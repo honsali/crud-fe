@@ -6,7 +6,7 @@ export { default as ActionUcNormale } from './composants/actionUc/ActionUcNormal
 export { default as ActionUcAccepter } from './composants/actionUc/confirmer/ActionUcAccepter';
 export { default as ActionUcCreer } from './composants/actionUc/confirmer/ActionUcCreer';
 export { default as ActionUcDeverrouiller } from './composants/actionUc/confirmer/ActionUcDeverrouiller';
-export { default as ActionUcEnregistrer } from './composants/actionUc/confirmer/ActionUcEnregistrer';
+export { default as ActionUcMaj } from './composants/actionUc/confirmer/ActionUcMaj';
 export { default as ActionUcRefuser } from './composants/actionUc/confirmer/ActionUcRefuser';
 export { default as ActionUcRejeter } from './composants/actionUc/confirmer/ActionUcRejeter';
 export { default as ActionUcSupprimer } from './composants/actionUc/confirmer/ActionUcSupprimer';

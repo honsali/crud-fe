@@ -15,8 +15,8 @@ export interface ResModifierDepartement extends IResultat {
 
 const initialState = {
     departement: {} as IDepartement,
-    etatEnregistrerDepartement: createEtatInit(),
-    etatInitModificationDepartement: createEtatInit(),
+    etatMajDepartement: createEtatInit(),
+    etatRecupererDepartementParId: createEtatInit(),
 };
 
 type ModifierDepartementType = typeof initialState;
@@ -25,33 +25,33 @@ const SliceModifierDepartement = createSlice({
     name: 'MdlModifierDepartement',
     initialState,
     reducers: {
-        resetEtatEnregistrerDepartement(state) {
-            state.etatEnregistrerDepartement = createEtatInit();
+        resetEtatMajDepartement(state) {
+            state.etatMajDepartement = createEtatInit();
         },
-        resetEtatInitModificationDepartement(state) {
-            state.etatInitModificationDepartement = createEtatInit();
+        resetEtatRecupererDepartementParId(state) {
+            state.etatRecupererDepartementParId = createEtatInit();
         },
     },
     extraReducers(builder) {
         builder
-            .addCase(CtrlModifierDepartement.enregistrerDepartement.fulfilled, (state, action) => {
-                state.etatEnregistrerDepartement = createEtatSuccess();
+            .addCase(CtrlModifierDepartement.majDepartement.fulfilled, (state, action) => {
+                state.etatMajDepartement = createEtatSuccess();
             })
-            .addCase(CtrlModifierDepartement.enregistrerDepartement.pending, (state, action) => {
-                state.etatEnregistrerDepartement = createEtatPending();
+            .addCase(CtrlModifierDepartement.majDepartement.pending, (state, action) => {
+                state.etatMajDepartement = createEtatPending();
             })
-            .addCase(CtrlModifierDepartement.enregistrerDepartement.rejected, (state, action) => {
-                state.etatEnregistrerDepartement = createEtatError();
+            .addCase(CtrlModifierDepartement.majDepartement.rejected, (state, action) => {
+                state.etatMajDepartement = createEtatError();
             })
-            .addCase(CtrlModifierDepartement.initModificationDepartement.fulfilled, (state, action) => {
+            .addCase(CtrlModifierDepartement.recupererDepartementParId.fulfilled, (state, action) => {
                 state.departement = action.payload.departement;
-                state.etatInitModificationDepartement = createEtatSuccess();
+                state.etatRecupererDepartementParId = createEtatSuccess();
             })
-            .addCase(CtrlModifierDepartement.initModificationDepartement.pending, (state, action) => {
-                state.etatInitModificationDepartement = createEtatPending();
+            .addCase(CtrlModifierDepartement.recupererDepartementParId.pending, (state, action) => {
+                state.etatRecupererDepartementParId = createEtatPending();
             })
-            .addCase(CtrlModifierDepartement.initModificationDepartement.rejected, (state, action) => {
-                state.etatInitModificationDepartement = createEtatError();
+            .addCase(CtrlModifierDepartement.recupererDepartementParId.rejected, (state, action) => {
+                state.etatRecupererDepartementParId = createEtatError();
             });
     },
 });
@@ -59,8 +59,8 @@ const SliceModifierDepartement = createSlice({
 export const MdlModifierDepartement = SliceModifierDepartement.actions;
 
 const selectMdlModifierDepartement = (state: IRootState) => state.mdlModifierDepartement;
-export const selectEtatInitModificationDepartement = createSelector([selectMdlModifierDepartement], (state: ModifierDepartementType) => state.etatInitModificationDepartement);
+export const selectEtatMajDepartement = createSelector([selectMdlModifierDepartement], (state: ModifierDepartementType) => state.etatMajDepartement);
+export const selectEtatRecupererDepartementParId = createSelector([selectMdlModifierDepartement], (state: ModifierDepartementType) => state.etatRecupererDepartementParId);
 export const selectDepartement = createSelector([selectMdlModifierDepartement], (state: ModifierDepartementType) => state.departement);
-export const selectEtatEnregistrerDepartement = createSelector([selectMdlModifierDepartement], (state: ModifierDepartementType) => state.etatEnregistrerDepartement);
 
 export default SliceModifierDepartement.reducer;

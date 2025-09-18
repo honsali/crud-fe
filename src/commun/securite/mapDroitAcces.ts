@@ -1,5 +1,6 @@
 import { aclCommun } from './acl/aclCommun';
-import { aclRh } from './acl/aclRh';
+import { aclDepartement } from './acl/aclDepartement';
+import { aclEmploye } from './acl/aclEmploye';
 import { ROLE_ADMIN, ROLE_INVITE } from './mapRole';
 
 const ALL = [
@@ -7,7 +8,7 @@ const ALL = [
 ];
 
 const CONSULTATION = [
-    ...aclRh
+    ...aclDepartement, ...aclEmploye
 ];
 
 const EDITION = [

@@ -1,6 +1,6 @@
 import ServiceDepartement from 'modele/rh/departement/ServiceDepartement';
 import { action } from 'waxant';
-import { ActionRh } from '../../ActionRh';
+import { ActionDepartement } from '../ActionDepartement';
 import { ReqListerDepartement, ResListerDepartement } from './MdlListerDepartement';
 
 const listerDepartementImpl = async (requete: ReqListerDepartement, resultat: ResListerDepartement, thunkAPI) => {
@@ -8,7 +8,7 @@ const listerDepartementImpl = async (requete: ReqListerDepartement, resultat: Re
 };
 
 const CtrlListerDepartement = {
-    listerDepartement: action<ReqListerDepartement, ResListerDepartement>(listerDepartementImpl, ActionRh.UcListerDepartement.LISTER_DEPARTEMENT),
+    listerDepartement: action<ReqListerDepartement, ResListerDepartement>(listerDepartementImpl, ActionDepartement.UcListerDepartement.LISTER_DEPARTEMENT),
 };
 
 export default CtrlListerDepartement;

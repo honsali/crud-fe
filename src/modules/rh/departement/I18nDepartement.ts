@@ -1,0 +1,33 @@
+import { enteteConfirmation, messageSuccess, titreConfirmation } from 'waxant';
+import { ActionDepartement } from './ActionDepartement';
+
+export const I18nDepartement = {
+    PageConsulterDepartement: 'Consulter Departement',
+    'UcConsulterDepartement.titre': 'Consulter Departement',
+    [ActionDepartement.UcConsulterDepartement.MODIFIER_DEPARTEMENT]: 'Modifier',
+    [ActionDepartement.UcConsulterDepartement.RETOUR_LISTE_DEPARTEMENT]: 'Retour Liste',
+    [ActionDepartement.UcConsulterDepartement.SUPPRIMER_DEPARTEMENT]: 'Supprimer',
+    [titreConfirmation(ActionDepartement.UcConsulterDepartement.SUPPRIMER_DEPARTEMENT)]: 'Supprimer Departement',
+    [enteteConfirmation(ActionDepartement.UcConsulterDepartement.SUPPRIMER_DEPARTEMENT)]: 'Etes vous sur de vouloir Supprimer ce Departement',
+    [messageSuccess(ActionDepartement.UcConsulterDepartement.SUPPRIMER_DEPARTEMENT)]: 'Departement supprimé avec succès',
+    PageCreerDepartement: 'Créer Departement',
+    'UcCreerDepartement.titre': 'Créer Departement',
+    [ActionDepartement.UcCreerDepartement.CREER_DEPARTEMENT]: 'Enregistrer',
+    [titreConfirmation(ActionDepartement.UcCreerDepartement.CREER_DEPARTEMENT)]: 'Créer Departement',
+    [enteteConfirmation(ActionDepartement.UcCreerDepartement.CREER_DEPARTEMENT)]: 'Etes vous sur de vouloir créer ce Departement',
+    [messageSuccess(ActionDepartement.UcCreerDepartement.CREER_DEPARTEMENT)]: 'Departement créé avec succès',
+    [ActionDepartement.UcCreerDepartement.RETOUR_LISTE_DEPARTEMENT]: 'Retour Liste',
+    PageListerDepartement: 'Liste Departements',
+    'UcListerDepartement.titre': 'Liste Departements',
+    [ActionDepartement.UcListerDepartement.AJOUTER_DEPARTEMENT]: 'Nouveau Departement',
+    PageModifierDepartement: 'Modifier Departement',
+    'UcModifierDepartement.titre': 'Modifier Departement',
+    [ActionDepartement.UcModifierDepartement.MAJ_DEPARTEMENT]: 'Enregistrer',
+    [titreConfirmation(ActionDepartement.UcModifierDepartement.MAJ_DEPARTEMENT)]: 'Maj Departement',
+    [enteteConfirmation(ActionDepartement.UcModifierDepartement.MAJ_DEPARTEMENT)]: 'Etes vous sur de vouloir Maj ce Departement',
+    [messageSuccess(ActionDepartement.UcModifierDepartement.MAJ_DEPARTEMENT)]: 'Departement enregistré avec succès',
+    [ActionDepartement.UcModifierDepartement.RETOUR_CONSULTER_DEPARTEMENT]: 'Retour',
+    'aucun.departement': 'Aucun Departement',
+    description: 'Description',
+    nom: 'Nom',
+};

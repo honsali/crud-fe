@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Bloc, Colonne, Tableau, useGoToPage } from 'waxant';
-import { PageConsulterDepartement } from '../../../ListePageRh';
+import { PageConsulterDepartement } from '../../ListePageDepartement';
 import useListerDepartement from '../useListerDepartement';
 
 const TableauDepartement = () => {

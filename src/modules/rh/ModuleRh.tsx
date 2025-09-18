@@ -1,15 +1,16 @@
 import { ModuleDefinition } from 'waxant';
 import { I18nRh } from './I18nRh';
-import ListePageRh, { PageListerDepartement } from './ListePageRh';
+import ListePageRh, { PageRh } from './ListePageRh';
 import ReducerRh from './ReducerRh';
 
-const ModuleRh = (): ModuleDefinition => {
+const ModuleRh = (listeSousModule: ModuleDefinition[]): ModuleDefinition => {
     return {
         key: 'ModuleRh',
         mapI18n: I18nRh,
         listePage: ListePageRh,
+        listeSousModule,
         reducer: ReducerRh,
-        index: PageListerDepartement,
+        index: PageRh,
     };
 };
 export default ModuleRh;

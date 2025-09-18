@@ -14,6 +14,7 @@ export interface ResConsulterDepartement extends IResultat {
 const initialState = {
     departement: {} as IDepartement,
     etatRecupererDepartementParId: createEtatInit(),
+    etatSupprimerDepartement: createEtatInit(),
 };
 
 type ConsulterDepartementType = typeof initialState;
@@ -24,6 +25,9 @@ const SliceConsulterDepartement = createSlice({
     reducers: {
         resetEtatRecupererDepartementParId(state) {
             state.etatRecupererDepartementParId = createEtatInit();
+        },
+        resetEtatSupprimerDepartement(state) {
+            state.etatSupprimerDepartement = createEtatInit();
         },
     },
     extraReducers(builder) {
@@ -37,6 +41,15 @@ const SliceConsulterDepartement = createSlice({
             })
             .addCase(CtrlConsulterDepartement.recupererDepartementParId.rejected, (state, action) => {
                 state.etatRecupererDepartementParId = createEtatError();
+            })
+            .addCase(CtrlConsulterDepartement.supprimerDepartement.fulfilled, (state, action) => {
+                state.etatSupprimerDepartement = createEtatSuccess();
+            })
+            .addCase(CtrlConsulterDepartement.supprimerDepartement.pending, (state, action) => {
+                state.etatSupprimerDepartement = createEtatPending();
+            })
+            .addCase(CtrlConsulterDepartement.supprimerDepartement.rejected, (state, action) => {
+                state.etatSupprimerDepartement = createEtatError();
             });
     },
 });
@@ -46,5 +59,6 @@ export const MdlConsulterDepartement = SliceConsulterDepartement.actions;
 const selectMdlConsulterDepartement = (state: IRootState) => state.mdlConsulterDepartement;
 export const selectEtatRecupererDepartementParId = createSelector([selectMdlConsulterDepartement], (state: ConsulterDepartementType) => state.etatRecupererDepartementParId);
 export const selectDepartement = createSelector([selectMdlConsulterDepartement], (state: ConsulterDepartementType) => state.departement);
+export const selectEtatSupprimerDepartement = createSelector([selectMdlConsulterDepartement], (state: ConsulterDepartementType) => state.etatSupprimerDepartement);
 
 export default SliceConsulterDepartement.reducer;

@@ -1,6 +1,6 @@
 import { ActionUcAjouter, BlocAction, Section } from 'waxant';
-import { ActionRh } from '../../ActionRh';
-import { PageCreerDepartement } from '../../ListePageRh';
+import { ActionDepartement } from '../ActionDepartement';
+import { PageCreerDepartement } from '../ListePageDepartement';
 import TableauDepartement from './element/TableauDepartement';
 
 const ViewListerDepartement = () => {
@@ -9,7 +9,7 @@ const ViewListerDepartement = () => {
         <Section>
             <TableauDepartement />
             <BlocAction>
-                <ActionUcAjouter nom={ActionRh.UcListerDepartement.AJOUTER_DEPARTEMENT} page={PageCreerDepartement} />
+                <ActionUcAjouter nom={ActionDepartement.UcListerDepartement.AJOUTER_DEPARTEMENT} page={PageCreerDepartement} />
             </BlocAction>
         </Section>
     );

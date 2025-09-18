@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { ActionUcCreer, useGoToPage } from 'waxant';
-import { ActionRh } from '../../../ActionRh';
-import { PageConsulterDepartement } from '../../../ListePageRh';
+import { ActionDepartement } from '../../ActionDepartement';
+import { PageConsulterDepartement } from '../../ListePageDepartement';
 import useCreerDepartement from '../useCreerDepartement';
 
 const ActionCreerDepartement = ({ form }) => {
@@ -20,7 +20,7 @@ const ActionCreerDepartement = ({ form }) => {
     }, [etatCreerDepartement.succes]);
     //
     return (
-        <ActionUcCreer nom={ActionRh.UcCreerDepartement.CREER_DEPARTEMENT} action={creer} rid={etatCreerDepartement.rid} />
+        <ActionUcCreer nom={ActionDepartement.UcCreerDepartement.CREER_DEPARTEMENT} action={creer} rid={etatCreerDepartement.rid} />
     );
 };
 
