@@ -1,4 +1,5 @@
-import { Action, combineReducers, configureStore, Reducer, Store, ThunkAction, UnknownAction } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import type { Action, Reducer, Store, ThunkAction, UnknownAction } from '@reduxjs/toolkit';
 import MdlI18n from '../i18n/MdlI18n';
 import MdlMessage from '../message/MdlMessage';
 import { AsyncStatusMiddleware } from './AsyncStatusMiddleware';
@@ -21,7 +22,11 @@ let staticReducers: ReducerMap = {
 
 const store = configureStore({
     reducer: combineReducers(staticReducers),
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend([AsyncStatusMiddleware, ErrorSerializationMiddleware]),
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().prepend(
+            AsyncStatusMiddleware as any,
+            ErrorSerializationMiddleware as any
+        ),
 });
 
 const getStore = () => {

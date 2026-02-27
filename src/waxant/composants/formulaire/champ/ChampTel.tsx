@@ -54,7 +54,6 @@ const ChampTel = (props) => {
                 disabled={props.attributes.disabled}
                 placeholder="0666 66 66 66"
                 onChange={onChangeValue}
-                addonAfter={props.addonAfter}
             />
         </Form.Item>
     );

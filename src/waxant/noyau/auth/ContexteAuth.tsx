@@ -1,11 +1,11 @@
 import _ from 'lodash';
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react';
-import { ConfigAppType } from '../contexte/ContexteApp';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { type ConfigAppType } from '../contexte/ContexteApp';
 
 interface IContexteAuthProps {
-    user?: string;
-    role?: string;
-    token?: string;
+    user: string | null;
+    role: string | null;
+    token: string | null;
     isAuthenticated: boolean;
     login: (token: string, accountData: any) => Promise<boolean>;
     logout: () => void;
@@ -31,6 +31,9 @@ const ContexteAuth = createContext({} as IContexteAuthProps);
 const decodeJWT = (token: string): JWTPayload | null => {
     try {
         const payload = token.split('.')[1];
+        if (!payload) {
+            return null;
+        }
         return JSON.parse(atob(payload));
     } catch (error) {
         console.error('Failed to decode JWT:', error);
@@ -76,25 +79,25 @@ export const AuthProvider = ({ children, config, onLogout }: AuthProviderProps) 
             }
 
             // Find matching role
-            let roleNormalise = null;
+            let roleNormalise: string | null = null;
             const roleTrouve = _.some(accountData.authorities, (r) => {
-                roleNormalise = config.mapRole[r];
+                roleNormalise = config.mapRole[r] ?? null;
                 return !!roleNormalise;
             });
 
-            if (!roleTrouve) {
+            if (!roleTrouve || !roleNormalise) {
                 console.error('No valid role found in token');
                 return false;
             }
 
             // Store authentication data
             sessionStorage.setItem('auth_token', newToken);
-            sessionStorage.setItem('auth_user', payload.preferred_username);
+            sessionStorage.setItem('auth_user', payload.sub);
             sessionStorage.setItem('auth_role', roleNormalise);
 
             // Update state
             setToken(newToken);
-            setUser(payload.preferred_username);
+            setUser(payload.sub);
             setRole(roleNormalise);
             setIsAuthenticated(true);
 
@@ -122,7 +125,7 @@ export const AuthProvider = ({ children, config, onLogout }: AuthProviderProps) 
             onLogout();
         } else {
             // Default redirect behavior
-            const redirectUri = window.location.origin + (process.env.PUBLIC_URL || '/');
+            const redirectUri = window.location.origin + '/';
             window.location.href = redirectUri;
         }
     };

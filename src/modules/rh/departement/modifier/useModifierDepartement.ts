@@ -1,8 +1,9 @@
+import type { AsyncThunk, AsyncThunkConfig } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useAppDispatch } from 'waxant';
 import CtrlModifierDepartement from './CtrlModifierDepartement';
-import { MdlModifierDepartement, ReqModifierDepartement, selectDepartement, selectEtatMajDepartement, selectEtatRecupererDepartementParId } from './MdlModifierDepartement';
+import { MdlModifierDepartement, type ReqModifierDepartement, type ResModifierDepartement, selectDepartement, selectEtatInitModificationDepartement, selectEtatMajDepartement } from './MdlModifierDepartement';
 
 const useModifierDepartement = () => {
 
@@ -10,21 +11,21 @@ const useModifierDepartement = () => {
     const params = useParams();
 
     const etatMajDepartement = useSelector(selectEtatMajDepartement);
-    const etatRecupererDepartementParId = useSelector(selectEtatRecupererDepartementParId);
+    const etatInitModificationDepartement = useSelector(selectEtatInitModificationDepartement);
     const departement = useSelector(selectDepartement);
 
-    const createAction = (action: any) => (req?: ReqModifierDepartement) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: AsyncThunk<ResModifierDepartement, ReqModifierDepartement, AsyncThunkConfig>) => (req?: ReqModifierDepartement) => dispatch(action({ ...req, ...params } as ReqModifierDepartement));
 
     return {
         // Actions
+        initModificationDepartement: createAction(CtrlModifierDepartement.initModificationDepartement),
         majDepartement: createAction(CtrlModifierDepartement.majDepartement),
-        recupererDepartementParId: createAction(CtrlModifierDepartement.recupererDepartementParId),
+        resetEtatInitModificationDepartement: () => dispatch(MdlModifierDepartement.resetEtatInitModificationDepartement()),
         resetEtatMajDepartement: () => dispatch(MdlModifierDepartement.resetEtatMajDepartement()),
-        resetEtatRecupererDepartementParId: () => dispatch(MdlModifierDepartement.resetEtatRecupererDepartementParId()),
 
         // State
         etatMajDepartement,
-        etatRecupererDepartementParId,
+        etatInitModificationDepartement,
         departement,
     };
 };

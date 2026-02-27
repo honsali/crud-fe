@@ -1,8 +1,9 @@
+import type { AsyncThunk, AsyncThunkConfig } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useAppDispatch } from 'waxant';
 import CtrlFiltrerEmploye from './CtrlFiltrerEmploye';
-import { MdlFiltrerEmploye, ReqFiltrerEmploye, selectEtatChangerPageFiltrerEmploye, selectEtatFiltrerEmploye, selectEtatInitialiserFiltrerEmploye, selectListePagineeEmploye } from './MdlFiltrerEmploye';
+import { MdlFiltrerEmploye, type ReqFiltrerEmploye, type ResFiltrerEmploye, selectEtatChangerPageFiltrerEmploye, selectEtatFiltrerEmploye, selectEtatInitialiserFiltrerEmploye, selectListePagineeEmploye } from './MdlFiltrerEmploye';
 
 const useFiltrerEmploye = () => {
 
@@ -14,7 +15,7 @@ const useFiltrerEmploye = () => {
     const etatChangerPageFiltrerEmploye = useSelector(selectEtatChangerPageFiltrerEmploye);
     const etatInitialiserFiltrerEmploye = useSelector(selectEtatInitialiserFiltrerEmploye);
 
-    const createAction = (action: any) => (req?: ReqFiltrerEmploye) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: AsyncThunk<ResFiltrerEmploye, ReqFiltrerEmploye, AsyncThunkConfig>) => (req?: ReqFiltrerEmploye) => dispatch(action({ ...req, ...params } as ReqFiltrerEmploye));
 
     return {
         // Actions

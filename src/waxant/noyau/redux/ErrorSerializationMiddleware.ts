@@ -1,9 +1,9 @@
 // --- ErrorSerializationMiddleware.ts ---
 import _ from 'lodash';
-import type { Middleware } from 'redux';
-import { IInfoActionEchouee } from '../message/DomaineMessage';
+import { type Middleware } from 'redux';
+import { type IInfoActionEchouee } from '../message/DomaineMessage';
 import { MdlMessage } from '../message/MdlMessage';
-import { WaxantAction } from './StoreDynamique';
+import { type WaxantAction } from './StoreDynamique';
 
 
 interface ErrorResponse {
@@ -48,13 +48,15 @@ export const ErrorSerializationMiddleware: Middleware = (store) => (next) => (ac
     const state = store.getState();
 
     const { error, payload } = action as any;
-    const [type, key] = _.split(action.type, '/');
     if (isRejectedAction(action) && error) {
         const err = error?.message === 'Rejected' ? payload : error as ErrorResponse;
         let message: IInfoActionEchouee = { code: payload };
 
-        if (err.status && ERROR_MESSAGES[err.status]) {
-            message = ERROR_MESSAGES[err.status](err);
+        const handler = ERROR_MESSAGES[err.status];
+        if (handler) {
+            message = handler(err);
+        } else if (payload.message) {
+            message = { code: payload.message };
         }
 
         store.dispatch(MdlMessage.setInfoActionEchouee(message));

@@ -1,8 +1,9 @@
 import { Avatar, Col, Modal, Row } from 'antd';
+import type { ReactNode } from 'react';
 import styled from 'styled-components';
 import useI18n from '../../noyau/i18n/useI18n';
 import BlocAction from '../bouton/BlocAction';
-import BoutonFort from '../bouton/BoutonFort';
+import BoutonFort from '../bouton/texte/BoutonTexteFort';
 
 const Composant = styled(Modal)`
     .ant-modal-content {
@@ -64,13 +65,24 @@ const SErreur = styled(Col)`
     margin-bottom: 10px;
 `;
 
-const DialogueInformation = ({ visible, nom, libelle = null, icone = null, entete = null, actionAnnuler = null, largeur = 1000, children }) => {
+type DialogueInformationProps = {
+    visible: boolean;
+    nom: string;
+    titre?: string | null;
+    icone?: ReactNode | null;
+    entete?: ReactNode | null;
+    actionAnnuler?: (() => void) | null;
+    largeur?: number;
+    children?: ReactNode;
+};
+
+const DialogueInformation = ({ visible, nom, titre = null, icone = null, entete = null, actionAnnuler = null, largeur = 1000, children }: DialogueInformationProps) => {
     const { i18n } = useI18n();
     const getTitre = () => {
         return (
             <span>
                 {icone && <SAvatar shape="circle" src={icone} size={32} />}
-                {libelle || i18n(nom)}
+                {titre || i18n(nom)}
             </span>
         );
     };
@@ -88,13 +100,13 @@ const DialogueInformation = ({ visible, nom, libelle = null, icone = null, entet
     const getFooter = () => {
         return (
             <BlocAction>
-                <BoutonFort nom="fermer" action={actionAnnuler} />
+                <BoutonFort nom="fermer" action={actionAnnuler ?? undefined} />
             </BlocAction>
         );
     };
 
     return (
-        <Composant open={visible} title={getTitre()} footer={getFooter()} width={largeur} maskClosable={false} onCancel={actionAnnuler}>
+        <Composant open={visible} title={getTitre()} footer={getFooter()} width={largeur} maskClosable={false} onCancel={actionAnnuler ?? undefined}>
             {getEntete()}
             <Row>
                 <SCorps span="24">{children}</SCorps>

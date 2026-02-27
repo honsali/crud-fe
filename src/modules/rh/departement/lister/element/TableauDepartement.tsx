@@ -14,7 +14,6 @@ const TableauDepartement = () => {
     useEffect(() => {
         listerDepartement();
     }, []);
-
     //
     return (
         <Bloc>

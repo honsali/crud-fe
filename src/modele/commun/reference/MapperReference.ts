@@ -1,4 +1,4 @@
-import { IReference } from './DomaineReference';
+import { type IReference } from './DomaineReference';
 
 const creerReference = (referentielRep: any): IReference => {
     const reference: IReference = {} as IReference;

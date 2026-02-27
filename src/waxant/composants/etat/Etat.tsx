@@ -1,18 +1,25 @@
 import { Row } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
 import useI18n from '../../noyau/i18n/useI18n';
 import util from '../../noyau/util/util';
 import OptionNon from '../widget/OptionNon';
 import OptionOui from '../widget/OptionOui';
 import { SLibelle, SValeur } from './styles';
 
-const labelWidthList = { 1: 10, 2: 5, 3: 3 };
-const textWidthList = { 1: 14, 2: 7, 3: 5 };
+const labelWidthList: Record<1 | 2 | 3, number> = { 1: 10, 2: 5, 3: 3 };
+const textWidthList: Record<1 | 2 | 3, number> = { 1: 14, 2: 7, 3: 5 };
 
-const Etat = ({ modele = null, nombreColonne = 2, children }) => {
+type EtatProps = {
+    modele?: any;
+    nombreColonne?: 1 | 2 | 3;
+    children?: ReactNode;
+};
+
+const Etat = ({ modele = null, nombreColonne = 2, children }: EtatProps) => {
     const { i18n } = useI18n();
-    const [listeElement, setListeElement] = useState([]);
+    const [listeElement, setListeElement] = useState<ReactNode[]>([]);
 
     const getLibelle = (cprops, propNom): any => {
         if (cprops.libelle) {
@@ -39,11 +46,15 @@ const Etat = ({ modele = null, nombreColonne = 2, children }) => {
 
     useEffect(() => {
         if (util.nonVide(modele)) {
-            let rowliste = [];
+            let rowliste: ReactNode[] = [];
             let rowIndex = 0;
-            const allliste = [];
+            const allliste: ReactNode[] = [];
             React.Children.forEach(children, (c) => {
-                const { props } = c;
+                if (!React.isValidElement(c)) {
+                    return;
+                }
+                const element = c as React.ReactElement<any>;
+                const { props } = element;
                 let key = props.nom;
                 let libelle = getLibelle(props, 'nom');
                 let text = getTexte(modele, props, 'nom');

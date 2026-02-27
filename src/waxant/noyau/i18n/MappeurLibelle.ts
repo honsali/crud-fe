@@ -3,7 +3,7 @@ import util from '../util/util';
 
 const libelle = (key: string, mapLibelle: Record<string, string>, safe = true): string => {
     if (util.estNul(key)) {
-        return safe ? '[]' : null;
+        return safe ? '[]' : '';
     }
     switch (key) {
         case '_vide':
@@ -15,9 +15,9 @@ const libelle = (key: string, mapLibelle: Record<string, string>, safe = true): 
         default:
             if (key.startsWith('libelle')) {
                 const filteredKey = key.charAt(7).toLowerCase() + key.slice(8);
-                return mapLibelle[filteredKey] || (safe ? `[${filteredKey}]` : null);
+                return mapLibelle[filteredKey] || (safe ? `[${filteredKey}]` : '');
             }
-            return mapLibelle[key] || (safe ? `[${key}]` : null);
+            return mapLibelle[key] || (safe ? `[${key}]` : '');
     }
 };
 
@@ -28,9 +28,7 @@ const journal = (key: string, mapActionCtrl: Record<string, string>): string => 
     return (
         mapActionCtrl[key] ||
         _.capitalize(
-            key
-                .split('/')
-                .pop()
+            (key.split('/').pop() ?? key)
                 .split(/(?=[A-Z])/)
                 .join(' ')
         )

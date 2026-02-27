@@ -1,5 +1,6 @@
 import { FilterOutlined } from '@ant-design/icons';
-import { BoutonProps } from '../../bouton/BoutonProps';
+import type { BoutonProps } from '../../bouton/BoutonProps';
+
 import ActionUcForte from '../ActionUcForte';
 
 const ActionUcModifierFiltre = (props: BoutonProps) => {

@@ -9,7 +9,7 @@ const FormulaireDepartement = () => {
     //
     return (
         <Bloc largeur="600px" marge="20px" fond="blanc">
-            <Formulaire form={form}>
+            <Formulaire form={form} nombreColonne={1}>
                 <ChampTexte nom="nom" requis="true" />
                 <ChampTexteLong nom="description" />
             </Formulaire>

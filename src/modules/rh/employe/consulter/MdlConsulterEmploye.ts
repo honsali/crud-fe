@@ -1,7 +1,7 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { IConge } from 'modele/rh/conge/DomaineConge';
-import { IEmploye } from 'modele/rh/employe/DomaineEmploye';
-import { createEtatError, createEtatInit, createEtatPending, createEtatSuccess, IRequete, IResultat, IRootState } from 'waxant';
+import { type IConge } from 'modele/rh/conge/DomaineConge';
+import { type IEmploye } from 'modele/rh/employe/DomaineEmploye';
+import { type EtatMdl, type IRequete, type IResultat, type IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlConsulterEmploye from './CtrlConsulterEmploye';
 
 export interface ReqConsulterEmploye extends IRequete {
@@ -9,19 +9,25 @@ export interface ReqConsulterEmploye extends IRequete {
 }
 
 export interface ResConsulterEmploye extends IResultat {
-    employe?: IEmploye;
+    employe: IEmploye | {};
     listeConge?: IConge[];
 }
 
-const initialState = {
+interface ConsulterEmployeType {
+    employe?: IEmploye;
+    etatListerCongeParIdEmploye: EtatMdl;
+    etatRecupererEmployeParId: EtatMdl;
+    etatSupprimerEmploye: EtatMdl;
+    listeConge?: IConge[];
+}
+
+const initialState: ConsulterEmployeType = {
     employe: {} as IEmploye,
     etatListerCongeParIdEmploye: createEtatInit(),
     etatRecupererEmployeParId: createEtatInit(),
     etatSupprimerEmploye: createEtatInit(),
     listeConge: [] as IConge[],
 };
-
-type ConsulterEmployeType = typeof initialState;
 
 const SliceConsulterEmploye = createSlice({
     name: 'MdlConsulterEmploye',

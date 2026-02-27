@@ -1,4 +1,5 @@
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useContexteAccordeon from 'waxant/noyau/contexte/ContexteAccordeon';
@@ -42,21 +43,21 @@ const Entete = styled.div<{ $opened: boolean, $inactif: boolean }>`
                 border-bottom: 2px solid #ccc;
                 &:hover {
                     color: #555;
-                    background-color: #2277BB;
+                    background-color: #3F72AF;
                 }
             `;
         } else {
             return `
                 color: #555;
-                background-color: #2277BB;
-                border-bottom: 2px solid #2277BB;
+                background-color: #3F72AF;
+                border-bottom: 2px solid #3F72AF;
             `;
         }
     }}
 `;
 
 const Corps = styled.div`
-    background-color: #f5f3f0;
+    background-color: #F5F7FB;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -72,26 +73,34 @@ const Titre = styled.div`
 `;
 
 
-const BlocAccordeon = ({ nom = null, titre = null, inactif = false, children }) => {
+type BlocAccordeonProps = {
+    nom?: string | null;
+    titre?: string | null;
+    inactif?: boolean;
+    children?: ReactNode;
+};
+
+const BlocAccordeon = ({ nom = null, titre = null, inactif = false, children }: BlocAccordeonProps) => {
     const { i18n } = useI18n();
     const { uc } = useContexteView();
     const { ouvert, setOuvert } = useContexteAccordeon();
     const [opened, setOpened] = useState(false);
+    const safeNom = nom ?? '';
 
     const toggle = () => {
         setOpened(!inactif && !opened);
-        setOuvert(nom);
+        setOuvert?.(safeNom || undefined);
     };
 
     useEffect(() => {
-        const test: boolean = !inactif && (ouvert === nom);
+        const test: boolean = !inactif && (ouvert === safeNom);
         setOpened(test);
-    }, [ouvert]);
+    }, [ouvert, inactif, safeNom]);
 
     return (
-        <Composant id={`bloc_${nom}`} >
+        <Composant id={`bloc_${safeNom}`} >
             <Entete onClick={toggle} $opened={opened} $inactif={inactif} className={opened ? 'opened' : 'closed'}>
-                <Titre>{titre || i18n(`${uc}.bloc.${nom}`)}</Titre>
+                <Titre>{titre || i18n(`${uc}.bloc.${safeNom}`)}</Titre>
                 {opened ? <UpOutlined /> : <DownOutlined />}
             </Entete>
             <Corps style={{ display: opened ? 'flex' : 'none' }} className="corps">

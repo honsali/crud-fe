@@ -1,7 +1,7 @@
 import ServiceEmploye from 'modele/rh/employe/ServiceEmploye';
 import { action, util } from 'waxant';
 import { ActionEmploye } from '../ActionEmploye';
-import { ReqFiltrerEmploye, ResFiltrerEmploye } from './MdlFiltrerEmploye';
+import { type ReqFiltrerEmploye, type ResFiltrerEmploye } from './MdlFiltrerEmploye';
 
 const changerPageFiltrerEmployeImpl = async (requete: ReqFiltrerEmploye, resultat: ResFiltrerEmploye, thunkAPI) => {
     const { mdlFiltrerEmploye } = thunkAPI.getState() as any;

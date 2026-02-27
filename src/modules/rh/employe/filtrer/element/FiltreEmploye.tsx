@@ -24,7 +24,7 @@ const FiltreEmploye = () => {
     return (
         <Filtre titre="filtreEmploye">
             <PanneauEtendable titre="employe" open={true}>
-                <Formulaire form={form} nombreColonne={2}>
+                <Formulaire form={form}>
                     <ChampTexte nom="matricule" seulDansLaLigne />
                     <ChampDate nom="debutDateEntree" />
                     <ChampDate nom="finDateEntree" />
@@ -33,7 +33,7 @@ const FiltreEmploye = () => {
                 </Formulaire>
             </PanneauEtendable>
             <PanneauEtendable titre="personnelle">
-                <Formulaire form={form} nombreColonne={2}>
+                <Formulaire form={form}>
                     <ChampTexte nom="nom" />
                     <ChampTexte nom="prenom" />
                     <ChampDate nom="debutDateNaissance" />
@@ -43,7 +43,7 @@ const FiltreEmploye = () => {
                 </Formulaire>
             </PanneauEtendable>
             <PanneauEtendable titre="contact">
-                <Formulaire form={form} nombreColonne={2}>
+                <Formulaire form={form}>
                     <ChampTexte nom="email" />
                     <ChampTexte nom="telephone" />
                     <ChampTexte nom="ville" />

@@ -1,4 +1,4 @@
-import { FC, Key, ReactNode } from 'react';
+import type { FC, ReactNode } from 'react';
 import { ContexteMenuOngletProvider } from 'waxant/noyau/contexte/ContexteMenuOnglet';
 import { ContexteTableauProvider } from 'waxant/noyau/contexte/ContexteTabeau';
 import MenuOngletInterne from './MenuOngletInterne';
@@ -11,13 +11,6 @@ export interface MenuOngletProps {
     children: ReactNode;
 }
 
-export interface OngletProps {
-    key: Key;
-    entete?: ReactNode;
-    badge?: ReactNode;
-    children: ReactNode;
-    disabled?: boolean;
-}
 
 const MenuOnglet: FC<MenuOngletProps> = (props) => {
 

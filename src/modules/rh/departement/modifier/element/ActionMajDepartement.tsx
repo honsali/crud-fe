@@ -8,7 +8,6 @@ const ActionMajDepartement = ({ form }) => {
     const goToPage = useGoToPage();
     const { etatMajDepartement, majDepartement, resetEtatMajDepartement } = useModifierDepartement();
 
-
     const maj = () => {
         majDepartement({ form });
     };

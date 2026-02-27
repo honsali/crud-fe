@@ -1,6 +1,6 @@
-import { IPagination } from 'modele/commun/pagination/DomainePagination';
-import { IEmploye } from 'modele/rh/employe/DomaineEmploye';
-import { ITypeConge } from 'modele/rh/typeConge/DomaineTypeConge';
+import { type IPagination } from 'modele/commun/pagination/DomainePagination';
+import { type IEmploye } from 'modele/rh/employe/DomaineEmploye';
+import { type ITypeConge } from 'modele/rh/typeConge/DomaineTypeConge';
 
 export interface IConge {
     id?: string;

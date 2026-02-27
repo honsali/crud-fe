@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext } from 'react';
+import { createContext, useContext, type ReactNode } from 'react';
 
 export interface IContexteTableauProps {
     type?: string;

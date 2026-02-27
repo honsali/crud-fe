@@ -1,11 +1,24 @@
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ContexteViewProvider, PageDefinition } from 'waxant';
+import { ContexteViewProvider, type PageDefinition } from 'waxant';
+import ViewConsulterConge from './conge/consulter/ViewConsulterConge';
+import ViewCreerConge from './conge/creer/ViewCreerConge';
 import ViewModifierConge from './conge/modifier/ViewModifierConge';
 import ViewConsulterEmploye from './consulter/ViewConsulterEmploye';
 import ViewCreerEmploye from './creer/ViewCreerEmploye';
 import ViewFiltrerEmploye from './filtrer/ViewFiltrerEmploye';
 import ViewModifierEmploye from './modifier/ViewModifierEmploye';
+
+export const PageConsulterConge: PageDefinition = {
+    key: 'PageConsulterConge',
+    path: '/rh/employe/:idEmploye/consulter/:idConge',
+    toPath: (args) => `/rh/employe/${args.idEmploye}/consulter/${args.idConge}`,
+    view: (
+        <ContexteViewProvider uc="UcConsulterConge">
+            <ViewConsulterConge />
+        </ContexteViewProvider>
+    ),
+};
 
 export const PageConsulterEmploye: PageDefinition = {
     key: 'PageConsulterEmploye',
@@ -14,6 +27,17 @@ export const PageConsulterEmploye: PageDefinition = {
     view: (
         <ContexteViewProvider uc="UcConsulterEmploye">
             <ViewConsulterEmploye />
+        </ContexteViewProvider>
+    ),
+};
+
+export const PageCreerConge: PageDefinition = {
+    key: 'PageCreerConge',
+    path: '/rh/employe/:idEmploye/conge/creer',
+    toPath: (args) => `/rh/employe/${args.idEmploye}/conge/creer`,
+    view: (
+        <ContexteViewProvider uc="UcCreerConge">
+            <ViewCreerConge />
         </ContexteViewProvider>
     ),
 };
@@ -44,8 +68,8 @@ export const PageFiltrerEmploye: PageDefinition = {
 
 export const PageModifierConge: PageDefinition = {
     key: 'PageModifierConge',
-    path: '/rh/employe/modifier/:idConge',
-    toPath: (args) => `/rh/employe/modifier/${args.idConge}`,
+    path: '/rh/employe/:idEmploye/conge/modifier/:idConge',
+    toPath: (args) => `/rh/employe/${args.idEmploye}/conge/modifier/${args.idConge}`,
     view: (
         <ContexteViewProvider uc="UcModifierConge">
             <ViewModifierConge />
@@ -65,7 +89,9 @@ export const PageModifierEmploye: PageDefinition = {
 };
 
 const ListePageEmploye = [
-    PageConsulterEmploye, //
+    PageConsulterConge, //
+    PageConsulterEmploye,
+    PageCreerConge,
     PageCreerEmploye,
     PageFiltrerEmploye,
     PageModifierConge,

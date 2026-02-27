@@ -5,7 +5,11 @@ import useContexteApp from '../contexte/ContexteApp';
 const useHasRight = (action): boolean => {
     const { mapDroitAcces } = useContexteApp();
     const { role } = useContexteAuth();
-    const inRole = _.includes(mapDroitAcces[role], action);
+    if (!role) {
+        console.log('NO RIGHT FOR =========>' + action);
+        return false;
+    }
+    const inRole = _.includes(mapDroitAcces[role] ?? [], action);
     if (!inRole) {
         console.log('NO RIGHT FOR =========>' + action);
     }

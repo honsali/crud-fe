@@ -1,10 +1,11 @@
 import { UploadOutlined } from '@ant-design/icons';
-import { Form, Input, Upload, UploadProps } from 'antd';
+import { Form, Input, Upload, type UploadProps } from 'antd';
 import { encode } from 'base-64';
 import _ from 'lodash';
 import { useContext, useEffect, useState } from 'react';
-import BoutonNormal from '../../bouton/BoutonNormal';
+import BoutonTexteNormal from 'waxant/composants/bouton/texte/BoutonTexteNormal';
 import FormulaireValidateur from '../FormulaireValidateur';
+
 const ChampFichier = (props) => {
     const { form, attributes } = props;
     const [actionVisible, setActionVisible] = useState(true);
@@ -22,17 +23,21 @@ const ChampFichier = (props) => {
         beforeUpload(file) {
             const reader = new FileReader();
             reader.onload = (e) => {
+                const result = e.target?.result;
+                if (result == null) {
+                    return;
+                }
                 if (_.isArray(attributes.name)) {
                     const v = {};
                     const d = {};
-                    d[attributes.name[1]] = encode(e.target.result);
+                    d[attributes.name[1]] = encode(result as string);
                     d[attributes.sname[1]] = file.name;
                     v[attributes.name[0]] = d;
                     form.setFieldsValue(v);
                 } else {
                     const d = {};
                     d[attributes.sname] = file.name;
-                    d[attributes.name] = encode(e.target.result);
+                    d[attributes.name] = encode(result as string);
                     form.setFieldsValue(d);
                 }
             };
@@ -74,8 +79,8 @@ const ChampFichier = (props) => {
 
     return (
         <div>
-            <Form.Item label={attributes.label} name={attributes.name} style={{ ...props.attributes.style }}>
-                <Upload {...uprops}>{actionVisible && <BoutonNormal icone={<UploadOutlined />} libelle="Selectionner Document" />}</Upload>
+            <Form.Item label={attributes.label} name={attributes.name} style={{ ...(props.attributes.style ?? {}) }}>
+                <Upload {...uprops}>{actionVisible && <BoutonTexteNormal icone={<UploadOutlined />} libelle="Selectionner Document" />}</Upload>
             </Form.Item>
             <Form.Item name={attributes.sname} rules={[getRules]} noStyle>
                 <Input style={{ display: 'none' }} />

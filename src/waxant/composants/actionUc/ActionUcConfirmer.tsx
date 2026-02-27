@@ -2,26 +2,35 @@ import { Popconfirm } from 'antd';
 import { useState } from 'react';
 import { enteteConfirmation, titreConfirmation } from 'waxant/noyau/util/libelleUtil';
 import useHasRight from '../../noyau/auth/useHasRight';
-import useContexteView from '../../noyau/contexte/ContexteView';
 import useI18n from '../../noyau/i18n/useI18n';
-import { BoutonProps } from '../bouton/BoutonProps';
-import BoutonSelonContexte from '../bouton/BoutonSelonContexte';
+import type { BoutonProps } from '../bouton/BoutonProps';
+import BoutonTexte from '../bouton/texte/BoutonTexte';
 
 
 const ActionUcConfirmer = (props: BoutonProps) => {
     const { i18n } = useI18n();
-    const { uc } = useContexteView();
-    const nom = props.nom?.startsWith('Uc') ? props.nom : `${uc}.action.${props.nom}${props.entite || ''}`;
-    const hasRight = useHasRight(nom);
+    const hasRight = useHasRight(props.nom);
     const [visible, setVisible] = useState(false);
+    const style = { display: 'flex', marginLeft: props.cote === 'droit' ? 'auto' : '' };
 
-    const executer = () => {
-        setVisible(false);
-        props.action();
-
+    const attributes = {
+        nom: props.nom,
+        title: i18n(titreConfirmation(props.nom)),
+        description: i18n(enteteConfirmation(props.nom)),
+        okText: i18n('confirmer'),
+        cancelText: i18n('annuler'),
+        onConfirm: () => confirmer(),
+        onCancel: () => annuler(),
+        icon: props.icone,
     };
-    const confirmer = () => {
+
+    const ouvrir = () => {
         setVisible(true);
+    };
+
+    const confirmer = () => {
+        setVisible(false);
+        props.action?.();
     };
 
     const annuler = () => {
@@ -29,8 +38,10 @@ const ActionUcConfirmer = (props: BoutonProps) => {
     };
 
     return (
-        <Popconfirm open={visible} title={i18n(titreConfirmation(nom))} description={i18n(enteteConfirmation(nom))} icon={props.icone} onConfirm={executer} onCancel={annuler} okText={i18n('confirmer')} cancelText={i18n('annuler')}>
-            <div> <BoutonSelonContexte {...props} nom={nom} rid={visible ? '1' : null} action={confirmer} visible={hasRight} /></div>
+        <Popconfirm open={visible} {...attributes} >
+            <div style={style}>
+                <BoutonTexte type="fort" {...props} rid={visible ? '1' : props.rid} action={ouvrir} visible={hasRight} />
+            </div>
         </Popconfirm>
     );
 };

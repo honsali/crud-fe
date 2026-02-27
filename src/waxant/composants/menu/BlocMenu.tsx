@@ -12,7 +12,7 @@ const Composant = styled.div`
         a,
         i,
         span {
-            color: ${() => '#bbb'};
+            color: ${() => '#3F72AF'};
         }
         
     }
@@ -21,7 +21,16 @@ const Composant = styled.div`
         a,
         i,
         span {
-            color: ${() => '#33AADD'};
+            color: ${() => '#DBE2EF'};
+        }
+        
+    }
+    .ant-menu-submenu.ant-menu-submenu-active> div {
+    color: ${() => '#DBE2EF'};
+        a,
+        i,
+        span {
+            color: ${() => '#DBE2EF'};
         }
         
     }

@@ -1,4 +1,4 @@
-import type { ThemeConfig } from 'antd/es/config-provider/context';
+import { type ThemeConfig } from 'antd';
 import 'styled-components';
 
 declare module 'styled-components' {

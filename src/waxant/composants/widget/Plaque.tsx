@@ -1,5 +1,6 @@
 import { Tag } from 'antd';
 import styled from 'styled-components';
+import type { CSSProperties, ReactNode } from 'react';
 
 const Composant = styled(Tag)`
     color: #fff;
@@ -21,23 +22,30 @@ const Composant = styled(Tag)`
     }
 `;
 
-const Plaque = ({ type = null, style = null, couleur = null, action = null, children }) => {
+type PlaqueProps = {
+    type?: string | null;
+    style?: CSSProperties;
+    couleur?: string | null;
+    action?: (() => void) | null;
+    children?: ReactNode;
+};
+
+const Plaque = ({ type = null, style, couleur = null, action = null, children }: PlaqueProps) => {
 
     const getClassName = () => {
         return (type ? type : 'principale') + (action ? ' clickable' : '');
     };
     const getStyle = () => {
         if (couleur) {
-            return style ? { ...style, backgroundColor: couleur } : { backgroundColor: couleur };
+            return { ...(style ?? {}), backgroundColor: couleur };
         }
-        return style;
+        return style ?? undefined;
     };
     const actionOnClick = (event) => {
-        if (action) {
-            event.preventDefault();
-            event.stopPropagation();
-            action();
-        }
+        if (!action) return;
+        event.preventDefault();
+        event.stopPropagation();
+        action();
     };
 
     return (

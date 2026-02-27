@@ -1,5 +1,4 @@
 import { Col, Row } from 'antd';
-import logo from 'assets/images/logo.png';
 import styled from 'styled-components';
 import useLayoutContext from '../LayoutContext';
 
@@ -18,27 +17,20 @@ const Logo = styled(Col)`
 
 const Title = styled(Col)`
     margin: 4px 0 0 8px;
-    color: #33AADD;
+    color: #3F72AF;
     font-size: 26px;
     font-weight: 400;
     letter-spacing: 4px;
     font-family: Roboto;
 `;
 
-// #88ccee
-// #4499DD
-// #2277BB
-// #33AADD
-// 62B01E
+
 const NoTitle = styled(Col)``;
 
 const Brand = () => {
     const { menuOuvert } = useLayoutContext();
     return (
         <SBrand>
-            <Logo>
-                <img src={logo} alt="logo" />
-            </Logo>
             {menuOuvert ? (
                 <Title>
                     CRUD

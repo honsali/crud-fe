@@ -1,7 +1,7 @@
-import { IPagination } from 'modele/commun/pagination/DomainePagination';
-import { IDepartement } from 'modele/rh/departement/DomaineDepartement';
-import { ISexe } from 'modele/rh/sexe/DomaineSexe';
-import { ISituationFamiliale } from 'modele/rh/situationFamiliale/DomaineSituationFamiliale';
+import { type IPagination } from 'modele/commun/pagination/DomainePagination';
+import { type IDepartement } from 'modele/rh/departement/DomaineDepartement';
+import { type ISexe } from 'modele/rh/sexe/DomaineSexe';
+import { type ISituationFamiliale } from 'modele/rh/situationFamiliale/DomaineSituationFamiliale';
 
 export interface IEmploye {
     id?: string;

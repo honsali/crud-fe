@@ -8,7 +8,6 @@ const ActionMajEmploye = ({ form }) => {
     const goToPage = useGoToPage();
     const { etatMajEmploye, majEmploye, resetEtatMajEmploye } = useModifierEmploye();
 
-
     const maj = () => {
         majEmploye({ form });
     };

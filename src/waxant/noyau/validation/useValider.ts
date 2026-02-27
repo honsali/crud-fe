@@ -1,7 +1,7 @@
-import { IInfoActionEchouee } from '../message/DomaineMessage';
+import { type IInfoActionEchouee } from '../message/DomaineMessage';
 import { MdlMessage } from '../message/MdlMessage';
 
-const useValider = (form, dispatch, actionSuccess, actionErreur = null) => {
+const useValider = (form, dispatch, actionSuccess, actionErreur?) => {
     form.validateFields()
         .then(() => {
             actionSuccess();

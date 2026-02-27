@@ -1,12 +1,13 @@
 import { Avatar, Col, Modal, Row, Space } from 'antd';
+import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import useI18n from '../../noyau/i18n/useI18n';
+import type { IMessageErreur } from '../../noyau/message/DomaineMessage';
 import { selectInfoActionEchoueeDansDialogue } from '../../noyau/message/MdlMessage';
-import util from '../../noyau/util/util';
-import BoutonFort from '../bouton/BoutonFort';
-import BoutonNormal from '../bouton/BoutonNormal';
+import BoutonFort from '../bouton/texte/BoutonTexteFort';
+import BoutonTexteNormal from '../bouton/texte/BoutonTexteNormal';
 
 const Composant = styled(Modal)`
     .ant-modal-content {
@@ -84,14 +85,31 @@ const BlocBouton = styled.div`
     }
 `;
 
-const DialogueOuiNon = ({ visible, nom, libelle = null, icone = null, entete = null, nomActionOui = 'accepter', nomActionNon = 'refuser', actionOui, actionNon, nomActionAnnuler = 'annuler', actionAnnuler = null, largeur = 520, rid = null, children }) => {
+type DialogueOuiNonProps = {
+    visible: boolean;
+    nom: string;
+    libelle?: string | null;
+    icone?: ReactNode | null;
+    entete?: ReactNode | null;
+    nomActionOui?: string;
+    nomActionNon?: string;
+    actionOui?: (() => void) | null;
+    actionNon?: (() => void) | null;
+    nomActionAnnuler?: string;
+    actionAnnuler?: (() => void) | null;
+    largeur?: number;
+    rid?: string | null;
+    children?: ReactNode;
+};
+
+const DialogueOuiNon = ({ visible, nom, libelle = null, icone = null, entete = null, nomActionOui = 'accepter', nomActionNon = 'refuser', actionOui = null, actionNon = null, nomActionAnnuler = 'annuler', actionAnnuler = null, largeur = 520, rid = null, children }: DialogueOuiNonProps) => {
     const { i18n, erreurI18n } = useI18n();
     const infoActionEchouee = useSelector(selectInfoActionEchoueeDansDialogue);
 
-    const [erreur, setErreur] = useState(null);
+    const [erreur, setErreur] = useState<IMessageErreur | null>(null);
 
     useEffect(() => {
-        if (util.nonNul(infoActionEchouee)) {
+        if (infoActionEchouee) {
             setErreur(erreurI18n(infoActionEchouee));
         } else {
             setErreur(null);
@@ -120,15 +138,15 @@ const DialogueOuiNon = ({ visible, nom, libelle = null, icone = null, entete = n
     const getFooter = () => {
         return (
             <Space>
-                <BoutonNormal nom={nomActionAnnuler} action={actionAnnuler} inactif={rid} />
-                <BoutonFort nom={nomActionNon} contexte={nom} action={actionNon} rid={rid} inactif={rid} />
-                <BoutonFort nom={nomActionOui} contexte={nom} action={actionOui} rid={rid} inactif={rid} />
+                <BoutonTexteNormal nom={nomActionAnnuler} action={actionAnnuler ?? undefined} inactif={rid} />
+                <BoutonFort nom={nomActionNon} contexte={nom} action={actionNon ?? undefined} rid={rid} inactif={rid} />
+                <BoutonFort nom={nomActionOui} contexte={nom} action={actionOui ?? undefined} rid={rid} inactif={rid} />
             </Space>
         );
     };
 
     return (
-        <Composant open={visible} title={getTitre()} footer={getFooter()} width={largeur} maskClosable={false} onCancel={actionAnnuler}>
+        <Composant open={visible} title={getTitre()} footer={getFooter()} width={largeur} maskClosable={false} onCancel={actionAnnuler ?? undefined}>
             {getEntete()}
             {erreur && (
                 <Row>

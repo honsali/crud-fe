@@ -1,22 +1,24 @@
-import { PageDefinition } from 'waxant/noyau/routes/PageDefinition';
+import type { CSSProperties, ReactNode } from 'react';
+import type { IModele } from 'waxant/noyau/domaine/modele';
+import type { PageDefinition } from 'waxant/noyau/routes/PageDefinition';
 
-export type BoutonProps = {
-    nom?: string | null;
+export interface BoutonProps {
+    nom?: string;
     contexte?: string;
-    action?: (event?) => void | null;
+    action?: (any?) => any | null;
     entite?: string | null;
     page?: PageDefinition | null;
-    modele?: any | null;
+    modele?: IModele | null;
     libelle?: string | null;
-    icone?: React.ReactNode | null;
+    icone?: ReactNode | null;
     inactif?: string | null;
     visible?: boolean;
     rid?: string | null;
     toolTip?: string | null;
     width?: number | string | null;
-    couleur?: 'fort' | 'normal' | 'danger';
-    forme?: 'contour' | 'plein' | 'lien' | 'simple';
+    forme?: 'icone' | 'texte';
+    type?: 'fort' | 'normal' | 'danger' | 'alerte' | 'lien';
     taille?: 'mini' | 'moyen' | 'large';
+    style?: CSSProperties;
+    cote?: 'gauche' | 'droit';
 };
-
-export default BoutonProps;

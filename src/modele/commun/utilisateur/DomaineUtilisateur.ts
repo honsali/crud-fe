@@ -1,4 +1,4 @@
-import { IPagination } from 'modele/commun/pagination/DomainePagination';
+import { type IPagination } from 'modele/commun/pagination/DomainePagination';
 
 export interface IUtilisateur {
     idUtilisateur?: string;

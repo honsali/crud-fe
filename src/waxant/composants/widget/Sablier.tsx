@@ -1,13 +1,13 @@
 import { Spin } from 'antd';
 import _ from 'lodash';
-import { ReactNode, useCallback } from 'react';
+import type { ReactNode } from 'react';
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { selectActionEnCours, useI18n } from 'waxant';
 
 
 const Composant = styled(Spin)`
-    padding: 10px;
     cursor: pointer;
 
     .wrap_spinner {
@@ -26,12 +26,16 @@ const Composant = styled(Spin)`
      
 `;
 
-const Sablier = ({ children }) => {
+type SablierProps = {
+    children?: ReactNode;
+};
+
+const Sablier = ({ children }: SablierProps) => {
     const { journalI18n } = useI18n();
     const actionEnCours = useSelector(selectActionEnCours);
 
     const getListeMessage = () => {
-        const array = _.flatten(_.values(actionEnCours));
+        const array = _.flatten(_.values(actionEnCours)) as string[];
         const liste: ReactNode[] = array.map((actionName: string, i) => {
             return (
                 <text x="0" y={30 * (i + 1)} className="sablier_msg" key={i}>

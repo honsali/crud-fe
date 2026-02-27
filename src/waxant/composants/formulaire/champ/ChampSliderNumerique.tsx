@@ -1,4 +1,4 @@
-import { Col, Form, InputNumber, Row, Slider, SliderSingleProps } from 'antd';
+import { Col, Form, InputNumber, Row, Slider, type SliderSingleProps } from 'antd';
 import _ from 'lodash';
 import { useCallback, useContext } from 'react';
 import FormulaireValidateur from '../FormulaireValidateur';
@@ -64,7 +64,7 @@ const ChampSliderNumerique = (props) => {
         <Row>
             <Col span="6">
                 <Form.Item {...props.attributes} rules={[getRules]}>
-                    <InputNumber style={{ ...props.attributes.style, width: '100%' }} disabled={true} placeholder={props.attributes.placeholder} onBlur={valueChanged} controls={false} decimalSeparator="," precision={2} />
+                    <InputNumber style={{ ...(props.attributes.style ?? {}), width: '100%' }} disabled={true} placeholder={props.attributes.placeholder} onBlur={valueChanged} controls={false} decimalSeparator="," precision={2} />
                 </Form.Item>
             </Col>
             <Col span="16" offset="2" style={{ paddingTop: '14px' }}>

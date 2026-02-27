@@ -1,7 +1,7 @@
 import ServiceDepartement from 'modele/rh/departement/ServiceDepartement';
 import { action } from 'waxant';
 import { ActionDepartement } from '../ActionDepartement';
-import { ReqConsulterDepartement, ResConsulterDepartement } from './MdlConsulterDepartement';
+import { type ReqConsulterDepartement, type ResConsulterDepartement } from './MdlConsulterDepartement';
 
 const recupererDepartementParIdImpl = async (requete: ReqConsulterDepartement, resultat: ResConsulterDepartement, thunkAPI) => {
     resultat.departement = await ServiceDepartement.recupererParId(requete.idDepartement);

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Bloc, CadreBas, FormulaireConsultation, Reference, Texte } from 'waxant';
+import { BlocInline, CadreFort, FormulaireConsultation, Reference, Texte } from 'waxant';
 import useConsulterEmploye from '../useConsulterEmploye';
 
 const EtatEmploye = () => {
@@ -10,8 +10,8 @@ const EtatEmploye = () => {
     }, []);
     //
     return (
-        <Bloc largeur="600px">
-            <CadreBas titre="employe">
+        <BlocInline>
+            <CadreFort titre="employe" largeur="500px">
                 <FormulaireConsultation modele={employe}>
                     <Texte nom="matricule" />
                     <Texte nom="dateEntree" />
@@ -19,8 +19,8 @@ const EtatEmploye = () => {
                     <Texte nom="fonction" />
                     <Texte nom="description" surTouteLaLigne />
                 </FormulaireConsultation>
-            </CadreBas>
-            <CadreBas titre="personnelle">
+            </CadreFort>
+            <CadreFort titre="personnelle" largeur="500px">
                 <FormulaireConsultation modele={employe}>
                     <Texte nom="nom" />
                     <Texte nom="prenom" />
@@ -28,16 +28,16 @@ const EtatEmploye = () => {
                     <Reference nom="sexe" />
                     <Reference nom="situationFamiliale" />
                 </FormulaireConsultation>
-            </CadreBas>
-            <CadreBas titre="contact">
+            </CadreFort>
+            <CadreFort titre="contact" largeur="500px">
                 <FormulaireConsultation modele={employe}>
                     <Texte nom="email" />
                     <Texte nom="telephone" />
                     <Texte nom="ville" seulDansLaLigne />
                     <Texte nom="adresse" surTouteLaLigne />
                 </FormulaireConsultation>
-            </CadreBas>
-        </Bloc>
+            </CadreFort>
+        </BlocInline>
     );
 };
 

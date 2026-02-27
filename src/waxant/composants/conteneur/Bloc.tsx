@@ -1,3 +1,4 @@
+import type { CSSProperties, ReactNode } from 'react';
 import styled from 'styled-components';
 
 const Composant = styled.div`
@@ -6,11 +7,19 @@ const Composant = styled.div`
     gap: 20px;
 `;
 
-const Bloc = ({ style = null, marge = '0', largeur = '100%', fond = 'transparent', children }) => {
+type BlocProps = {
+    style?: CSSProperties;
+    marge?: string;
+    largeur?: string;
+    fond?: 'transparent' | 'blanc' | 'clair' | 'fonce';
+    children?: ReactNode;
+};
 
-    const toBg = { 'transparent': 'transparent', 'blanc': '#FFFFFFcc', 'clair': '#faf9f7', 'fonce': '#e9e5e0' };
+const Bloc = (props: BlocProps) => {
+    const { style, marge = '0', largeur = '100%', fond = 'transparent', children } = props;
+    const toBg = { transparent: 'transparent', blanc: '#FFFFFF', clair: '#F5F7FB', fonce: '#e9e5e0' };
 
-    return <Composant style={{ ...style, padding: marge, width: largeur, background: toBg[fond] }}>{children}</Composant>;
+    return <Composant style={{ ...(style ?? {}), padding: marge, width: largeur, background: toBg[fond] }}>{children}</Composant>;
 };
 
 export default Bloc;

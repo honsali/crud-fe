@@ -1,7 +1,7 @@
 import { faPeopleLine } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Outlet } from 'react-router';
-import { ContexteViewProvider, PageDefinition } from 'waxant';
+import { ContexteViewProvider, type PageDefinition } from 'waxant';
 
 export const PageRh: PageDefinition = {
     key: 'PageRh',

@@ -1,9 +1,10 @@
 import { TableOutlined } from '@ant-design/icons';
-import { BoutonProps } from '../../bouton/BoutonProps';
-import ActionUcNormale from '../ActionUcNormale';
+import BoutonTexteLien from 'waxant/composants/bouton/texte/BoutonTexteLien';
+import type { BoutonProps } from '../../bouton/BoutonProps';
+
 
 const ActionUcRetourListe = (props: BoutonProps) => {
-    return <ActionUcNormale nom={props.nom ? props.nom : 'retourListe'} icone={<TableOutlined />} {...props} />;
+    return <BoutonTexteLien nom="retourListe" icone={<TableOutlined />} {...props} />;
 };
 
 export default ActionUcRetourListe;

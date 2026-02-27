@@ -2,7 +2,7 @@ import axios from 'axios';
 import { API_URL } from 'commun';
 import { Page } from 'modele/commun/pagination/DomainePagination';
 import MapperPagination from 'modele/commun/pagination/MapperPagination';
-import { IEmploye, IListePagineeEmploye } from './DomaineEmploye';
+import { type IEmploye, type IListePagineeEmploye } from './DomaineEmploye';
 
 
 const creer = async (employe: IEmploye) => {

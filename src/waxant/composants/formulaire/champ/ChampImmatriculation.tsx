@@ -1,6 +1,5 @@
 import { DownOutlined } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Dropdown, Form } from 'antd';
+import { Dropdown, Form, type MenuProps } from 'antd';
 import { MaskedInput } from 'antd-mask-input';
 import _ from 'lodash';
 import { useContext, useEffect, useState } from 'react';

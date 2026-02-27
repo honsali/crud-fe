@@ -1,26 +1,39 @@
 import { Col, Form } from 'antd';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { MdlMessage } from '../../noyau/message/MdlMessage';
 import useAppDispatch from '../../noyau/redux/useAppDispatch';
 import ListeChamp from './ListeChamp';
 import useFormConverter from './useFormConverter';
 
-const FormulaireInline = ({ form, siChange = null, nom = null, style = null, children }) => {
+type FormulaireInlineProps = {
+    form: any;
+    siChange?: ((changedFields: any, allFields: any) => void) | null;
+    nom?: string | null;
+    style?: CSSProperties;
+    children?: ReactNode;
+};
+
+const FormulaireInline = ({ form, siChange = null, nom = null, style, children }: FormulaireInlineProps) => {
     const dispatch = useAppDispatch();
-    const [items, setItems] = useState([]);
-    const [hiddenItems, setHiddenItems] = useState([]);
+    const [items, setItems] = useState<ReactNode[]>([]);
+    const [hiddenItems, setHiddenItems] = useState<ReactNode[]>([]);
     const convert = useFormConverter();
 
     useEffect(() => {
-        const hiddenListe = [];
-        const liste = [];
+        const hiddenListe: ReactNode[] = [];
+        const liste: ReactNode[] = [];
 
         React.Children.forEach(children, (child, index) => {
+            if (!React.isValidElement(child)) {
+                return;
+            }
             const key = `col-${index}`;
+            const element = child as React.ReactElement<any>;
             liste.push(
-                <Col key={key} flex={child.props.largeur ? child.props.largeur : 'auto'}>
-                    {React.cloneElement(child, { attributes: convert(nom, child.props), form })}
+                <Col key={key} flex={element.props.largeur ? element.props.largeur : 'auto'}>
+                    {React.cloneElement(element, { attributes: convert(nom, element.props), form })}
                 </Col>
             );
         });
@@ -38,7 +51,7 @@ const FormulaireInline = ({ form, siChange = null, nom = null, style = null, chi
         <Form //
             form={form}
             name={nom ? nom : _.uniqueId()}
-            style={{ flex: 1, paddingRight: '20px', ...style }}
+            style={{ flex: 1, paddingRight: '20px', ...(style ?? {}) }}
             layout="vertical"
             onFieldsChange={onFieldsChange}
         >

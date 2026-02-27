@@ -1,8 +1,9 @@
+import type { AsyncThunk, AsyncThunkConfig } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useAppDispatch } from 'waxant';
 import CtrlListerDepartement from './CtrlListerDepartement';
-import { MdlListerDepartement, ReqListerDepartement, selectEtatListerDepartement, selectListeDepartement } from './MdlListerDepartement';
+import { MdlListerDepartement, type ReqListerDepartement, type ResListerDepartement, selectEtatListerDepartement, selectListeDepartement } from './MdlListerDepartement';
 
 const useListerDepartement = () => {
 
@@ -12,7 +13,7 @@ const useListerDepartement = () => {
     const listeDepartement = useSelector(selectListeDepartement);
     const etatListerDepartement = useSelector(selectEtatListerDepartement);
 
-    const createAction = (action: any) => (req?: ReqListerDepartement) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: AsyncThunk<ResListerDepartement, ReqListerDepartement, AsyncThunkConfig>) => (req?: ReqListerDepartement) => dispatch(action({ ...req, ...params } as ReqListerDepartement));
 
     return {
         // Actions

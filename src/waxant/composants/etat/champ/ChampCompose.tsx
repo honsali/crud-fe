@@ -1,5 +1,6 @@
 import { Form, Space } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
 import useI18n from '../../../noyau/i18n/useI18n';
 
 const ChampCompose = (props: any) => {
@@ -21,9 +22,9 @@ const ChampCompose = (props: any) => {
         return attributes;
     }, []);
 
-    const [items, setItems] = useState([]);
+    const [items, setItems] = useState<ReactNode[]>([]);
     useEffect(() => {
-        const list = [];
+        const list: ReactNode[] = [];
         React.Children.forEach(props.children, (c, index) => {
             list.push(React.cloneElement(c, { key: index, attributes: extract(c.props), form: props.form }));
         });

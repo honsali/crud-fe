@@ -7,22 +7,22 @@ import useModifierDepartement from '../useModifierDepartement';
 import ActionMajDepartement from './ActionMajDepartement';
 
 const FormulaireDepartement = () => {
-    const { departement, etatRecupererDepartementParId, recupererDepartementParId } = useModifierDepartement();
+    const { departement, etatInitModificationDepartement, initModificationDepartement } = useModifierDepartement();
     const [form] = Form.useForm();
 
     useEffect(() => {
-        recupererDepartementParId();
+        initModificationDepartement();
     }, []);
 
     useEffect(() => {
-        if (etatRecupererDepartementParId.succes) {
+        if (etatInitModificationDepartement.succes) {
             form.setFieldsValue(departement);
         }
-    }, [etatRecupererDepartementParId.succes]);
+    }, [etatInitModificationDepartement.succes]);
     //
     return (
         <Bloc largeur="600px" marge="20px" fond="blanc">
-            <Formulaire form={form}>
+            <Formulaire form={form} nombreColonne={1}>
                 <ChampTexte nom="nom" requis="true" />
                 <ChampTexteLong nom="description" />
                 <ChampCache nom="id" />

@@ -1,15 +1,21 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import _ from 'lodash';
-import { IRootState } from '../redux/StoreDynamique';
-import { IInfoActionEchouee, IInfoActionReussie } from './DomaineMessage';
+import { type IRootState } from '../redux/StoreDynamique';
+import type { IInfoActionEchouee, IInfoActionReussie } from './DomaineMessage';
 
-const initialState = {
-    infoActionEchouee: null as IInfoActionEchouee,
-    infoActionEchoueeDansDialogue: null as IInfoActionEchouee,
-    actionEnCours: {},
-    infoActionReussie: null as IInfoActionReussie,
+type MessageStateType = {
+    infoActionEchouee: IInfoActionEchouee | null;
+    infoActionEchoueeDansDialogue: IInfoActionEchouee | null;
+    actionEnCours: Record<string, string[]>;
+    infoActionReussie: IInfoActionReussie | null;
 };
-type MessageStateType = typeof initialState;
+
+const initialState: MessageStateType = {
+    infoActionEchouee: null,
+    infoActionEchoueeDansDialogue: null,
+    actionEnCours: {},
+    infoActionReussie: null,
+};
 
 export const MessageSlice = createSlice({
     name: 'message',

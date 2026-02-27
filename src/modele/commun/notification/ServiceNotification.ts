@@ -1,5 +1,5 @@
 import { API_URL } from 'commun';
-import { IListePagineeNotification } from './DomaineNotification';
+import { type IListePagineeNotification } from './DomaineNotification';
 
 const resourceUri = API_URL + '/notification';
 

@@ -1,7 +1,7 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { FormInstance } from 'antd';
-import { IListePagineeEmploye, IRequeteEmploye } from 'modele/rh/employe/DomaineEmploye';
-import { createEtatError, createEtatInit, createEtatPending, createEtatSuccess, IRequete, IResultat, IRootState } from 'waxant';
+import { type FormInstance } from 'antd';
+import { type IListePagineeEmploye, type IRequeteEmploye } from 'modele/rh/employe/DomaineEmploye';
+import { type EtatMdl, type IRequete, type IResultat, type IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlFiltrerEmploye from './CtrlFiltrerEmploye';
 
 export interface ReqFiltrerEmploye extends IRequete {
@@ -10,20 +10,26 @@ export interface ReqFiltrerEmploye extends IRequete {
 }
 
 export interface ResFiltrerEmploye extends IResultat {
-    filtre?: IRequeteEmploye;
-    listePagineeEmploye?: IListePagineeEmploye;
+    filtre: IRequeteEmploye | {};
+    listePagineeEmploye: IListePagineeEmploye | {};
 }
 
-const initialState = {
+interface FiltrerEmployeType {
+    etatChangerPageFiltrerEmploye: EtatMdl;
+    etatFiltrerEmploye: EtatMdl;
+    etatInitialiserFiltrerEmploye: EtatMdl;
+    filtre?: IRequeteEmploye;
+    listePagineeEmploye?: IListePagineeEmploye;
+    pageCourante?: number;
+}
+
+const initialState: FiltrerEmployeType = {
     etatChangerPageFiltrerEmploye: createEtatInit(),
     etatFiltrerEmploye: createEtatInit(),
     etatInitialiserFiltrerEmploye: createEtatInit(),
     filtre: {} as IRequeteEmploye,
     listePagineeEmploye: {} as IListePagineeEmploye,
-    pageCourante: 0,
 };
-
-type FiltrerEmployeType = typeof initialState;
 
 const SliceFiltrerEmploye = createSlice({
     name: 'MdlFiltrerEmploye',

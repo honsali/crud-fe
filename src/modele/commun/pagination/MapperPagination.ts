@@ -1,4 +1,4 @@
-import { IPagination, Page, Pageable } from './DomainePagination';
+import { type IPagination, Page, Pageable } from './DomainePagination';
 
 const NOMBRE_LIGNE_PAR_PAGE_PAR_DEFAUT = 10;
 

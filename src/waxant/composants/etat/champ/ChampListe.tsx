@@ -1,14 +1,15 @@
 import { Form, Input, Select } from 'antd';
 import _ from 'lodash';
 import { useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
 import util from '../../../noyau/util/util';
 
 const ChampListe = (props) => {
     const { Option } = Select;
-    const [options, setOptions] = useState([]);
-    const [current, setCurrent] = useState(null);
-    const [referenceListe, setReferenceListe] = useState(null);
-    const [selectAttributes, setSelectAttributes] = useState(null);
+    const [options, setOptions] = useState<ReactNode[]>([]);
+    const [current, setCurrent] = useState<any>(null);
+    const [referenceListe, setReferenceListe] = useState<any[] | null>(null);
+    const [selectAttributes, setSelectAttributes] = useState<any | null>(null);
     const { form, attributes, liste, optionLibelle } = props;
     const newValue = Form.useWatch(attributes.name, form);
 
@@ -18,7 +19,7 @@ const ChampListe = (props) => {
 
     useEffect(() => {
         setSelectAttributes({ ...attributes, name: attributes.sname });
-        const refOptionList = [];
+        const refOptionList: ReactNode[] = [];
         if (liste) {
             setReferenceListe(liste);
             if (Array.isArray(liste)) {

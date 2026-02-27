@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
 
-const ErrorBoundary = ({ children }) => {
-    const [error, setError] = useState(null);
-    const [errorInfo, setErrorInfo] = useState(null);
+type ErrorBoundaryProps = {
+    children: ReactNode;
+};
+
+const ErrorBoundary = ({ children }: ErrorBoundaryProps) => {
+    const [error, setError] = useState<Error | null>(null);
+    const [errorInfo, setErrorInfo] = useState<ErrorEvent | null>(null);
 
     useEffect(() => {
-        const errorHandler = (errorEvent) => {
-            setError(errorEvent.error);
-            setErrorInfo(errorEvent.errorInfo);
+        const errorHandler = (errorEvent: ErrorEvent) => {
+            setError((errorEvent.error as Error) ?? null);
+            setErrorInfo(errorEvent);
         };
         window.addEventListener('error', errorHandler);
 
@@ -18,13 +23,13 @@ const ErrorBoundary = ({ children }) => {
         return (
             <div>
                 <h2 className="error">An unexpected error has occurred.</h2>
-                process.env.NODE_ENV === 'development' && (
-                <details className="preserve-space">
-                    {error?.toString()}
-                    <br />
-                    {errorInfo.componentStack}
-                </details>
-                )
+                {process.env.NODE_ENV === 'development' && (
+                    <details className="preserve-space">
+                        {error?.toString()}
+                        <br />
+                        {error?.stack}
+                    </details>
+                )}
             </div>
         );
     }

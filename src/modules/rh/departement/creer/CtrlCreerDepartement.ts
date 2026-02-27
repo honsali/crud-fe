@@ -1,7 +1,7 @@
 import ServiceDepartement from 'modele/rh/departement/ServiceDepartement';
 import { action, util } from 'waxant';
 import { ActionDepartement } from '../ActionDepartement';
-import { ReqCreerDepartement, ResCreerDepartement } from './MdlCreerDepartement';
+import { type ReqCreerDepartement, type ResCreerDepartement } from './MdlCreerDepartement';
 
 const creerDepartementImpl = async (requete: ReqCreerDepartement, resultat: ResCreerDepartement, thunkAPI) => {
     await requete.form.validateFields();

@@ -1,0 +1,78 @@
+/* Cadre Normal*/
+.ant-card.waxant-cadre-normal {
+    --ant-card-header-height: 0px;
+    border-radius: 6px;
+    border: 1px solid var(--ant-color-secondary);
+}
+
+.ant-card-head.waxant-cadre-normal__header {
+    background-color: var(--ant-color-secondary);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    padding: 0px;
+}
+
+.ant-card-head-title.waxant-cadre-normal__title {
+    color: var(--ant-color-primary);
+    font-weight: 500;
+
+    .cadre-texte {
+        padding: 6px 0px 2px 10px;
+    }
+}
+
+.ant-card-extra.waxant-cadre__extra {
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+}
+
+.ant-card-body.waxant-cadre__body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Cadre Fort*/
+.ant-card.waxant-cadre-fort {
+    --ant-card-header-height: 0px;
+    border-radius: 6px;
+    border: 1px solid var(--ant-color-primary);
+}
+
+.ant-card-head.waxant-cadre-fort__header {
+    background-color: var(--ant-color-primary);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    padding: 0px;
+}
+
+.ant-card-head-title.waxant-cadre-fort__title {
+    color: #fff;
+    font-weight: 500;
+
+    .cadre-texte {
+        padding: 6px 0px 2px 10px;
+    }
+}
+
+/* Cadre Simple */
+.ant-card.waxant-cadre-simple {
+    --ant-card-header-height: 0px;
+    border-radius: 6px;
+    border: 1px solid var(--ant-color-border);
+}
+
+.ant-card-head.waxant-cadre-simple__header {
+    border-bottom: 1px solid var(--ant-color-primary);
+    padding: 0px;
+}
+
+.ant-card-head-title.waxant-cadre-simple__title {
+    color: var(--ant-color-primary);
+    font-weight: 500;
+
+    .cadre-texte {
+        padding: 6px 0px 2px 10px;
+    }
+}

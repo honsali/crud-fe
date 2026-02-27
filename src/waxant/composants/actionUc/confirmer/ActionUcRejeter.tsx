@@ -1,5 +1,6 @@
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { BoutonProps } from '../../bouton/BoutonProps';
+import type { BoutonProps } from '../../bouton/BoutonProps';
+
 import ActionUcConfirmer from '../ActionUcConfirmer';
 
 const ActionUcRejeter = (props: BoutonProps) => {

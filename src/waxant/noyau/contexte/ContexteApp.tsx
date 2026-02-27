@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { ModuleDefinition } from '../routes/ModuleDefinition';
+import { type ModuleDefinition } from '../routes/ModuleDefinition';
 
 export type MapDomaineType = {
     listeModule?: ModuleDefinition[];

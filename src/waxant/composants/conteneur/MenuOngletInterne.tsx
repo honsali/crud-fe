@@ -1,11 +1,13 @@
 import { Tabs } from 'antd';
-import { FC, useEffect, useMemo } from 'react';
+import type { FC } from 'react';
+import { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import useContexteMenuOnglet from 'waxant/noyau/contexte/ContexteMenuOnglet';
 import { ContexteTableauProvider } from 'waxant/noyau/contexte/ContexteTabeau';
 import useI18n from '../../noyau/i18n/useI18n';
 import Bloc from './Bloc';
-import { MenuOngletProps, OngletProps } from './MenuOnglet';
+import type { MenuOngletProps } from './MenuOnglet';
+import type { OngletProps } from './Onglet';
 
 const Composant = styled(Tabs)`
     .ant-tabs-nav {
@@ -50,11 +52,11 @@ const MenuOngletInterne: FC<MenuOngletProps> = ({ ongletActif = null, siOngletCh
 
     useEffect(() => {
         if (ongletActif !== null && ongletActif !== ongletCourant) {
-            setOngletCourant(ongletActif);
+            setOngletCourant?.(ongletActif);
         } else if (!ongletCourant && !ongletActif) {
             const firstKey = tabs[0]?.key;
             if (firstKey) {
-                setOngletCourant(firstKey);
+                setOngletCourant?.(firstKey);
                 siOngletChange?.(firstKey);
             }
         }
@@ -62,12 +64,12 @@ const MenuOngletInterne: FC<MenuOngletProps> = ({ ongletActif = null, siOngletCh
 
     const handleChange = (selectedKey: string) => {
         if (selectedKey !== ongletCourant) {
-            setOngletCourant(selectedKey);
+            setOngletCourant?.(selectedKey);
             siOngletChange?.(selectedKey);
         }
     };
 
-    const toBg = { 'transparent': 'transparent', 'blanc': '#FFFFFFcc', 'clair': '#faf9f7', 'fonce': '#e9e5e0' };
+    const toBg = { transparent: 'transparent', blanc: '#FFFFFFcc', clair: '#F5F7FB', fonce: '#e9e5e0' };
 
     return (
         <ContexteTableauProvider type="fonce">

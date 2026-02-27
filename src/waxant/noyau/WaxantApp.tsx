@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { AuthProvider } from './auth/ContexteAuth';
 import initAxios from './axios/axios.config';
-import { ConfigAppType, ContexteAppProvider } from './contexte/ContexteApp';
+import { type ConfigAppType, ContexteAppProvider } from './contexte/ContexteApp';
 import { ContexteI18nProvider } from './i18n/ContexteI18n';
 import { DynamicStoreProvider } from './redux/DynamicStoreContext';
 import { AppRoutes } from './routes/AppRoutes';

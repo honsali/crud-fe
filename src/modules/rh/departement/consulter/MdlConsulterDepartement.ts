@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { IDepartement } from 'modele/rh/departement/DomaineDepartement';
-import { createEtatError, createEtatInit, createEtatPending, createEtatSuccess, IRequete, IResultat, IRootState } from 'waxant';
+import { type IDepartement } from 'modele/rh/departement/DomaineDepartement';
+import { type EtatMdl, type IRequete, type IResultat, type IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlConsulterDepartement from './CtrlConsulterDepartement';
 
 export interface ReqConsulterDepartement extends IRequete {
@@ -8,16 +8,20 @@ export interface ReqConsulterDepartement extends IRequete {
 }
 
 export interface ResConsulterDepartement extends IResultat {
-    departement?: IDepartement;
+    departement: IDepartement | {};
 }
 
-const initialState = {
+interface ConsulterDepartementType {
+    departement?: IDepartement;
+    etatRecupererDepartementParId: EtatMdl;
+    etatSupprimerDepartement: EtatMdl;
+}
+
+const initialState: ConsulterDepartementType = {
     departement: {} as IDepartement,
     etatRecupererDepartementParId: createEtatInit(),
     etatSupprimerDepartement: createEtatInit(),
 };
-
-type ConsulterDepartementType = typeof initialState;
 
 const SliceConsulterDepartement = createSlice({
     name: 'MdlConsulterDepartement',

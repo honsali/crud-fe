@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useContexteView, useI18n } from 'waxant';
 
 const Composant = styled.div`
-    background-color: #e9e5e0;
+    background-color: #DBE2EF;
     border: 1px solid transparent;
     border-radius: 6px;
 `;
@@ -25,7 +25,7 @@ const Titre = styled(Col)`
     padding-top: 8px;
     font-size: 24px;
     font-weight: 500;
-    color: #000000dd;
+    color: #3F72AF;
 `;
 
 const Filtre = ({ titre, children }) => {

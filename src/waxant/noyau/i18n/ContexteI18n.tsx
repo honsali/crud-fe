@@ -2,9 +2,9 @@ import _ from 'lodash';
 import { createContext, useContext, useEffect, useState } from 'react';
 import Avancement from 'waxant/composants/widget/Avancement';
 import useContexteAuth from '../auth/ContexteAuth';
-import { ConfigAppType } from '../contexte/ContexteApp';
+import { type ConfigAppType } from '../contexte/ContexteApp';
 import useAppDispatch from '../redux/useAppDispatch';
-import { ModuleDefinition } from '../routes/ModuleDefinition';
+import { type ModuleDefinition } from '../routes/ModuleDefinition';
 import { MdlI18n } from './MdlI18n';
 
 export interface IContexteI18nProps {
@@ -24,6 +24,9 @@ export const ContexteI18nProvider: React.FC<ContexteI18nProviderProps> = ({ conf
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!role) {
+            return;
+        }
         const domaine = config.mapDomaine[role];
         const listeModule = domaine?.listeModule;
         const sum = _.reduce(

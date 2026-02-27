@@ -1,7 +1,7 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { FormInstance } from 'antd';
-import { IConge } from 'modele/rh/conge/DomaineConge';
-import { createEtatError, createEtatInit, createEtatPending, createEtatSuccess, IRequete, IResultat, IRootState } from 'waxant';
+import { type FormInstance } from 'antd';
+import { type IConge } from 'modele/rh/conge/DomaineConge';
+import { type EtatMdl, type IRequete, type IResultat, type IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlModifierConge from './CtrlModifierConge';
 
 export interface ReqModifierConge extends IRequete {
@@ -10,30 +10,44 @@ export interface ReqModifierConge extends IRequete {
 }
 
 export interface ResModifierConge extends IResultat {
-    conge?: IConge;
+    conge: IConge | {};
 }
 
-const initialState = {
-    conge: {} as IConge,
-    etatMajConge: createEtatInit(),
-    etatRecupererCongeParId: createEtatInit(),
-};
+interface ModifierCongeType {
+    conge?: IConge;
+    etatInitModificationConge: EtatMdl;
+    etatMajConge: EtatMdl;
+}
 
-type ModifierCongeType = typeof initialState;
+const initialState: ModifierCongeType = {
+    conge: {} as IConge,
+    etatInitModificationConge: createEtatInit(),
+    etatMajConge: createEtatInit(),
+};
 
 const SliceModifierConge = createSlice({
     name: 'MdlModifierConge',
     initialState,
     reducers: {
+        resetEtatInitModificationConge(state) {
+            state.etatInitModificationConge = createEtatInit();
+        },
         resetEtatMajConge(state) {
             state.etatMajConge = createEtatInit();
-        },
-        resetEtatRecupererCongeParId(state) {
-            state.etatRecupererCongeParId = createEtatInit();
         },
     },
     extraReducers(builder) {
         builder
+            .addCase(CtrlModifierConge.initModificationConge.fulfilled, (state, action) => {
+                state.conge = action.payload.conge;
+                state.etatInitModificationConge = createEtatSuccess();
+            })
+            .addCase(CtrlModifierConge.initModificationConge.pending, (state, action) => {
+                state.etatInitModificationConge = createEtatPending();
+            })
+            .addCase(CtrlModifierConge.initModificationConge.rejected, (state, action) => {
+                state.etatInitModificationConge = createEtatError();
+            })
             .addCase(CtrlModifierConge.majConge.fulfilled, (state, action) => {
                 state.etatMajConge = createEtatSuccess();
             })
@@ -42,16 +56,6 @@ const SliceModifierConge = createSlice({
             })
             .addCase(CtrlModifierConge.majConge.rejected, (state, action) => {
                 state.etatMajConge = createEtatError();
-            })
-            .addCase(CtrlModifierConge.recupererCongeParId.fulfilled, (state, action) => {
-                state.conge = action.payload.conge;
-                state.etatRecupererCongeParId = createEtatSuccess();
-            })
-            .addCase(CtrlModifierConge.recupererCongeParId.pending, (state, action) => {
-                state.etatRecupererCongeParId = createEtatPending();
-            })
-            .addCase(CtrlModifierConge.recupererCongeParId.rejected, (state, action) => {
-                state.etatRecupererCongeParId = createEtatError();
             });
     },
 });
@@ -59,7 +63,7 @@ const SliceModifierConge = createSlice({
 export const MdlModifierConge = SliceModifierConge.actions;
 
 const selectMdlModifierConge = (state: IRootState) => state.mdlModifierConge;
-export const selectEtatRecupererCongeParId = createSelector([selectMdlModifierConge], (state: ModifierCongeType) => state.etatRecupererCongeParId);
+export const selectEtatInitModificationConge = createSelector([selectMdlModifierConge], (state: ModifierCongeType) => state.etatInitModificationConge);
 export const selectConge = createSelector([selectMdlModifierConge], (state: ModifierCongeType) => state.conge);
 export const selectEtatMajConge = createSelector([selectMdlModifierConge], (state: ModifierCongeType) => state.etatMajConge);
 

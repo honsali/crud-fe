@@ -1,5 +1,5 @@
-import { Reducer } from 'redux';
-import { PageDefinition } from './PageDefinition';
+import { type Reducer } from 'redux';
+import { type PageDefinition } from './PageDefinition';
 
 export interface ModuleDefinition {
     key: string;

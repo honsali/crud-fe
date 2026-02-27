@@ -9,7 +9,7 @@ export const STable = styled(Table) <{ $type: string }>`
             font-size: 12px;
             ${({ $type }) => {
         if ($type === 'normal') {
-            return 'background-color: #e9e5e0;';
+            return 'background-color: #DBE2EF;';
         } else {
             return `
                                         color: #555;

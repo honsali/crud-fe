@@ -1,9 +1,14 @@
 import axios from 'axios';
 import { API_URL } from 'commun';
-import { IConge } from './DomaineConge';
+import { type IConge } from './DomaineConge';
 
 
-const listerParIdEmploye = async (idEmploye: string, ) => {
+const creer = async (idEmploye: string, conge: IConge) => {
+    const { data } = await axios.post(`${API_URL}/employe/${idEmploye}/conge`, conge);
+    return data;
+};
+
+const listerParIdEmploye = async (idEmploye: string) => {
     const listeConge: IConge[] = (await axios.get<IConge[]>(`${API_URL}/employe/${idEmploye}/conge`)).data;
     return listeConge;
 };
@@ -18,10 +23,16 @@ const recupererParId = async (idConge: string) => {
     return data;
 };
 
+const supprimer = async (idConge: string) => {
+    await axios.delete(`${API_URL}/conge/${idConge}`);
+};
+
 const ServiceConge = {
+    creer,
     listerParIdEmploye,
     maj,
     recupererParId,
+    supprimer,
 };
 
 export default ServiceConge;

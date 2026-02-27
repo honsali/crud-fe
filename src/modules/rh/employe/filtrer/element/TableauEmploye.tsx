@@ -13,7 +13,6 @@ const TableauEmploye = () => {
     const goToPageConsulterEmploye = (employe) => {
         goToPage(PageConsulterEmploye, employe);
     };
-
     //
     return (
         <Bloc>

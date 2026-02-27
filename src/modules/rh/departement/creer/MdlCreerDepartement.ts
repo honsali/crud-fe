@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { FormInstance } from 'antd';
-import { createEtatError, createEtatInit, createEtatPending, createEtatSuccess, IRequete, IResultat, IRootState } from 'waxant';
+import { type FormInstance } from 'antd';
+import { type EtatMdl, type IRequete, type IResultat, type IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlCreerDepartement from './CtrlCreerDepartement';
 
 export interface ReqCreerDepartement extends IRequete {
@@ -11,12 +11,14 @@ export interface ResCreerDepartement extends IResultat {
     idDepartement?: string;
 }
 
-const initialState = {
-    etatCreerDepartement: createEtatInit(),
-    idDepartement: null,
-};
+interface CreerDepartementType {
+    etatCreerDepartement: EtatMdl;
+    idDepartement?: string;
+}
 
-type CreerDepartementType = typeof initialState;
+const initialState: CreerDepartementType = {
+    etatCreerDepartement: createEtatInit(),
+};
 
 const SliceCreerDepartement = createSlice({
     name: 'MdlCreerDepartement',

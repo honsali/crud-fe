@@ -1,5 +1,5 @@
 import { Col, Row } from 'antd';
-import { ActionUcAjouter, BlocAction, Panneau, Section } from 'waxant';
+import { ActionUcAjouter, Bloc, CadreFort, Section } from 'waxant';
 import { ActionEmploye } from '../ActionEmploye';
 import { PageCreerEmploye } from '../ListePageEmploye';
 import FiltreEmploye from './element/FiltreEmploye';
@@ -8,21 +8,26 @@ import TableauEmploye from './element/TableauEmploye';
 const ViewFiltrerEmploye = () => {
     //
     return (
-        <Section>
+        <Bloc marge="20px 40px">
             <Row gutter={20}>
                 <Col span={16}>
-                    <Panneau titre="listeEmploye">
-                        <TableauEmploye />
-                        <BlocAction>
+                    <Section marge="0"
+                        blocAction={
                             <ActionUcAjouter nom={ActionEmploye.UcFiltrerEmploye.AJOUTER_EMPLOYE} page={PageCreerEmploye} />
-                        </BlocAction>
-                    </Panneau>
+                        }
+                    >
+                        <CadreFort titre="listeEmploye">
+                            <TableauEmploye />
+                        </CadreFort>
+                    </Section>
                 </Col>
                 <Col span={8}>
-                    <FiltreEmploye />
+                    <Bloc marge="62px 0px">
+                        <FiltreEmploye />
+                    </Bloc>
                 </Col>
             </Row>
-        </Section>
+        </Bloc>
     );
 };
 

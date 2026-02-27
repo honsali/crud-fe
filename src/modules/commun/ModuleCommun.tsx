@@ -1,4 +1,4 @@
-import { ModuleDefinition } from 'waxant';
+import { type ModuleDefinition } from 'waxant';
 import { I18nCommun } from './I18nCommun';
 import ListePageCommun, { PageCommun } from './ListePageCommun';
 import ReducerCommun from './ReducerCommun';

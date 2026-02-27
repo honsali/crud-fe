@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { FormInstance } from 'antd';
-import { createEtatError, createEtatInit, createEtatPending, createEtatSuccess, IRequete, IResultat, IRootState } from 'waxant';
+import { type FormInstance } from 'antd';
+import { type EtatMdl, type IRequete, type IResultat, type IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlCreerEmploye from './CtrlCreerEmploye';
 
 export interface ReqCreerEmploye extends IRequete {
@@ -11,12 +11,14 @@ export interface ResCreerEmploye extends IResultat {
     idEmploye?: string;
 }
 
-const initialState = {
-    etatCreerEmploye: createEtatInit(),
-    idEmploye: null,
-};
+interface CreerEmployeType {
+    etatCreerEmploye: EtatMdl;
+    idEmploye?: string;
+}
 
-type CreerEmployeType = typeof initialState;
+const initialState: CreerEmployeType = {
+    etatCreerEmploye: createEtatInit(),
+};
 
 const SliceCreerEmploye = createSlice({
     name: 'MdlCreerEmploye',

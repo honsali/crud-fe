@@ -1,9 +1,10 @@
 import { RollbackOutlined } from '@ant-design/icons';
-import { BoutonProps } from '../../bouton/BoutonProps';
-import ActionUcNormale from '../ActionUcNormale';
+import BoutonTexteLien from 'waxant/composants/bouton/texte/BoutonTexteLien';
+import type { BoutonProps } from '../../bouton/BoutonProps';
+
 
 const ActionUcRetourConsulter = (props: BoutonProps) => {
-    return <ActionUcNormale nom="retourConsulter" icone={<RollbackOutlined />} {...props} />;
+    return <BoutonTexteLien nom="retourConsulter" icone={<RollbackOutlined />} {...props} />;
 };
 
 export default ActionUcRetourConsulter;

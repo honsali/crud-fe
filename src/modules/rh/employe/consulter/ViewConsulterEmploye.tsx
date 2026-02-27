@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { ActionUcAjouter, ActionUcModifier, ActionUcRetourListe, ActionUcSupprimer, Bloc, BlocAction, MenuOnglet, Onglet, Section, useGoToPage } from 'waxant';
 import { ActionEmploye } from '../ActionEmploye';
-import { PageFiltrerEmploye, PageModifierConge, PageModifierEmploye } from '../ListePageEmploye';
+import { PageCreerConge, PageFiltrerEmploye, PageModifierEmploye } from '../ListePageEmploye';
 import EtatEmploye from './element/EtatEmploye';
 import TableauConge from './element/TableauConge';
 import useConsulterEmploye from './useConsulterEmploye';
@@ -9,7 +9,6 @@ import useConsulterEmploye from './useConsulterEmploye';
 const ViewConsulterEmploye = () => {
     const goToPage = useGoToPage();
     const { etatSupprimerEmploye, resetEtatSupprimerEmploye, supprimerEmploye } = useConsulterEmploye();
-
 
 
     useEffect(() => {
@@ -33,10 +32,10 @@ const ViewConsulterEmploye = () => {
                     </Bloc>
                 </Onglet>
                 <Onglet key="conge" >
-                    <Bloc>
+                    <Bloc marge="20px">
                         <TableauConge />
                         <BlocAction>
-                            <ActionUcAjouter nom={ActionEmploye.UcConsulterEmploye.AJOUTER_CONGE} page={PageModifierConge} />
+                            <ActionUcAjouter nom={ActionEmploye.UcConsulterEmploye.AJOUTER_CONGE} page={PageCreerConge} />
                         </BlocAction>
                     </Bloc>
                 </Onglet>

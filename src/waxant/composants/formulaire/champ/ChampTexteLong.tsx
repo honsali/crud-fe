@@ -1,12 +1,11 @@
-import { Form } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
+import { Form, Input } from 'antd';
 import _ from 'lodash';
 import { useContext } from 'react';
 import FormulaireValidateur from '../FormulaireValidateur';
 
-const ChampTexteLong = (props: any) => {
+const ChampTexteLong = (props) => {
     const validateur = useContext(FormulaireValidateur);
-
+    const { TextArea } = Input;
     const getRules = () => {
         const n = _.isArray(props.attributes.name) ? _.join(props.attributes.name, '.') : props.attributes.name;
         if (props.attributes.requis || (validateur && validateur[n] && validateur[n].requis)) {
@@ -21,9 +20,9 @@ const ChampTexteLong = (props: any) => {
         }
     };
     return (
-        <Form.Item {...props.attributes} rules={[getRules]} style={{ ...props.attributes.style }}>
+        <Form.Item key={props.attributes.cname} {...props.attributes} rules={[getRules]} style={{ ...props.attributes.style }}>
             <TextArea
-                className={'champ-' + props.attributes.cls}
+                className={'champ-' + props.attributes.cls}//
                 disabled={props.attributes.disabled}
                 placeholder={props.attributes.placeholder}
                 onBlur={valueChanged}

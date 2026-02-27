@@ -1,13 +1,14 @@
 import { Avatar, Col, Modal, Row, Space } from 'antd';
+import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import useI18n from '../../noyau/i18n/useI18n';
+import type { IMessageErreur } from '../../noyau/message/DomaineMessage';
 import { MdlMessage, selectInfoActionEchoueeDansDialogue } from '../../noyau/message/MdlMessage';
 import useAppDispatch from '../../noyau/redux/useAppDispatch';
-import util from '../../noyau/util/util';
-import BoutonFort from '../bouton/BoutonFort';
-import BoutonNormal from '../bouton/BoutonNormal';
+import BoutonFort from '../bouton/texte/BoutonTexteFort';
+import BoutonTexteNormal from '../bouton/texte/BoutonTexteNormal';
 const Composant = styled(Modal)`
     .ant-modal-content {
         padding: 0;
@@ -68,14 +69,29 @@ const SErreur = styled(Col)`
     margin-bottom: 10px;
 `;
 
-const DialogueConfirmation = ({ visible, nom, titre = null, icone = null, nomActionConfirmer = 'confirmer', actionConfirmer, nomActionAnnuler = 'annuler', actionAnnuler = null, largeur = 1000, rid = null, inactif = null, children = null }) => {
+type DialogueConfirmationProps = {
+    visible: boolean;
+    nom: string;
+    titre?: string | null;
+    icone?: ReactNode | null;
+    nomActionConfirmer?: string;
+    actionConfirmer?: (() => void) | null;
+    nomActionAnnuler?: string;
+    actionAnnuler?: (() => void) | null;
+    largeur?: number;
+    rid?: string | null;
+    inactif?: string | null;
+    children?: ReactNode;
+};
+
+const DialogueConfirmation = ({ visible, nom, titre = null, icone = null, nomActionConfirmer = 'confirmer', actionConfirmer = null, nomActionAnnuler = 'annuler', actionAnnuler = null, largeur = 1000, rid = null, inactif = null, children = null }: DialogueConfirmationProps) => {
     const { i18n, erreurI18n } = useI18n();
     const infoActionEchouee = useSelector(selectInfoActionEchoueeDansDialogue);
     const dispatch = useAppDispatch();
-    const [erreur, setErreur] = useState(null);
+    const [erreur, setErreur] = useState<IMessageErreur | null>(null);
 
     useEffect(() => {
-        if (util.nonNul(infoActionEchouee)) {
+        if (infoActionEchouee) {
             setErreur(erreurI18n(infoActionEchouee));
         } else {
             setErreur(null);
@@ -98,14 +114,14 @@ const DialogueConfirmation = ({ visible, nom, titre = null, icone = null, nomAct
     const getFooter = () => {
         return (
             <Space>
-                <BoutonNormal nom={nomActionAnnuler} action={actionAnnuler} inactif={rid} />
-                <BoutonFort nom={nomActionConfirmer} contexte={nom} action={actionConfirmer} rid={rid} inactif={inactif} />
+                <BoutonTexteNormal nom={nomActionAnnuler} action={actionAnnuler ?? undefined} inactif={rid} />
+                <BoutonFort nom={nomActionConfirmer} contexte={nom} action={actionConfirmer ?? undefined} rid={rid} inactif={inactif} />
             </Space>
         );
     };
 
     return (
-        <Composant open={visible} title={getTitre()} footer={getFooter()} width={largeur} maskClosable={false} onCancel={actionAnnuler} closable={false}>
+        <Composant open={visible} title={getTitre()} footer={getFooter()} width={largeur} maskClosable={false} onCancel={actionAnnuler ?? undefined} closable={false}>
             {erreur && (
                 <Row>
                     <SErreur>{erreur.titre}</SErreur>

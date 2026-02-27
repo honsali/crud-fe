@@ -1,9 +1,9 @@
 import { CloseOutlined, EditFilled } from '@ant-design/icons';
-import { Form, Input } from 'antd';
+import { Form, Input, Space } from 'antd';
 import _ from 'lodash';
 import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
-import BoutonIcone from '../../bouton/BoutonIcone';
+import BoutonIcone from '../../bouton/icone/BoutonIconeNormal';
 import FormulaireValidateur from '../FormulaireValidateur';
 
 export const Composant = styled(Input)`
@@ -54,18 +54,20 @@ const ChampTexteModifiableParDialogue = (props) => {
     return (
         <div>
             <Form.Item {...props.attributes} disabled rules={[getRules]}>
-                <Composant
-                    style={props.attributes.style}
-                    disabled
-                    placeholder={props.attributes.placeholder}
-                    onBlur={valueChanged}
-                    addonAfter={
-                        <span>
-                            <BoutonIcone nom="modifier" icone={<EditFilled />} taille="mini" forme="plein" action={afficherDialogue} /> |&nbsp;
-                            <BoutonIcone nom="initialiser" icone={<CloseOutlined />} taille="mini" forme="plein" action={initialiser} />
-                        </span>
-                    }
-                />
+                <Space.Compact>
+                    <Composant
+                        style={props.attributes.style}
+                        disabled
+                        placeholder={props.attributes.placeholder}
+                        onBlur={valueChanged}
+                    />
+                    <Space.Addon>
+                        <BoutonIcone nom="modifier" icone={<EditFilled />} taille="mini" action={afficherDialogue} />
+                    </Space.Addon>
+                    <Space.Addon>
+                        <BoutonIcone nom="initialiser" icone={<CloseOutlined />} taille="mini" action={initialiser} />
+                    </Space.Addon>
+                </Space.Compact>
             </Form.Item>
             {React.cloneElement(props.dialogue, { visible, setVisible })}
         </div>

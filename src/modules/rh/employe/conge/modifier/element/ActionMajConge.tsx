@@ -1,13 +1,12 @@
 import { useEffect } from 'react';
 import { ActionUcMaj, useGoToPage } from 'waxant';
-import { PageConsulterDepartement } from '../../../../departement/ListePageDepartement';
 import { ActionEmploye } from '../../../ActionEmploye';
+import { PageConsulterConge } from '../../../ListePageEmploye';
 import useModifierConge from '../useModifierConge';
 
 const ActionMajConge = ({ form }) => {
     const goToPage = useGoToPage();
     const { etatMajConge, majConge, resetEtatMajConge } = useModifierConge();
-
 
     const maj = () => {
         majConge({ form });
@@ -16,7 +15,7 @@ const ActionMajConge = ({ form }) => {
     useEffect(() => {
         if (etatMajConge.succes) {
             resetEtatMajConge();
-            goToPage(PageConsulterDepartement);
+            goToPage(PageConsulterConge);
         }
     }, [etatMajConge.succes]);
     //

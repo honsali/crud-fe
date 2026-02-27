@@ -1,8 +1,9 @@
+import type { AsyncThunk, AsyncThunkConfig } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useAppDispatch } from 'waxant';
 import CtrlConsulterEmploye from './CtrlConsulterEmploye';
-import { MdlConsulterEmploye, ReqConsulterEmploye, selectEmploye, selectEtatListerCongeParIdEmploye, selectEtatRecupererEmployeParId, selectEtatSupprimerEmploye, selectListeConge } from './MdlConsulterEmploye';
+import { MdlConsulterEmploye, type ReqConsulterEmploye, type ResConsulterEmploye, selectEmploye, selectEtatListerCongeParIdEmploye, selectEtatRecupererEmployeParId, selectEtatSupprimerEmploye, selectListeConge } from './MdlConsulterEmploye';
 
 const useConsulterEmploye = () => {
 
@@ -15,7 +16,7 @@ const useConsulterEmploye = () => {
     const employe = useSelector(selectEmploye);
     const listeConge = useSelector(selectListeConge);
 
-    const createAction = (action: any) => (req?: ReqConsulterEmploye) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: AsyncThunk<ResConsulterEmploye, ReqConsulterEmploye, AsyncThunkConfig>) => (req?: ReqConsulterEmploye) => dispatch(action({ ...req, ...params } as ReqConsulterEmploye));
 
     return {
         // Actions

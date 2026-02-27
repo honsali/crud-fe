@@ -1,14 +1,14 @@
 import { SwapRightOutlined, WarningOutlined } from '@ant-design/icons';
 import { Col, Modal, Row } from 'antd';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { useContexteAuth } from 'waxant';
+import { BoutonFort, useContexteAuth } from 'waxant';
 import useI18n from '../../noyau/i18n/useI18n';
+import type { IMessageErreur } from '../../noyau/message/DomaineMessage';
 import { MdlMessage, selectInfoActionEchouee } from '../../noyau/message/MdlMessage';
 import useAppDispatch from '../../noyau/redux/useAppDispatch';
 import util from '../../noyau/util/util';
-import BoutonFort from '../bouton/BoutonFort';
 
 const SDialogErreur = styled(Modal)`
     padding: 0;
@@ -81,16 +81,17 @@ const DialogueErreur = () => {
     const { erreurI18n } = useI18n();
     const dispatch = useAppDispatch();
     const infoActionEchouee = useSelector(selectInfoActionEchouee);
-    const [erreur, setErreur] = useState(null);
+    const [erreur, setErreur] = useState<IMessageErreur | null>(null);
     const { logout } = useContexteAuth();
 
     useEffect(() => {
-        if (util.nonNul(infoActionEchouee)) {
+        if (infoActionEchouee) {
             const code: any = infoActionEchouee?.code;
             if (code?.status === 403) {
                 setErreur(erreurI18n({ code: 'error.url.not.authorized' }));
             } else {
-                setErreur(erreurI18n(infoActionEchouee));
+                const lst = erreurI18n(infoActionEchouee);
+                setErreur(lst);
             }
         } else {
             setErreur(null);
@@ -98,8 +99,18 @@ const DialogueErreur = () => {
     }, [infoActionEchouee]);
 
     const fermer = () => {
+        setErreur(null);
         dispatch(MdlMessage.initialiser());
     };
+
+    const afficherListeErreur = useCallback(() => {
+        const items = (erreur?.listeErreur ?? []).map((e, i) => (
+            <div className="detail" key={i}>
+                <SwapRightOutlined /> {e}
+            </div>
+        ));
+        return items;
+    }, [erreur]);
 
     return (
         <SDialogErreur open={util.nonNul(infoActionEchouee)} closable={false} width={600} zIndex={9999}>
@@ -116,11 +127,7 @@ const DialogueErreur = () => {
                         <div>
                             <div className="titre">{erreur?.titre}</div>
                             <div className="message">{erreur?.sousTitre}</div>
-                            {erreur?.listeErreur.map((e) => (
-                                <div className="detail" key={e}>
-                                    <SwapRightOutlined /> {e}
-                                </div>
-                            ))}
+                            {afficherListeErreur()}
                         </div>
                         <SDialogueErreurFooter>
                             <BoutonFort action={fermer} libelle="Fermer" />

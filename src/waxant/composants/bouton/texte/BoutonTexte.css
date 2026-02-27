@@ -1,0 +1,272 @@
+/* BOUTON DANGER */
+.ant-btn.waxant-bouton-danger {
+    position: relative;
+    overflow: hidden;
+    background-color: #fff;
+    border: 2px solid var(--ant-color-error);
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.ant-btn.waxant-bouton-danger::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    background-color: #fff;
+    transition: width 0.3s ease;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.ant-btn.waxant-bouton-danger:hover:not(:disabled) {
+    border: 2px solid var(--ant-color-error);
+    background-color: var(--ant-color-error);
+}
+
+.ant-btn.waxant-bouton-danger:hover:not(:disabled)::after {
+    width: 0;
+    transition: width 0.7s ease;
+}
+
+.ant-btn.waxant-bouton-danger .waxant-bouton-danger__content,
+.ant-btn.waxant-bouton-danger .waxant-bouton-danger__icon {
+    position: relative;
+    z-index: 1;
+    color: var(--ant-color-error);
+    font-weight: 500;
+}
+
+.ant-btn.waxant-bouton-danger:hover:not(:disabled) .waxant-bouton-danger__content,
+.ant-btn.waxant-bouton-danger:hover:not(:disabled) .waxant-bouton-danger__icon {
+    color: #fff;
+}
+
+.ant-btn.waxant-bouton-danger:disabled {
+    background-color: transparent;
+    border-color: #aaa;
+    color: #999;
+}
+
+.ant-btn.waxant-bouton-danger:disabled::after {
+    display: none;
+}
+
+.ant-btn.waxant-bouton-danger:disabled .waxant-bouton-danger__content,
+.ant-btn.waxant-bouton-danger:disabled .waxant-bouton-danger__icon {
+    color: #999;
+}
+
+/* BOUTON NORMAL */
+.ant-btn.waxant-bouton-normal {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--ant-color-secondary);
+    border: 2px solid var(--ant-color-secondary);
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.ant-btn.waxant-bouton-normal::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    background-color: var(--ant-color-secondary);
+    transition: width 0.3s ease;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.ant-btn.waxant-bouton-normal:hover:not(:disabled) {
+    background-color: #fff;
+    border: 2px solid var(--ant-color-primary);
+}
+
+.ant-btn.waxant-bouton-normal:hover:not(:disabled)::after {
+    width: 0;
+    transition: width 0.7s ease;
+}
+
+.ant-btn.waxant-bouton-normal .waxant-bouton-normal__content,
+.ant-btn.waxant-bouton-normal .waxant-bouton-normal__icon {
+    position: relative;
+    z-index: 1;
+    color: var(--ant-color-primary);
+    font-weight: 500;
+}
+
+.ant-btn.waxant-bouton-normal:hover:not(:disabled) .waxant-bouton-normal__content,
+.ant-btn.waxant-bouton-normal:hover:not(:disabled) .waxant-bouton-normal__icon {
+    color: var(--ant-color-primary);
+}
+
+.ant-btn.waxant-bouton-normal:disabled {
+    background-color: transparent;
+    border-color: #aaa;
+    color: #999;
+}
+
+.ant-btn.waxant-bouton-normal:disabled::after {
+    display: none;
+}
+
+.ant-btn.waxant-bouton-normal:disabled .waxant-bouton-normal__content,
+.ant-btn.waxant-bouton-normal:disabled .waxant-bouton-normal__icon {
+    color: #999;
+}
+
+/* BOUTON FORT */
+.ant-btn.waxant-bouton-fort {
+    position: relative;
+    overflow: hidden;
+    background-color: transparent;
+    border: 2px solid var(--ant-color-primary);
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.ant-btn.waxant-bouton-fort::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    background-color: var(--ant-color-primary);
+    transition: width 0.3s ease;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.ant-btn.waxant-bouton-fort:hover:not(:disabled) {
+    background-color: #fff;
+    border: 2px solid var(--ant-color-primary);
+}
+
+.ant-btn.waxant-bouton-fort:hover:not(:disabled)::after {
+    width: 0;
+    transition: width 0.7s ease;
+}
+
+.ant-btn.waxant-bouton-fort .waxant-bouton-fort__content,
+.ant-btn.waxant-bouton-fort .waxant-bouton-fort__icon {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    font-weight: 500;
+}
+
+.ant-btn.waxant-bouton-fort:hover:not(:disabled) .waxant-bouton-fort__content,
+.ant-btn.waxant-bouton-fort:hover:not(:disabled) .waxant-bouton-fort__icon {
+    color: var(--ant-color-primary);
+}
+
+.ant-btn.waxant-bouton-fort:disabled {
+    background-color: transparent;
+    border-color: #aaa;
+    color: #999;
+}
+
+.ant-btn.waxant-bouton-fort:disabled::after {
+    display: none;
+}
+
+.ant-btn.waxant-bouton-fort:disabled .waxant-bouton-fort__content,
+.ant-btn.waxant-bouton-fort:disabled .waxant-bouton-fort__icon {
+    color: #999;
+}
+
+/* BOUTON ALERTE */
+.ant-btn.waxant-bouton-alerte {
+    position: relative;
+    overflow: hidden;
+    background-color: #fff;
+    border: 2px solid var(--ant-color-warning);
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.ant-btn.waxant-bouton-alerte::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    background-color: #fff;
+    transition: width 0.3s ease;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.ant-btn.waxant-bouton-alerte:hover:not(:disabled) {
+    background-color: var(--ant-color-warning);
+    border: 2px solid var(--ant-color-warning);
+}
+
+.ant-btn.waxant-bouton-alerte:hover:not(:disabled)::after {
+    width: 0;
+    transition: width 0.7s ease;
+}
+
+.ant-btn.waxant-bouton-alerte .waxant-bouton-alerte__content,
+.ant-btn.waxant-bouton-alerte .waxant-bouton-alerte__icon {
+    position: relative;
+    z-index: 1;
+    color: var(--ant-color-warning);
+    font-weight: 500;
+}
+
+.ant-btn.waxant-bouton-alerte:hover:not(:disabled) .waxant-bouton-alerte__content,
+.ant-btn.waxant-bouton-alerte:hover:not(:disabled) .waxant-bouton-alerte__icon {
+    color: #fff;
+}
+
+.ant-btn.waxant-bouton-alerte:disabled {
+    background-color: transparent;
+    border-color: #aaa;
+    color: #999;
+}
+
+.ant-btn.waxant-bouton-alerte:disabled::after {
+    display: none;
+}
+
+.ant-btn.waxant-bouton-alerte:disabled .waxant-bouton-alerte__content,
+.ant-btn.waxant-bouton-alerte:disabled .waxant-bouton-alerte__icon {
+    color: #999;
+}
+
+/* BOUTON LIEN */
+.ant-btn.waxant-bouton-lien {
+    color: #999;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0;
+    font-weight: 500;
+    height: auto;
+    padding: 0;
+    line-height: 1.2;
+    margin: 0 15px;
+}
+
+.ant-btn.waxant-bouton-lien .waxant-bouton-lien__content,
+.ant-btn.waxant-bouton-lien .waxant-bouton-lien__icon {
+    color: inherit;
+    font-weight: 500;
+}
+
+.ant-btn.waxant-bouton-lien:hover:not(:disabled) {
+    color: var(--ant-color-primary);
+    background-color: transparent;
+    border-bottom: 1px solid var(--ant-color-primary);
+}
+
+.ant-btn.waxant-bouton-lien:disabled {
+    background-color: transparent;
+    border-color: #999;
+    color: #999;
+}
+
+.ant-btn.waxant-bouton-lien:disabled .waxant-bouton-lien__content,
+.ant-btn.waxant-bouton-lien:disabled .waxant-bouton-lien__icon {
+    color: inherit;
+}

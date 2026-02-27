@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { IInfoActionEchouee, IInfoActionReussie, IMessageErreur } from '../message/DomaineMessage';
+import type { IInfoActionEchouee, IInfoActionReussie, IMessageErreur } from '../message/DomaineMessage';
 import MappeurErreur from './MappeurErreur';
 import MappeurInfoActionReussie from './MappeurInfoActionReussie';
 import MappeurLibelle from './MappeurLibelle';
@@ -30,7 +30,7 @@ const useI18n = () => {
 
     const infoActionI18n = useCallback(
         (key: IInfoActionReussie): string => {
-            return MappeurInfoActionReussie.get(key, mapInfoActionI18n, mapLibelleI18n);
+            return MappeurInfoActionReussie.get(key, mapInfoActionI18n, mapLibelleI18n) ?? '';
         },
         [mapLibelleI18n, mapInfoActionI18n]
     );

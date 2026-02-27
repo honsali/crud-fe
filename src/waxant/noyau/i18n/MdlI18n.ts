@@ -1,5 +1,5 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IRootState } from '../redux/StoreDynamique';
+import { createSelector, createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { type IRootState } from '../redux/StoreDynamique';
 
 const initialState = {
     mapLibelleI18n: {} as Record<string, string>,

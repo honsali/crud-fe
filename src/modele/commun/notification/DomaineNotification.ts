@@ -1,5 +1,5 @@
-import { IPagination } from 'modele/commun/pagination/DomainePagination';
-import { IReference } from 'modele/commun/reference/DomaineReference';
+import { type IPagination } from 'modele/commun/pagination/DomainePagination';
+import { type IReference } from 'modele/commun/reference/DomaineReference';
 
 export interface INotification {
     id?: string;

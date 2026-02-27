@@ -1,15 +1,9 @@
 import { Row } from 'antd';
-import styled from 'styled-components';
+import styled, { type CSSProperties } from 'styled-components';
 import useContexteView from 'waxant/noyau/contexte/ContexteView';
 import useContexteApp from '../../noyau/contexte/ContexteApp';
 import useI18n from '../../noyau/i18n/useI18n';
 
-const Composant = styled.div`
-    padding: 20px 40px ;
-`;
-
-const Entete = styled(Row)`
-`;
 
 const Titre = styled.div`
     flex: none;
@@ -25,7 +19,8 @@ const Action = styled.div`
     flex: auto;
     display: flex;
     justify-content: end;
-    align-items: center;
+    align-items: baseline;
+    padding:12px 0 0 0 ;
 `;
 
 const Corps = styled.div`
@@ -35,13 +30,16 @@ const Corps = styled.div`
 `;
 
 interface SectionProps {
+    style?: CSSProperties;
+    marge?: string;
     titre?: string | null;
     libelle?: string | React.ReactNode | null;
     blocAction?: React.ReactNode;
     children: React.ReactNode;
 }
 
-const Section: React.FC<SectionProps> = ({ titre = null, libelle = null, blocAction = null, children }) => {
+const Section: React.FC<SectionProps> = (props: SectionProps) => {
+    const { style, marge = '20px 40px', titre = null, libelle = null, blocAction = null, children } = props;
     const { i18n } = useI18n();
     const { uc } = useContexteView();
     const { appName } = useContexteApp();
@@ -49,13 +47,13 @@ const Section: React.FC<SectionProps> = ({ titre = null, libelle = null, blocAct
     document.title = appName + ' ' + titreSection;
 
     return (
-        <Composant>
-            <Entete>
+        <div style={{ ...(style ?? {}), padding: marge }}>
+            <Row>
                 <Titre>{libelle || titreSection}</Titre>
                 <Action>{blocAction}</Action>
-            </Entete>
+            </Row>
             <Corps>{children}</Corps>
-        </Composant>
+        </div>
     );
 };
 

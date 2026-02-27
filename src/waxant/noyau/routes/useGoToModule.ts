@@ -22,6 +22,9 @@ const useGoToModule = () => {
     };
 
     return (nomModule: string, args?: any) => {
+        if (!role) {
+            return;
+        }
         const index = parse(nomModule, mapDomaine[role]?.listeModule);
         if (index) {
             navigate(index.toPath({ ...args, ...params }));

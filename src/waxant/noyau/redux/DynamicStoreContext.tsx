@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { Provider as StoreProvider } from 'react-redux';
 import Avancement from 'waxant/composants/widget/Avancement';
 import useContexteAuth from '../auth/ContexteAuth';
-import { ConfigAppType } from '../contexte/ContexteApp';
+import { type ConfigAppType } from '../contexte/ContexteApp';
 import { listeReducer } from '../routes/PageDefinition';
 import getStore, { registerReducer } from './StoreDynamique';
 
@@ -15,6 +15,9 @@ export const DynamicStoreProvider = ({ config, children }: { config: ConfigAppTy
     const [store, setStore] = useState(getStore());
 
     useEffect(() => {
+        if (!role) {
+            return;
+        }
         const domaine = config.mapDomaine[role];
         const listeModule = domaine?.listeModule;
         const allReducers = listeReducer({}, listeModule);

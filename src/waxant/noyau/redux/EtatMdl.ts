@@ -4,7 +4,7 @@ export interface EtatMdl {
     enCours: boolean;
     succes: boolean;
     erreur?: boolean;
-    rid?: string;
+    rid?: string | null;
 }
 
 

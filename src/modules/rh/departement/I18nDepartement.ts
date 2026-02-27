@@ -22,6 +22,7 @@ export const I18nDepartement = {
     [ActionDepartement.UcListerDepartement.AJOUTER_DEPARTEMENT]: 'Nouveau Departement',
     PageModifierDepartement: 'Modifier Departement',
     'UcModifierDepartement.titre': 'Modifier Departement',
+    [ActionDepartement.UcModifierDepartement.INIT_MODIFICATION_DEPARTEMENT]: 'Init Modification',
     [ActionDepartement.UcModifierDepartement.MAJ_DEPARTEMENT]: 'Enregistrer',
     [titreConfirmation(ActionDepartement.UcModifierDepartement.MAJ_DEPARTEMENT)]: 'Maj Departement',
     [enteteConfirmation(ActionDepartement.UcModifierDepartement.MAJ_DEPARTEMENT)]: 'Etes vous sur de vouloir Maj ce Departement',

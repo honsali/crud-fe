@@ -1,7 +1,7 @@
 import ServiceEmploye from 'modele/rh/employe/ServiceEmploye';
 import { action, util } from 'waxant';
 import { ActionEmploye } from '../ActionEmploye';
-import { ReqCreerEmploye, ResCreerEmploye } from './MdlCreerEmploye';
+import { type ReqCreerEmploye, type ResCreerEmploye } from './MdlCreerEmploye';
 
 const creerEmployeImpl = async (requete: ReqCreerEmploye, resultat: ResCreerEmploye, thunkAPI) => {
     await requete.form.validateFields();

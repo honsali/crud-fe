@@ -1,7 +1,7 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { FormInstance } from 'antd';
-import { IEmploye } from 'modele/rh/employe/DomaineEmploye';
-import { createEtatError, createEtatInit, createEtatPending, createEtatSuccess, IRequete, IResultat, IRootState } from 'waxant';
+import { type FormInstance } from 'antd';
+import { type IEmploye } from 'modele/rh/employe/DomaineEmploye';
+import { type EtatMdl, type IRequete, type IResultat, type IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlModifierEmploye from './CtrlModifierEmploye';
 
 export interface ReqModifierEmploye extends IRequete {
@@ -10,30 +10,44 @@ export interface ReqModifierEmploye extends IRequete {
 }
 
 export interface ResModifierEmploye extends IResultat {
-    employe?: IEmploye;
+    employe: IEmploye | {};
 }
 
-const initialState = {
-    employe: {} as IEmploye,
-    etatMajEmploye: createEtatInit(),
-    etatRecupererEmployeParId: createEtatInit(),
-};
+interface ModifierEmployeType {
+    employe?: IEmploye;
+    etatInitModificationEmploye: EtatMdl;
+    etatMajEmploye: EtatMdl;
+}
 
-type ModifierEmployeType = typeof initialState;
+const initialState: ModifierEmployeType = {
+    employe: {} as IEmploye,
+    etatInitModificationEmploye: createEtatInit(),
+    etatMajEmploye: createEtatInit(),
+};
 
 const SliceModifierEmploye = createSlice({
     name: 'MdlModifierEmploye',
     initialState,
     reducers: {
+        resetEtatInitModificationEmploye(state) {
+            state.etatInitModificationEmploye = createEtatInit();
+        },
         resetEtatMajEmploye(state) {
             state.etatMajEmploye = createEtatInit();
-        },
-        resetEtatRecupererEmployeParId(state) {
-            state.etatRecupererEmployeParId = createEtatInit();
         },
     },
     extraReducers(builder) {
         builder
+            .addCase(CtrlModifierEmploye.initModificationEmploye.fulfilled, (state, action) => {
+                state.employe = action.payload.employe;
+                state.etatInitModificationEmploye = createEtatSuccess();
+            })
+            .addCase(CtrlModifierEmploye.initModificationEmploye.pending, (state, action) => {
+                state.etatInitModificationEmploye = createEtatPending();
+            })
+            .addCase(CtrlModifierEmploye.initModificationEmploye.rejected, (state, action) => {
+                state.etatInitModificationEmploye = createEtatError();
+            })
             .addCase(CtrlModifierEmploye.majEmploye.fulfilled, (state, action) => {
                 state.etatMajEmploye = createEtatSuccess();
             })
@@ -42,16 +56,6 @@ const SliceModifierEmploye = createSlice({
             })
             .addCase(CtrlModifierEmploye.majEmploye.rejected, (state, action) => {
                 state.etatMajEmploye = createEtatError();
-            })
-            .addCase(CtrlModifierEmploye.recupererEmployeParId.fulfilled, (state, action) => {
-                state.employe = action.payload.employe;
-                state.etatRecupererEmployeParId = createEtatSuccess();
-            })
-            .addCase(CtrlModifierEmploye.recupererEmployeParId.pending, (state, action) => {
-                state.etatRecupererEmployeParId = createEtatPending();
-            })
-            .addCase(CtrlModifierEmploye.recupererEmployeParId.rejected, (state, action) => {
-                state.etatRecupererEmployeParId = createEtatError();
             });
     },
 });
@@ -59,8 +63,8 @@ const SliceModifierEmploye = createSlice({
 export const MdlModifierEmploye = SliceModifierEmploye.actions;
 
 const selectMdlModifierEmploye = (state: IRootState) => state.mdlModifierEmploye;
+export const selectEtatInitModificationEmploye = createSelector([selectMdlModifierEmploye], (state: ModifierEmployeType) => state.etatInitModificationEmploye);
 export const selectEtatMajEmploye = createSelector([selectMdlModifierEmploye], (state: ModifierEmployeType) => state.etatMajEmploye);
-export const selectEtatRecupererEmployeParId = createSelector([selectMdlModifierEmploye], (state: ModifierEmployeType) => state.etatRecupererEmployeParId);
 export const selectEmploye = createSelector([selectMdlModifierEmploye], (state: ModifierEmployeType) => state.employe);
 
 export default SliceModifierEmploye.reducer;

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import util from '../../noyau/util/util';
-import { IInfoActionReussie } from '../message/DomaineMessage';
+import { type IInfoActionReussie } from '../message/DomaineMessage';
 import MappeurLibelle from './MappeurLibelle';
 
 const templateMap = {
@@ -12,7 +12,7 @@ const templateMap = {
 };
 
 const get = (infoActionReussie: IInfoActionReussie, mapMessage: Record<string, string>, mapLibelle: Record<string, string>): string | null => {
-    if (util.estNul(infoActionReussie?.key)) {
+    if (!infoActionReussie?.key || !infoActionReussie?.type) {
         return null;
     }
 
@@ -20,7 +20,7 @@ const get = (infoActionReussie: IInfoActionReussie, mapMessage: Record<string, s
     const messageTypeKey = `${type}.${key}`;
 
     const textFromMessage = mapMessage[messageTypeKey];
-    if (util.nonNul(textFromMessage)) {
+    if (textFromMessage) {
         return textFromMessage;
     }
     const texteFromLibelle = MappeurLibelle.libelle(messageTypeKey, mapLibelle, false);
@@ -30,9 +30,10 @@ const get = (infoActionReussie: IInfoActionReussie, mapMessage: Record<string, s
 
     const reducedKey = key.split(/(?=[A-Z])/)[0];
     const deducedType = type.split(/(?=[A-Z])/);
+    const typeSuffixLength = deducedType[1]?.length ?? 0;
     const compiledTemplateForReducedKey = templateMap[`default.${reducedKey}`];
     if (compiledTemplateForReducedKey) {
-        return compiledTemplateForReducedKey({ key, type, libelleType: type.substring(4 + deducedType[1].length) });
+        return compiledTemplateForReducedKey({ key, type, libelleType: type.substring(4 + typeSuffixLength) });
     }
 
 

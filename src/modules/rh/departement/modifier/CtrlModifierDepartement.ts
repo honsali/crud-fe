@@ -1,7 +1,11 @@
 import ServiceDepartement from 'modele/rh/departement/ServiceDepartement';
 import { action, util } from 'waxant';
 import { ActionDepartement } from '../ActionDepartement';
-import { ReqModifierDepartement, ResModifierDepartement } from './MdlModifierDepartement';
+import { type ReqModifierDepartement, type ResModifierDepartement } from './MdlModifierDepartement';
+
+const initModificationDepartementImpl = async (requete: ReqModifierDepartement, resultat: ResModifierDepartement, thunkAPI) => {
+    resultat.departement = await ServiceDepartement.recupererParId(requete.idDepartement);
+};
 
 const majDepartementImpl = async (requete: ReqModifierDepartement, resultat: ResModifierDepartement, thunkAPI) => {
     await requete.form.validateFields();
@@ -9,13 +13,9 @@ const majDepartementImpl = async (requete: ReqModifierDepartement, resultat: Res
     await ServiceDepartement.maj(dataForm);
 };
 
-const recupererDepartementParIdImpl = async (requete: ReqModifierDepartement, resultat: ResModifierDepartement, thunkAPI) => {
-    resultat.departement = await ServiceDepartement.recupererParId(requete.idDepartement);
-};
-
 const CtrlModifierDepartement = {
+    initModificationDepartement: action<ReqModifierDepartement, ResModifierDepartement>(initModificationDepartementImpl, ActionDepartement.UcModifierDepartement.INIT_MODIFICATION_DEPARTEMENT),
     majDepartement: action<ReqModifierDepartement, ResModifierDepartement>(majDepartementImpl, ActionDepartement.UcModifierDepartement.MAJ_DEPARTEMENT),
-    recupererDepartementParId: action<ReqModifierDepartement, ResModifierDepartement>(recupererDepartementParIdImpl, ActionDepartement.UcModifierDepartement.RECUPERER_DEPARTEMENT_PAR_ID),
 };
 
 export default CtrlModifierDepartement;

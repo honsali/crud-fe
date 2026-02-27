@@ -47,24 +47,6 @@ const supprimerChampVide = (objet): any => {
     const filter = _.overEvery([_.isNil, _.isEmpty]);
     return _.omitBy(objet, filter);
 };
-const sommer = (tableau): number => {
-    return _.reduce(
-        tableau,
-        function (sum, n) {
-            return +n ? sum + n : sum;
-        },
-        null
-    );
-};
-const sommerPar = (tableau, champ): number => {
-    return _.reduce(
-        tableau,
-        function (sum, o) {
-            return o && o[champ] ? sum + o[champ] : sum;
-        },
-        null
-    );
-};
 const contient = (objet, champ): boolean => {
     return _.get(objet, champ);
 };
@@ -86,8 +68,6 @@ const util = {
     fresh,
     equalIgnoreCase,
     supprimerChampVide,
-    sommer,
-    sommerPar,
     contient,
     unCapitalize,
     capitalize,

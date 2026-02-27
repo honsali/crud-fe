@@ -1,6 +1,6 @@
 import { faSitemap } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ContexteViewProvider, PageDefinition } from 'waxant';
+import { ContexteViewProvider, type PageDefinition } from 'waxant';
 import ViewConsulterDepartement from './consulter/ViewConsulterDepartement';
 import ViewCreerDepartement from './creer/ViewCreerDepartement';
 import ViewListerDepartement from './lister/ViewListerDepartement';

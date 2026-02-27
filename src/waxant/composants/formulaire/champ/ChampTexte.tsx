@@ -26,7 +26,6 @@ const ChampTexte = (props) => {
                 disabled={props.attributes.disabled}
                 placeholder={props.attributes.placeholder}
                 onBlur={valueChanged}
-                addonAfter={props.addonAfter}
             />
         </Form.Item>
     );

@@ -1,16 +1,17 @@
 import { Form, Input, Select } from 'antd';
 import _ from 'lodash';
 import { useContext, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
 import useContexteApp from '../../../noyau/contexte/ContexteApp';
 import util from '../../../noyau/util/util';
 import FormulaireValidateur from '../FormulaireValidateur';
 
 const ChampReference = (props) => {
     const { Option } = Select;
-    const [options, setOptions] = useState([]);
-    const [current, setCurrent] = useState(null);
-    const [referenceListe, setReferenceListe] = useState(null);
-    const [selectAttributes, setSelectAttributes] = useState(null);
+    const [options, setOptions] = useState<ReactNode[]>([]);
+    const [current, setCurrent] = useState<any>(null);
+    const [referenceListe, setReferenceListe] = useState<any[] | null>(null);
+    const [selectAttributes, setSelectAttributes] = useState<any | null>(null);
     const { form, attributes, reference, optionLibelle } = props;
     const newValue = Form.useWatch(attributes.name, form);
     const { listerReference } = useContexteApp();
@@ -21,7 +22,7 @@ const ChampReference = (props) => {
 
     useEffect(() => {
         setSelectAttributes({ ...attributes, name: attributes.sname });
-        const refOptionList = [];
+        const refOptionList: ReactNode[] = [];
         const ref = reference ? reference : attributes.lname;
         listerReference({ reference: ref }).then((lst) => {
             setReferenceListe(lst);

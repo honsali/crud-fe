@@ -1,7 +1,11 @@
 import ServiceConge from 'modele/rh/conge/ServiceConge';
 import { action, util } from 'waxant';
 import { ActionEmploye } from '../../ActionEmploye';
-import { ReqModifierConge, ResModifierConge } from './MdlModifierConge';
+import { type ReqModifierConge, type ResModifierConge } from './MdlModifierConge';
+
+const initModificationCongeImpl = async (requete: ReqModifierConge, resultat: ResModifierConge, thunkAPI) => {
+    resultat.conge = await ServiceConge.recupererParId(requete.idConge);
+};
 
 const majCongeImpl = async (requete: ReqModifierConge, resultat: ResModifierConge, thunkAPI) => {
     await requete.form.validateFields();
@@ -9,13 +13,9 @@ const majCongeImpl = async (requete: ReqModifierConge, resultat: ResModifierCong
     await ServiceConge.maj(dataForm);
 };
 
-const recupererCongeParIdImpl = async (requete: ReqModifierConge, resultat: ResModifierConge, thunkAPI) => {
-    resultat.conge = await ServiceConge.recupererParId(requete.idConge);
-};
-
 const CtrlModifierConge = {
+    initModificationConge: action<ReqModifierConge, ResModifierConge>(initModificationCongeImpl, ActionEmploye.UcModifierConge.INIT_MODIFICATION_CONGE),
     majConge: action<ReqModifierConge, ResModifierConge>(majCongeImpl, ActionEmploye.UcModifierConge.MAJ_CONGE),
-    recupererCongeParId: action<ReqModifierConge, ResModifierConge>(recupererCongeParIdImpl, ActionEmploye.UcModifierConge.RECUPERER_CONGE_PAR_ID),
 };
 
 export default CtrlModifierConge;

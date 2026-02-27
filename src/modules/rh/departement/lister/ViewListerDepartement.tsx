@@ -1,4 +1,4 @@
-import { ActionUcAjouter, BlocAction, Section } from 'waxant';
+import { ActionUcAjouter, Section } from 'waxant';
 import { ActionDepartement } from '../ActionDepartement';
 import { PageCreerDepartement } from '../ListePageDepartement';
 import TableauDepartement from './element/TableauDepartement';
@@ -6,11 +6,12 @@ import TableauDepartement from './element/TableauDepartement';
 const ViewListerDepartement = () => {
     //
     return (
-        <Section>
-            <TableauDepartement />
-            <BlocAction>
+        <Section
+            blocAction={
                 <ActionUcAjouter nom={ActionDepartement.UcListerDepartement.AJOUTER_DEPARTEMENT} page={PageCreerDepartement} />
-            </BlocAction>
+            }
+        >
+            <TableauDepartement />
         </Section>
     );
 };

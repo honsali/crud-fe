@@ -1,0 +1,95 @@
+.ant-btn.waxant-bouton-icone-alerte {
+    color: var(--ant-color-warning);
+    background-color: #fff;
+    border: 2px solid var(--ant-color-warning);
+    border-radius: 4px;
+    box-shadow: none;
+}
+
+.ant-btn.waxant-bouton-icone-alerte:hover:not(:disabled) {
+    color: #fff;
+    border: 2px solid var(--ant-color-warning);
+    background-color: var(--ant-color-warning);
+}
+
+.ant-btn.waxant-bouton-icone-alerte:disabled {
+    background-color: transparent;
+    border-color: #aaa;
+    color: #999;
+}
+
+.ant-btn.waxant-bouton-icone-alerte:disabled {
+    color: #999;
+}
+
+.ant-btn.waxant-bouton-icone-danger {
+    color: var(--ant-color-error);
+    background-color: #fff;
+    border: 2px solid var(--ant-color-error);
+    border-radius: 4px;
+    box-shadow: none;
+}
+
+.ant-btn.waxant-bouton-icone-danger:hover:not(:disabled) {
+    color: #fff;
+    border: 2px solid var(--ant-color-error);
+    background-color: var(--ant-color-error);
+}
+
+.ant-btn.waxant-bouton-icone-danger:disabled {
+    background-color: transparent;
+    border-color: #aaa;
+    color: #999;
+}
+
+.ant-btn.waxant-bouton-icone-danger:disabled {
+    color: #999;
+}
+
+.ant-btn.waxant-bouton-icone-fort {
+    color: #fff;
+    background-color: var(--ant-color-primary);
+    border: 2px solid var(--ant-color-primary);
+    border-radius: 4px;
+    box-shadow: none;
+}
+
+.ant-btn.waxant-bouton-icone-fort:hover:not(:disabled) {
+    color: var(--ant-color-primary);
+    border: 2px solid var(--ant-color-primary);
+    background-color: #fff;
+}
+
+.ant-btn.waxant-bouton-icone-fort:disabled {
+    background-color: transparent;
+    border-color: #aaa;
+    color: #999;
+}
+
+.ant-btn.waxant-bouton-icone-fort:disabled {
+    color: #999;
+}
+
+.ant-btn.waxant-bouton-icone-normal {
+    color: var(--ant-color-primary);
+    background-color: var(--ant-color-secondary);
+    border: 2px solid var(--ant-color-secondary);
+    border-radius: 4px;
+    box-shadow: none;
+}
+
+.ant-btn.waxant-bouton-icone-normal:hover:not(:disabled) {
+    color: var(--ant-color-primary);
+    border: 2px solid var(--ant-color-primary);
+    background-color: #fff;
+}
+
+.ant-btn.waxant-bouton-icone-normal:disabled {
+    background-color: transparent;
+    border-color: #aaa;
+    color: #999;
+}
+
+.ant-btn.waxant-bouton-icone-normal:disabled {
+    color: #999;
+}

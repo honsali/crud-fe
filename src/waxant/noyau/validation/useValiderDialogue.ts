@@ -1,4 +1,4 @@
-import { IInfoActionEchouee } from '../message/DomaineMessage';
+import { type IInfoActionEchouee } from '../message/DomaineMessage';
 import { MdlMessage } from '../message/MdlMessage';
 
 const useValiderDialogue = (form, dispatch, action) => {
