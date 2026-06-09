@@ -1,10 +1,10 @@
-import { type IInfoActionEchouee } from '../message/DomaineMessage';
+import { IInfoActionEchouee } from '../message/DomaineMessage';
 import { MdlMessage } from '../message/MdlMessage';
 
-const useValiderDialogue = (form, dispatch, action) => {
+const useValiderDialogue = (form, dispatch, actionErreur?: () => void) => {
     form.validateFields()
         .then(() => {
-            action();
+            actionErreur();
         })
         .catch((errorInfo) => {
             const messageErreur: IInfoActionEchouee = { code: 'error.validation.form' };

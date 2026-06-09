@@ -11,7 +11,7 @@ import { WaxantApp, type ConfigAppType } from 'waxant';
 const App = () => {
   const config: ConfigAppType = useMemo(
     () => ({
-      appName: 'CRUD',
+      appName: 'SINCORPO',
       langue: 'fr',
       formatDate: 'DD/MM/YYYY',
       formatDateTime: 'DD/MM/YYYY HH:mm',

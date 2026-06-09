@@ -1,0 +1,33 @@
+import { enteteConfirmation, messageSuccess, titreConfirmation } from 'waxant';
+import { ActionPage } from './ActionPage';
+
+export const I18nPage = {
+    PageConsulterPage: 'Consulter Page',
+    'UcConsulterPage.titre': 'Consulter Page',
+    [ActionPage.UcConsulterPage.MODIFIER_PAGE]: 'Modifier',
+    [ActionPage.UcConsulterPage.RETOUR_CONSULTER_PAGE]: 'Retour',
+    [ActionPage.UcConsulterPage.SUPPRIMER_PAGE]: 'Supprimer',
+    [titreConfirmation(ActionPage.UcConsulterPage.SUPPRIMER_PAGE)]: 'Supprimer Page',
+    [enteteConfirmation(ActionPage.UcConsulterPage.SUPPRIMER_PAGE)]: 'Etes vous sur de vouloir Supprimer ce Page',
+    [messageSuccess(ActionPage.UcConsulterPage.SUPPRIMER_PAGE)]: 'Page supprimé avec succès',
+    PageCreerPage: 'Créer Page',
+    'UcCreerPage.titre': 'Créer Page',
+    [ActionPage.UcCreerPage.CREER_PAGE]: 'Enregistrer',
+    [titreConfirmation(ActionPage.UcCreerPage.CREER_PAGE)]: 'Créer Page',
+    [enteteConfirmation(ActionPage.UcCreerPage.CREER_PAGE)]: 'Etes vous sur de vouloir créer ce Page',
+    [messageSuccess(ActionPage.UcCreerPage.CREER_PAGE)]: 'Page créé avec succès',
+    [ActionPage.UcCreerPage.RETOUR_LISTE_PAGE]: 'Retour Liste',
+    PageListerPage: 'Liste Pages',
+    'UcListerPage.titre': 'Liste Pages',
+    [ActionPage.UcListerPage.AJOUTER_PAGE]: 'Nouveau Page',
+    PageModifierPage: 'Modifier Page',
+    'UcModifierPage.titre': 'Modifier Page',
+    [ActionPage.UcModifierPage.INIT_MODIFICATION_PAGE]: 'Init Modification',
+    [ActionPage.UcModifierPage.MAJ_PAGE]: 'Enregistrer',
+    [titreConfirmation(ActionPage.UcModifierPage.MAJ_PAGE)]: 'Maj Page',
+    [enteteConfirmation(ActionPage.UcModifierPage.MAJ_PAGE)]: 'Etes vous sur de vouloir Maj ce Page',
+    [messageSuccess(ActionPage.UcModifierPage.MAJ_PAGE)]: 'Page enregistré avec succès',
+    [ActionPage.UcModifierPage.RETOUR_CONSULTER_PAGE]: 'Retour',
+    'aucun.page': 'Aucun Page',
+    name: 'Name',
+};

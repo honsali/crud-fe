@@ -1,5 +1,5 @@
 import { Layout } from 'antd';
-import { BlocMenu } from 'waxant';
+import ViewListerMenu from 'modules/navigation/menu/lister/ViewListerMenu';
 import BlocAvatar from './element/BlocAvatar';
 import BoutonCollapse from './element/BoutonCollapse';
 import Brand from './element/Brand';
@@ -12,7 +12,7 @@ const LayoutSidebar = () => {
         <Layout.Sider collapsible collapsed={!menuOuvert} width={270} trigger={null} style={{ position: 'relative', minHeight: '100%' }}>
             <Brand />
             <BlocAvatar />
-            <BlocMenu ouvert={menuOuvert} />
+            <ViewListerMenu />
             <BoutonCollapse />
         </Layout.Sider>
     );

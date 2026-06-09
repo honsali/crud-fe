@@ -1,6 +1,6 @@
 import { Tag } from 'antd';
+import { CSSProperties, ReactNode } from 'react';
 import styled from 'styled-components';
-import type { CSSProperties, ReactNode } from 'react';
 
 const Composant = styled(Tag)`
     color: #fff;
@@ -43,9 +43,9 @@ const Plaque = ({ type = null, style, couleur = null, action = null, children }:
     };
     const actionOnClick = (event) => {
         if (!action) return;
-        event.preventDefault();
-        event.stopPropagation();
-        action();
+            event.preventDefault();
+            event.stopPropagation();
+            action();
     };
 
     return (

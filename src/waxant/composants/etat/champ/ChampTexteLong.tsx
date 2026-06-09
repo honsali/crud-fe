@@ -1,5 +1,6 @@
-import { Form } from 'antd';
-import TextArea from 'antd/lib/input/TextArea';
+import { Form, Input } from 'antd';
+
+const { TextArea } = Input;
 
 const ChampTexteLong = (props: any) => {
 

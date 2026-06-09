@@ -1,6 +1,6 @@
 import { Form, Radio } from 'antd';
 import { useEffect } from 'react';
-import useI18n from 'waxant/noyau/i18n/useI18n';
+import useI18n from '../../../noyau/i18n/useI18n';
 
 const OuiNon = (props: any) => {
     const { i18n } = useI18n();

@@ -1,6 +1,5 @@
 import { CheckCircleOutlined } from '@ant-design/icons';
-import type { BoutonProps } from '../../bouton/BoutonProps';
-
+import { BoutonProps } from '../../bouton/BoutonProps';
 import ActionUcConfirmer from '../ActionUcConfirmer';
 
 const ActionUcAccepter = (props: BoutonProps) => {

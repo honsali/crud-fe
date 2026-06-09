@@ -1,12 +1,12 @@
-import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
 export interface ILayoutContextProps {
     menuOuvert: boolean;
-    gedOuvert: boolean;
-    gedFixe: boolean;
+    entiteOuvert: boolean;
+    moduleOuvert: boolean;
     setMenuOuvert: (ouvert: boolean) => void;
-    setGedOuvert: (ouvert: boolean) => void;
-    setGedFixe: (fixe: boolean) => void;
+    setEntiteOuvert: (ouvert: boolean) => void;
+    setModuleOuvert: (ouvert: boolean) => void;
 }
 
 const LayoutContext = createContext<ILayoutContextProps | undefined>(undefined);
@@ -20,12 +20,12 @@ export const LayoutContextProvider: React.FC<LayoutContextProviderProps> = ({ ch
         const saved = localStorage.getItem('menuOuvert');
         return saved !== null ? JSON.parse(saved) : true;
     });
-    const [gedOuvert, setGedOuvert] = useState<boolean>(() => {
-        const saved = localStorage.getItem('gedOuvert');
+    const [entiteOuvert, setEntiteOuvert] = useState<boolean>(() => {
+        const saved = localStorage.getItem('entiteOuvert');
         return saved !== null ? JSON.parse(saved) : false;
     });
-    const [gedFixe, setGedFixe] = useState<boolean>(() => {
-        const saved = localStorage.getItem('gedFixe');
+    const [moduleOuvert, setModuleOuvert] = useState<boolean>(() => {
+        const saved = localStorage.getItem('moduleOuvert');
         return saved !== null ? JSON.parse(saved) : false;
     });
 
@@ -34,26 +34,22 @@ export const LayoutContextProvider: React.FC<LayoutContextProviderProps> = ({ ch
     }, [menuOuvert]);
 
     useEffect(() => {
-        localStorage.setItem('gedOuvert', JSON.stringify(gedOuvert));
-    }, [gedOuvert]);
+        localStorage.setItem('entiteOuvert', JSON.stringify(entiteOuvert));
+    }, [entiteOuvert]);
 
     useEffect(() => {
-        localStorage.setItem('gedFixe', JSON.stringify(gedFixe));
-    }, [gedFixe]);
-
-    useEffect(() => {
-        localStorage.setItem('gedOuvert', JSON.stringify(true));
-    }, []);
+        localStorage.setItem('moduleOuvert', JSON.stringify(moduleOuvert));
+    }, [moduleOuvert]);
 
     return (
         <LayoutContext.Provider
             value={{
                 menuOuvert,
-                gedOuvert,
-                gedFixe,
+                entiteOuvert,
+                moduleOuvert,
                 setMenuOuvert,
-                setGedOuvert,
-                setGedFixe,
+                setEntiteOuvert,
+                setModuleOuvert,
             }}
         >
             {children}

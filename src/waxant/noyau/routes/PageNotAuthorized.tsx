@@ -1,6 +1,6 @@
 import { Button, Result } from 'antd';
-import useI18n from '../i18n/useI18n';
 import useContexteAuth from '../auth/ContexteAuth';
+import useI18n from '../i18n/useI18n';
 
 const PageNotAuthorized = () => {
     const { i18n } = useI18n();

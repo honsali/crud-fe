@@ -22,14 +22,14 @@ const Username = styled.div`
     font-size: 16px;
     font-weight: 500;
     text-align: center;
-    color: #DBE2EF;
+    color: #bbb;
 `;
 
 const Role = styled.div`
     font-size: 12px;
     font-weight: 400;
     text-align: center;
-    color: #DBE2EF;
+    color: #bbb;
 `;
 
 const BlocAvatar = () => {

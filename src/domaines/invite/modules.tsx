@@ -1,15 +1,10 @@
 import ModuleCommun from 'modules/commun/ModuleCommun';
-import ModuleDepartement from 'modules/rh/departement/ModuleDepartement';
-import ModuleEmploye from 'modules/rh/employe/ModuleEmploye';
-import ModuleRh from 'modules/rh/ModuleRh';
-import ModuleAccueilInvite from './home';
+import ModuleModule from 'modules/modelisation/module/ModuleModule';
+import ModuleNavigation from 'modules/navigation/ModuleNavigation';
 
 const ListeModuleInvite = [
-    ModuleAccueilInvite(),//
-    ModuleCommun(), //
-    ModuleRh([
-        ModuleDepartement(),//
-        ModuleEmploye(), //
-    ]), // 
+    ModuleCommun(),
+    ModuleNavigation(),
+    ModuleModule(),
 ];
 export default ListeModuleInvite;

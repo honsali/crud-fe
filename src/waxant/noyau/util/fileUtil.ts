@@ -1,7 +1,11 @@
+const revokeObjectUrl = (url: string) => {
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
 
 const imprimer = (data) => {
     const url = URL.createObjectURL(data);
     window.open(url, '_blank');
+    revokeObjectUrl(url);
 };
 
 const telechargerFichier = (response, nomFichier) => {
@@ -19,6 +23,8 @@ const telechargerFichier = (response, nomFichier) => {
     } else {
         window.open(url, '_blank');
     }
+
+    revokeObjectUrl(url);
 };
 
 const fileUtil = {

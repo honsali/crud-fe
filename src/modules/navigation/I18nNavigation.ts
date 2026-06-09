@@ -1,0 +1,32 @@
+import { enteteConfirmation, messageSuccess, titreConfirmation } from 'waxant';
+import { ActionNavigation } from './ActionNavigation';
+
+export const I18nNavigation = {
+    PageConsulterMenu: 'Consulter Menu',
+    'UcConsulterMenu.titre': 'Consulter Menu',
+    [ActionNavigation.UcConsulterMenu.CREER_PAGE]: 'Enregistrer',
+    [titreConfirmation(ActionNavigation.UcConsulterMenu.CREER_PAGE)]: 'Créer Page',
+    [enteteConfirmation(ActionNavigation.UcConsulterMenu.CREER_PAGE)]: 'Etes vous sur de vouloir créer ce Page',
+    [messageSuccess(ActionNavigation.UcConsulterMenu.CREER_PAGE)]: 'Page créé avec succès',
+    'aucun.page': 'Aucun Page',
+    name: 'Nom',
+    label: 'Libellé',
+    icon: 'Icone',
+    ajouterPage: 'Ajouter Page',
+    creerPage: 'Créer une nouvelle Page',
+    pageVide: 'Page Vide',
+    pageChercher: 'Page Chercher',
+    pageLister: 'Page Lister',
+    pageConsulter: 'Page Consulter',
+    pageCreer: 'Page Créer',
+    pageModifier: 'Page Modifier',
+    pageOnglet: 'Page Avec Onglets',
+    'creer.pageVide': 'Créer Page Vide',
+    'creer.pageChercher': 'Créer Page Chercher',
+    'creer.pageLister': 'Créer Page Lister',
+    'creer.pageConsulter': 'Créer Page Consulter',
+    'creer.pageCreer': 'Créer Page Créer',
+    'creer.pageModifier': 'Créer Page Modifier',
+    'creer.pageOnglet': 'Créer Page Onglet',
+    'modifierMenu': 'Modifier Menu',
+};

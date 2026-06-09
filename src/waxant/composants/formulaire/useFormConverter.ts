@@ -10,11 +10,12 @@ const useFormConverter = () => {
             const attributes = {} as any;
             const i = cname.lastIndexOf('.');
             attributes.name = i > 0 ? _.split(cname, '.') : cname;
+            const label = i > 0 ? cname.substr(i + 1) : cname;
+            attributes.fallBackLabel = i18n(label);
             if (cprops.libelle) {
                 attributes.label = cprops.libelle === 'vide' ? null : cprops.libelle;
             } else {
-                const label = i > 0 ? cname.substr(i + 1) : cname;
-                attributes.label = i18n(label);
+                attributes.label = attributes.fallBackLabel;
             }
 
             if (_.isArray(attributes.name)) {
@@ -33,7 +34,7 @@ const useFormConverter = () => {
             attributes.requis = cprops.requis;
             attributes.style = cprops.style;
             attributes.arg = cprops.arg;
-            attributes.onChange = cprops.siChange;
+            attributes.siChange = cprops.siChange;
             attributes.disabled = cprops.disabled;
             attributes.placeholder = cprops.placeholder;
             attributes.validateStatus = util.nonVide(cprops.erreur) ? 'error' : null;

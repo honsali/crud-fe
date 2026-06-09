@@ -2,6 +2,7 @@ export interface IInfoActionEchouee {
     code?: string;
     erreur?: string;
     status?: number;
+    params?: any[];
     listeErreurServeur?: IErreurServeur[];
     listeErreurDirecte?: string[];
 }
@@ -9,7 +10,7 @@ export interface IInfoActionEchouee {
 export interface IErreurServeur {
     code?: string;
     severity?: string;
-    params?: [];
+    params?: any[];
     arguments?: string[];
     data?: any;
     libelle?: string;

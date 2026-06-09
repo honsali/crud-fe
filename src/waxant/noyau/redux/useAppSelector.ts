@@ -1,5 +1,5 @@
-import { useSelector, type TypedUseSelectorHook } from 'react-redux';
-import { type IRootState } from './StoreDynamique';
+import { TypedUseSelectorHook, useSelector } from 'react-redux';
+import { IRootState } from './StoreDynamique';
 
 const useAppSelector: TypedUseSelectorHook<IRootState> = useSelector;
 

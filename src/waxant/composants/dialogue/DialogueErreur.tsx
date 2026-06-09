@@ -3,7 +3,7 @@ import { Col, Modal, Row } from 'antd';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { BoutonFort, useContexteAuth } from 'waxant';
+import { BoutonTexteFort, useContexteAuth } from 'waxant';
 import useI18n from '../../noyau/i18n/useI18n';
 import type { IMessageErreur } from '../../noyau/message/DomaineMessage';
 import { MdlMessage, selectInfoActionEchouee } from '../../noyau/message/MdlMessage';
@@ -130,7 +130,7 @@ const DialogueErreur = () => {
                             {afficherListeErreur()}
                         </div>
                         <SDialogueErreurFooter>
-                            <BoutonFort action={fermer} libelle="Fermer" />
+                            <BoutonTexteFort action={fermer} libelle="Fermer" />
                         </SDialogueErreurFooter>
                     </SDialogErreurCorps>
                 </Row>

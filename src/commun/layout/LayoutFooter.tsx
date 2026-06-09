@@ -9,7 +9,7 @@ export const SFooter = styled(Layout.Footer)`
 `;
 
 const LayoutFooter = () => {
-    return <SFooter>&copy; 2025 CRUD</SFooter>;
+    return <SFooter>&copy; 2025 SINCORPO</SFooter>;
 };
 
 export default LayoutFooter;

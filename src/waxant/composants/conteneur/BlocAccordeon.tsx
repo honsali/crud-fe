@@ -2,16 +2,18 @@ import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import useContexteAccordeon from 'waxant/noyau/contexte/ContexteAccordeon';
-import useContexteView from 'waxant/noyau/contexte/ContexteView';
-import useI18n from 'waxant/noyau/i18n/useI18n';
+import useContexteAccordeon from '../../noyau/contexte/ContexteAccordeon';
+import useContexteView from '../../noyau/contexte/ContexteView';
+import useI18n from '../../noyau/i18n/useI18n';
 
 const Composant = styled.div`
     &:first-child  > .closed  {
+        border-top: 1px solid #ddd;
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
     }
     &:first-child  > .opened  {
+        border-top: 1px solid #ddd;
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
     }
@@ -31,45 +33,48 @@ const Entete = styled.div<{ $opened: boolean, $inactif: boolean }>`
     ${({ $opened, $inactif }) => {
         if ($inactif) {
             return `
-                color: #ccc;
-                background-color: #e9e5e0;
-                border-bottom: 2px solid #ccc;
+                color: red;
+                background-color: #f5f3f0;
+                border: 1px solid #ddd;
+                border-top:none;
                 cursor: not-allowed;
             `;
         } else if (!$opened) {
             return `
                 color: #777;
-                background-color: #e9e5e0;
-                border-bottom: 2px solid #ccc;
+                background-color: #f5f3f0;
+                border: 1px solid #ddd;
+                border-top:none;
                 &:hover {
-                    color: #555;
+                    color: #fff;
                     background-color: #3F72AF;
                 }
             `;
         } else {
             return `
-                color: #555;
+                color: #fff;
                 background-color: #3F72AF;
-                border-bottom: 2px solid #3F72AF;
+                border: 1px solid #3F72AF;
+                border-top:none;
             `;
         }
     }}
 `;
 
 const Corps = styled.div`
-    background-color: #F5F7FB;
+    background-color: #fff;
     display: flex;
     flex-direction: column;
     gap: 20px;
     padding: 20px;
-    border-top: 1px solid #999;
-    border-bottom: 2px solid #ccc;
+    border: 1px solid #ddd;
+    border-top:none;
 `;
 
 const Titre = styled.div`
     flex: auto;
     font-weight: 700;
-    padding-top: 2px;
+    padding: 5px 0 3px 5px;
 `;
 
 

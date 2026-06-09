@@ -1,19 +1,11 @@
 import _ from 'lodash';
-import { useContexteAuth } from 'waxant';
 import useContexteApp from '../contexte/ContexteApp';
+import useContexteAuth from './ContexteAuth';
 
 const useHasRight = (action): boolean => {
     const { mapDroitAcces } = useContexteApp();
     const { role } = useContexteAuth();
-    if (!role) {
-        console.log('NO RIGHT FOR =========>' + action);
-        return false;
-    }
-    const inRole = _.includes(mapDroitAcces[role] ?? [], action);
-    if (!inRole) {
-        console.log('NO RIGHT FOR =========>' + action);
-    }
-    return inRole;
+    return _.includes(mapDroitAcces[role], action);
 };
 
 export default useHasRight;

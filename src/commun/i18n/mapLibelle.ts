@@ -6,4 +6,9 @@ export const mapLibelle = {
     invite: 'Invité',
     admin: 'Administrateur',
     'aucun.resultat': 'Aucun Resultat',
+    ajouterPage: 'Ajouter Page',
+    fermer: 'Fermer',
+    entites: 'Entités',
+    modules: 'Modules',
+    name: 'Nom',
 };

@@ -72,16 +72,16 @@
 
 .ant-btn.waxant-bouton-icone-normal {
     color: var(--ant-color-primary);
-    background-color: var(--ant-color-secondary);
+    background-color: #fff;
     border: 2px solid var(--ant-color-secondary);
     border-radius: 4px;
     box-shadow: none;
 }
 
 .ant-btn.waxant-bouton-icone-normal:hover:not(:disabled) {
-    color: var(--ant-color-primary);
+    color: #fff;
     border: 2px solid var(--ant-color-primary);
-    background-color: #fff;
+    background-color: var(--ant-color-secondary);
 }
 
 .ant-btn.waxant-bouton-icone-normal:disabled {
@@ -92,4 +92,8 @@
 
 .ant-btn.waxant-bouton-icone-normal:disabled {
     color: #999;
+}
+
+.ant-btn.waxant-bouton-icone-mini {
+    border-width: 1px;
 }

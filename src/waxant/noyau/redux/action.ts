@@ -22,11 +22,19 @@ interface SerializedError {
 
 
 export const serializeError = (value: any): SerializedError => {
-    if (util.nonNul(value) && value.isAxiosError && value.response) {
-        return {
-            data: value.response.data,
-            status: value.response.status
-        };
+    if (util.nonNul(value) && value.isAxiosError) {
+        if (value.response) {
+            return {
+                data: value.response.data,
+                status: value.response.status
+            };
+        }
+
+        if (value.code === 'ECONNABORTED') {
+            return { message: 'error.request.timeout' };
+        }
+
+        return { message: 'error.server.not.reachable', status: 0 };
     }
 
     if (util.nonNul(value) && value.errorFields) {
@@ -39,6 +47,19 @@ export const serializeError = (value: any): SerializedError => {
             },
         };
     }
+
+    if (value instanceof Error) {
+        return { message: value.message };
+    }
+
+    if (typeof value === 'string') {
+        return { message: value };
+    }
+
+    if (util.nonNul(value) && value.message) {
+        return { message: value.message };
+    }
+
     return { message: String(value) };
 };
 

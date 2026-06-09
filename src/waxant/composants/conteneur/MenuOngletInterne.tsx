@@ -2,12 +2,12 @@ import { Tabs } from 'antd';
 import type { FC } from 'react';
 import { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
-import useContexteMenuOnglet from 'waxant/noyau/contexte/ContexteMenuOnglet';
-import { ContexteTableauProvider } from 'waxant/noyau/contexte/ContexteTabeau';
+import useContexteMenuOnglet from '../../noyau/contexte/ContexteMenuOnglet';
+import { ContexteTableauProvider } from '../../noyau/contexte/ContexteTableau';
 import useI18n from '../../noyau/i18n/useI18n';
 import Bloc from './Bloc';
-import type { MenuOngletProps } from './MenuOnglet';
-import type { OngletProps } from './Onglet';
+import { MenuOngletProps } from './MenuOnglet';
+import { OngletProps } from './Onglet';
 
 const Composant = styled(Tabs)`
     .ant-tabs-nav {
@@ -23,7 +23,7 @@ const Composant = styled(Tabs)`
         color: #ccc ;
         }
     }
-    
+
     .ant-tabs-content-holder {
         padding: 0px;
     }

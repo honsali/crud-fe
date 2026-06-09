@@ -1,11 +1,11 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { ReactNode, createContext, useContext, useState } from 'react';
 
 export interface IContexteMenuOngletProps {
     ongletCourant?: string;
     setOngletCourant?: (onglet: string) => void;
 }
 
-const ContexteMenuOnglet = createContext({} as IContexteMenuOngletProps);
+const ContexteMenuOnglet = createContext<IContexteMenuOngletProps | undefined>(undefined);
 
 interface ContexteMenuOngletProviderProps {
     ongletCourantParDefaut?: string;

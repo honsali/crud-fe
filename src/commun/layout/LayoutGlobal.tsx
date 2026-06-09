@@ -10,8 +10,11 @@ import { useSelector } from 'react-redux';
 import { Outlet, useLocation } from 'react-router';
 import { DialogueErreur, MdlI18n, Sablier, selectInfoActionReussie, useAppDispatch, useI18n } from 'waxant';
 import { LayoutContextProvider } from './LayoutContext';
+import LayoutEntite from './LayoutEntite';
 import LayoutFooter from './LayoutFooter';
 import LayoutHeader from './LayoutHeader';
+import LayoutModule from './LayoutModule';
+import LayoutRightBar from './LayoutRightBar';
 import LayoutSidebar from './LayoutSidebar';
 const LayoutGlobal = () => {
     const { infoActionI18n } = useI18n();
@@ -32,7 +35,7 @@ const LayoutGlobal = () => {
         const message = infoActionI18n(infoActionReussie);
         if (message) {
             notification.success({
-                message,
+                title: message,
                 placement: 'topRight',
             });
         }
@@ -50,7 +53,7 @@ const LayoutGlobal = () => {
                     <Flex>
                         <Layout>
                             <LayoutSidebar />
-                            <Layout style={{ overflowY: 'scroll' }}>
+                            <Layout >
                                 <LayoutHeader />
                                 <Layout.Content>
                                     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -63,9 +66,12 @@ const LayoutGlobal = () => {
                                     </div>
                                 </Layout.Content>
                             </Layout>
+                            <LayoutRightBar />
                         </Layout>
                     </Flex>
                 </div>
+                <LayoutEntite />
+                <LayoutModule />
             </Sablier>
             <DialogueErreur />
         </LayoutContextProvider>

@@ -1,0 +1,34 @@
+.ant-menu-title-content.navigation-item-content {
+    font-weight: 500;
+    margin-inline-start: 8px !important;
+}
+
+.ant-card.carte {
+    width: 200px;
+    flex-shrink: 0;
+    box-shadow: none;
+    cursor: default;
+    border: 1px solid #e6e6e6;
+}
+
+.ant-card.carte-hoverable {
+    width: 200px;
+    flex-shrink: 0;
+    box-shadow: none;
+    border: 1px solid #e6e6e6;
+}
+
+.ant-card.carte-hoverable:hover {
+    border: 1px solid var(--ant-color-primary);
+    box-shadow: 0 0 5px 1px #ddd;
+}
+
+.ant-card-body.carte-body {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 0;
+}
+
+.ant-card-head-title.carte-title {
+    color: #555;
+}

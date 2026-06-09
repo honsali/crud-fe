@@ -1,8 +1,8 @@
 import type { ButtonProps as AntdButtonProps } from 'antd';
 import { Button, Tooltip } from 'antd';
 import React from 'react';
-import useI18n from 'waxant/noyau/i18n/useI18n';
-import useGoToPage from 'waxant/noyau/routes/useGoToPage';
+import useI18n from '../../../noyau/i18n/useI18n';
+import useGoToPage from '../../../noyau/routes/useGoToPage';
 import type { BoutonProps } from '../BoutonProps';
 import './BoutonIcone.css';
 
@@ -43,11 +43,12 @@ const BoutonIcone: React.FC<BoutonProps> = (props) => {
                 size={tailleMap[taille]}
                 onClick={executeOnClick}
                 onKeyDown={onKeyDown}
-                icon={icone ?? undefined}
+                icon={icone}
                 loading={!!rid}
                 disabled={!!inactif}
                 color="default"
                 variant="filled"
+                className={taille === 'mini' ? 'waxant-bouton-icone-mini' : ''}
                 classNames={semanticClassNames}
             />
         </Tooltip>

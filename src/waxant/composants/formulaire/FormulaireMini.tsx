@@ -1,7 +1,7 @@
 import { Col, Form } from 'antd';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import type { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 import { MdlMessage } from '../../noyau/message/MdlMessage';
 import useAppDispatch from '../../noyau/redux/useAppDispatch';
 import ListeChamp from './ListeChamp';

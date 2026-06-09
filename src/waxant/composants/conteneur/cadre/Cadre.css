@@ -60,7 +60,7 @@
 .ant-card.waxant-cadre-simple {
     --ant-card-header-height: 0px;
     border-radius: 6px;
-    border: 1px solid var(--ant-color-border);
+    border: 1px solid var(--ant-color-primary);
 }
 
 .ant-card-head.waxant-cadre-simple__header {

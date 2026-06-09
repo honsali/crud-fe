@@ -1,50 +1,9 @@
-import { Avatar, Col, Modal, Row } from 'antd';
-import type { ReactNode } from 'react';
+import { Col, Row, Space } from 'antd';
 import styled from 'styled-components';
-import useI18n from '../../noyau/i18n/useI18n';
-import BlocAction from '../bouton/BlocAction';
 import BoutonFort from '../bouton/texte/BoutonTexteFort';
+import Dialogue, { type DialogueProps } from './Dialogue';
 
-const Composant = styled(Modal)`
-    .ant-modal-content {
-        padding: 0;
-        border-radius: 6px;
-        .ant-modal-header {
-            padding: 10px;
-            border-top-left-radius: 6px;
-            border-top-right-radius: 6px;
-            background-color: #f9f9f9;
-            border-bottom: 1px solid #ddd;
-            .ant-modal-title {
-                font-weight: 500;
-                color: ${(props) => props.theme.token.colorPrimary};
-                font-size: 26px;
-                margin-top: 10px;
-            }
-        }
-        .ant-modal-body {
-            padding: 10px 20px;
-        }
-        .ant-modal-footer {
-            padding: 10px;
-            background-color: #fdfcfa;
-            border-bottom-left-radius: 6px;
-            border-bottom-right-radius: 6px;
-            border-top: 1px solid #ddd;
-        }
-    }
-`;
 
-const SAvatar = styled(Avatar)`
-    background-color: #fefefe;
-    border: 1px solid #ddd;
-    margin: 0 5px 5px 0;
-    svg {
-        margin-top: 1px;
-        fill: ${(props) => props.theme.token.colorPrimary};
-        width: 22px;
-    }
-`;
 
 const SEntete = styled(Col)`
     font-weight: 500;
@@ -58,34 +17,11 @@ const SCorps = styled(Col)`
     margin-bottom: 10px;
 `;
 
-const SErreur = styled(Col)`
-    font-weight: 700;
-    font-size: 18px;
-    color: red;
-    margin-bottom: 10px;
-`;
 
-type DialogueInformationProps = {
-    visible: boolean;
-    nom: string;
-    titre?: string | null;
-    icone?: ReactNode | null;
-    entete?: ReactNode | null;
-    actionAnnuler?: (() => void) | null;
-    largeur?: number;
-    children?: ReactNode;
-};
 
-const DialogueInformation = ({ visible, nom, titre = null, icone = null, entete = null, actionAnnuler = null, largeur = 1000, children }: DialogueInformationProps) => {
-    const { i18n } = useI18n();
-    const getTitre = () => {
-        return (
-            <span>
-                {icone && <SAvatar shape="circle" src={icone} size={32} />}
-                {titre || i18n(nom)}
-            </span>
-        );
-    };
+const DialogueInformation = (props: DialogueProps) => {
+    const { entete, actionAnnuler, children } = props;
+
 
     const getEntete = () => {
         if (entete) {
@@ -99,19 +35,17 @@ const DialogueInformation = ({ visible, nom, titre = null, icone = null, entete 
 
     const getFooter = () => {
         return (
-            <BlocAction>
-                <BoutonFort nom="fermer" action={actionAnnuler ?? undefined} />
-            </BlocAction>
+            <Space>
+                <BoutonFort nom="fermer" action={actionAnnuler} />
+            </Space>
         );
     };
 
     return (
-        <Composant open={visible} title={getTitre()} footer={getFooter()} width={largeur} maskClosable={false} onCancel={actionAnnuler ?? undefined}>
+        <Dialogue  {...props} footer={getFooter()}   >
             {getEntete()}
-            <Row>
-                <SCorps span="24">{children}</SCorps>
-            </Row>
-        </Composant>
+            {children}
+        </Dialogue >
     );
 };
 

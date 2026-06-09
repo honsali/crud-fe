@@ -8,7 +8,7 @@ const useGoToModule = () => {
     const { mapDomaine } = useContexteApp();
     const { role } = useContexteAuth();
 
-    const parse = (nomModule, listeModule) => {
+    const parse = (nomModule, listeModule = []) => {
         for (const module of listeModule) {
             if (module.key === nomModule) {
                 return module.index;
@@ -22,10 +22,7 @@ const useGoToModule = () => {
     };
 
     return (nomModule: string, args?: any) => {
-        if (!role) {
-            return;
-        }
-        const index = parse(nomModule, mapDomaine[role]?.listeModule);
+        const index = parse(nomModule, mapDomaine[role]?.listeModule || []);
         if (index) {
             navigate(index.toPath({ ...args, ...params }));
         }

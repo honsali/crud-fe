@@ -1,5 +1,5 @@
-import useHasRight from 'waxant/noyau/auth/useHasRight';
-import type { BoutonProps } from '../bouton/BoutonProps';
+import useHasRight from '../../noyau/auth/useHasRight';
+import { BoutonProps } from '../bouton/BoutonProps';
 import BoutonTexteNormal from '../bouton/texte/BoutonTexteNormal';
 
 const ActionUcNormale = (props: BoutonProps) => {

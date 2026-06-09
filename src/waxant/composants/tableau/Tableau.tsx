@@ -1,12 +1,12 @@
-import { Tag, type TablePaginationConfig } from 'antd';
+import { ConfigProvider, Tag, type TablePaginationConfig } from 'antd';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import _ from 'lodash';
 import type { ReactNode } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
-import useContexteTableau from 'waxant/noyau/contexte/ContexteTabeau';
 import useContexteApp from '../../noyau/contexte/ContexteApp';
+import useContexteTableau from '../../noyau/contexte/ContexteTableau';
 import useI18n from '../../noyau/i18n/useI18n';
 import util from '../../noyau/util/util';
 import OptionNon from '../widget/OptionNon';
@@ -40,23 +40,9 @@ type TableauProps = {
     expandable?: any;
 };
 
-const Tableau = ({
-    listeDonnee = [], //
-    id = null,
-    champIdentification = 'id',
-    texteAucunResultat = 'aucun.resultat',
-    pagination = null,
-    initialiser = 0,
-    listeIndexElementSelectionne = [],
-    indexElementSelectionne = null,
-    siSelectionChange = null,
-    siClicLigne = null,
-    siChangementPage = null,
-    sansEntete = false,
-    scroll = null,
-    children,
-    expandable = null,
-}: TableauProps) => {
+const Tableau = (props: TableauProps) => {
+    const { listeDonnee = [], id = null, champIdentification = 'id', texteAucunResultat = 'aucun.resultat', pagination = null, initialiser = 0, listeIndexElementSelectionne = [], indexElementSelectionne = null, siSelectionChange = null, siClicLigne = null, siChangementPage = null, sansEntete = false, scroll = null, children, expandable = null,
+    } = props;
     const { i18n } = useI18n();
     const { formatDate, formatDateTime } = useContexteApp();
     const [tablePagination, setTablePagination] = useState<TablePaginationConfig | false>(false);
@@ -335,23 +321,25 @@ const Tableau = ({
     }, []);
 
     return (
-        <STable
-            id={id ?? undefined} //
-            columns={getColonnes()}
-            showHeader={!sansEntete}
-            size="small"
-            dataSource={listeDonnee}
-            rowKey={champIdentification}
-            onChange={handleTableChange}
-            locale={{ emptyText: getTexteAucunResultat() }}
-            pagination={tablePagination}
-            rowClassName={getRowClassName}
-            rowSelection={getRowSelection()}
-            scroll={scroll ?? undefined}
-            expandable={expandable ?? undefined}
-            $type={type ?? 'normal'}
-            bordered
-        ></STable>
+        <ConfigProvider theme={{ components: { Table: { headerBorderRadius: 4 } } }}>
+            <STable
+                id={id ?? undefined} //
+                columns={getColonnes()}
+                showHeader={!sansEntete}
+                size="small"
+                dataSource={listeDonnee}
+                rowKey={champIdentification}
+                onChange={handleTableChange}
+                locale={{ emptyText: getTexteAucunResultat() }}
+                pagination={tablePagination}
+                rowClassName={getRowClassName}
+                rowSelection={getRowSelection()}
+                scroll={scroll ?? undefined}
+                expandable={expandable ?? undefined}
+                $type={type ?? 'normal'}
+                bordered
+            ></STable>
+        </ConfigProvider>
     );
 };
 

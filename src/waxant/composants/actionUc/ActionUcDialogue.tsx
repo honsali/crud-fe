@@ -1,10 +1,11 @@
-import type { CSSProperties, ReactNode } from 'react';
-import { useEffect, useState } from 'react';
-import { DialogueConfirmation, enteteConfirmation, titreConfirmation, useHasRight, useI18n } from 'waxant';
-import type { ExecuteResponse } from 'waxant/noyau/redux/useExecute';
+import { CSSProperties, ReactNode, useEffect, useState } from 'react';
+import useHasRight from '../../noyau/auth/useHasRight';
+import useI18n from '../../noyau/i18n/useI18n';
+import { ExecuteResponse } from '../../noyau/redux/useExecute';
+import { enteteConfirmation, titreConfirmation } from '../../noyau/util/libelleUtil';
 import BoutonTexte from '../bouton/texte/BoutonTexte';
+import DialogueConfirmation from '../dialogue/DialogueConfirmation';
 import EnteteDialogue from '../dialogue/EnteteDialogue';
-import type style from 'antd/es/affix/style';
 
 type ActionUcDialogueProps = {
     nom: string;
@@ -24,10 +25,11 @@ type ActionUcDialogueProps = {
     inactif?: string;
     style?: CSSProperties;
     children?: ReactNode;
+    type?: 'fort' | 'normal' | 'danger' | 'alerte' | 'lien' | 'menuItem';
 };
 
 const ActionUcDialogue = (props: ActionUcDialogueProps) => {
-    const { nom, icone, action, args, getArgs, form, etat, pret = true, siInit, siAnnuler, siSucces, siErreur, siErreurAnnuler, inactif, style, children } = props;
+    const { nom, type, icone, action, args, getArgs, form, etat, pret = true, siInit, siAnnuler, siSucces, siErreur, siErreurAnnuler, inactif, style, children } = props;
     const { i18n } = useI18n();
     const hasRight = useHasRight(nom);
     const [visible, setVisible] = useState(false);
@@ -92,7 +94,7 @@ const ActionUcDialogue = (props: ActionUcDialogueProps) => {
 
     return (
         <div style={{ display: 'flex', ...style }}>
-            <BoutonTexte nom={nom} icone={icone} action={ouvrir} rid={visible ? '1' : null} visible={hasRight} inactif={inactif} />
+            <BoutonTexte nom={nom} type={type} icone={icone} action={ouvrir} rid={visible ? '1' : null} visible={hasRight} inactif={inactif} />
             <DialogueConfirmation visible={visible} {...attributes} rid={etatValue.rid}>
                 <EnteteDialogue texte={attributes.entete} />
                 {children}
