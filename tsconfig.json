@@ -13,7 +13,7 @@
     // Bundler mode
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "noEmit": true,
     // Best practices
     "strict": true,
@@ -21,7 +21,32 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "baseUrl": "src",
+    "paths": {
+      "assets/*": [
+        "./src/assets/*"
+      ],
+      "commun": [
+        "./src/commun/index.ts"
+      ],
+      "commun/*": [
+        "./src/commun/*"
+      ],
+      "domaines/*": [
+        "./src/domaines/*"
+      ],
+      "modele/*": [
+        "./src/modele/*"
+      ],
+      "modules/*": [
+        "./src/modules/*"
+      ],
+      "waxant": [
+        "./src/waxant/index.ts"
+      ],
+      "waxant/*": [
+        "./src/waxant/*"
+      ]
+    },
     // Some stricter flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,

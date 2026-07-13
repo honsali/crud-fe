@@ -1,7 +1,7 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { type FormInstance } from 'antd';
-import { type IEmploye } from 'modele/rh/employe/DomaineEmploye';
-import { type EtatMdl, type IRequete, type IResultat, type IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
+import { FormInstance } from 'antd';
+import { IEmploye } from 'modele/rh/employe/DomaineEmploye';
+import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlModifierEmploye from './CtrlModifierEmploye';
 
 export interface ReqModifierEmploye extends IRequete {
@@ -63,8 +63,8 @@ const SliceModifierEmploye = createSlice({
 export const MdlModifierEmploye = SliceModifierEmploye.actions;
 
 const selectMdlModifierEmploye = (state: IRootState) => state.mdlModifierEmploye;
+export const selectEmploye = createSelector([selectMdlModifierEmploye], (state: ModifierEmployeType) => state.employe);
 export const selectEtatInitModificationEmploye = createSelector([selectMdlModifierEmploye], (state: ModifierEmployeType) => state.etatInitModificationEmploye);
 export const selectEtatMajEmploye = createSelector([selectMdlModifierEmploye], (state: ModifierEmployeType) => state.etatMajEmploye);
-export const selectEmploye = createSelector([selectMdlModifierEmploye], (state: ModifierEmployeType) => state.employe);
 
 export default SliceModifierEmploye.reducer;

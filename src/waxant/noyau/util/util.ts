@@ -4,7 +4,7 @@ import _ from 'lodash';
 const removeNonSerialisable = <T extends object>(obj: T): Partial<T> => {
     const resultat: Partial<T> = {};
     Object.entries(obj).forEach(([key, value]) => {
-        if (!(value instanceof dayjs) && nonNul(value)) {
+        if (!dayjs.isDayjs(value) && nonNul(value)) {
             if (typeof value === 'string' && value.trim() === '') {
                 return;
             }
@@ -47,6 +47,24 @@ const supprimerChampVide = (objet): any => {
     const filter = _.overEvery([_.isNil, _.isEmpty]);
     return _.omitBy(objet, filter);
 };
+const sommer = (tableau): number => {
+    return _.reduce(
+        tableau,
+        function (sum, n) {
+            return +n ? sum + n : sum;
+        },
+        null
+    );
+};
+const sommerPar = (tableau, champ): number => {
+    return _.reduce(
+        tableau,
+        function (sum, o) {
+            return o && o[champ] ? sum + o[champ] : sum;
+        },
+        null
+    );
+};
 const contient = (objet, champ): boolean => {
     return _.get(objet, champ);
 };
@@ -68,6 +86,8 @@ const util = {
     fresh,
     equalIgnoreCase,
     supprimerChampVide,
+    sommer,
+    sommerPar,
     contient,
     unCapitalize,
     capitalize,

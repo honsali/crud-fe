@@ -26,7 +26,7 @@ const FormulaireEmploye = () => {
                 <CadreSimple titre="employe">
                     <Bloc largeur="400px">
                         <Formulaire form={form}>
-                            <ChampTexte nom="matricule" />
+                            <ChampTexte nom="matricule" requis="true" />
                             <ChampDate nom="dateEntree" />
                             <ChampReference nom="departement" />
                             <ChampTexte nom="fonction" />
@@ -38,9 +38,9 @@ const FormulaireEmploye = () => {
                 <CadreSimple titre="personnelle">
                     <Bloc largeur="400px">
                         <Formulaire form={form}>
-                            <ChampTexte nom="nom" />
-                            <ChampTexte nom="prenom" />
-                            <ChampDate nom="dateNaissance" />
+                            <ChampTexte nom="nom" requis="true" />
+                            <ChampTexte nom="prenom" requis="true" />
+                            <ChampDate nom="dateNaissance" requis="true" />
                             <ChampReference nom="sexe" />
                             <ChampReference nom="situationFamiliale" />
                         </Formulaire>

@@ -1,22 +1,21 @@
-import type { AsyncThunk, AsyncThunkConfig } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useAppDispatch } from 'waxant';
 import CtrlConsulterEmploye from './CtrlConsulterEmploye';
-import { MdlConsulterEmploye, type ReqConsulterEmploye, type ResConsulterEmploye, selectEmploye, selectEtatListerCongeParIdEmploye, selectEtatRecupererEmployeParId, selectEtatSupprimerEmploye, selectListeConge } from './MdlConsulterEmploye';
+import { MdlConsulterEmploye, ReqConsulterEmploye, selectEmploye, selectEtatListerCongeParIdEmploye, selectEtatRecupererEmployeParId, selectEtatSupprimerEmploye, selectListeConge } from './MdlConsulterEmploye';
 
 const useConsulterEmploye = () => {
 
     const dispatch = useAppDispatch();
     const params = useParams();
 
+    const employe = useSelector(selectEmploye);
+    const etatListerCongeParIdEmploye = useSelector(selectEtatListerCongeParIdEmploye);
     const etatRecupererEmployeParId = useSelector(selectEtatRecupererEmployeParId);
     const etatSupprimerEmploye = useSelector(selectEtatSupprimerEmploye);
-    const etatListerCongeParIdEmploye = useSelector(selectEtatListerCongeParIdEmploye);
-    const employe = useSelector(selectEmploye);
     const listeConge = useSelector(selectListeConge);
 
-    const createAction = (action: AsyncThunk<ResConsulterEmploye, ReqConsulterEmploye, AsyncThunkConfig>) => (req?: ReqConsulterEmploye) => dispatch(action({ ...req, ...params } as ReqConsulterEmploye));
+    const createAction = (action: any) => (req?: ReqConsulterEmploye) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions
@@ -28,10 +27,10 @@ const useConsulterEmploye = () => {
         resetEtatSupprimerEmploye: () => dispatch(MdlConsulterEmploye.resetEtatSupprimerEmploye()),
 
         // State
+        employe,
+        etatListerCongeParIdEmploye,
         etatRecupererEmployeParId,
         etatSupprimerEmploye,
-        etatListerCongeParIdEmploye,
-        employe,
         listeConge,
     };
 };

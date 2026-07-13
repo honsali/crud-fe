@@ -1,7 +1,7 @@
 import ServiceConge from 'modele/rh/conge/ServiceConge';
 import { action } from 'waxant';
 import { ActionEmploye } from '../../ActionEmploye';
-import { type ReqConsulterConge, type ResConsulterConge } from './MdlConsulterConge';
+import { ReqConsulterConge, ResConsulterConge } from './MdlConsulterConge';
 
 const recupererCongeParIdImpl = async (requete: ReqConsulterConge, resultat: ResConsulterConge, thunkAPI) => {
     resultat.conge = await ServiceConge.recupererParId(requete.idConge);

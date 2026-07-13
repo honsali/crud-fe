@@ -1,7 +1,7 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { type IConge } from 'modele/rh/conge/DomaineConge';
-import { type IEmploye } from 'modele/rh/employe/DomaineEmploye';
-import { type EtatMdl, type IRequete, type IResultat, type IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
+import { IConge } from 'modele/rh/conge/DomaineConge';
+import { IEmploye } from 'modele/rh/employe/DomaineEmploye';
+import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlConsulterEmploye from './CtrlConsulterEmploye';
 
 export interface ReqConsulterEmploye extends IRequete {
@@ -80,10 +80,10 @@ const SliceConsulterEmploye = createSlice({
 export const MdlConsulterEmploye = SliceConsulterEmploye.actions;
 
 const selectMdlConsulterEmploye = (state: IRootState) => state.mdlConsulterEmploye;
+export const selectEmploye = createSelector([selectMdlConsulterEmploye], (state: ConsulterEmployeType) => state.employe);
+export const selectEtatListerCongeParIdEmploye = createSelector([selectMdlConsulterEmploye], (state: ConsulterEmployeType) => state.etatListerCongeParIdEmploye);
 export const selectEtatRecupererEmployeParId = createSelector([selectMdlConsulterEmploye], (state: ConsulterEmployeType) => state.etatRecupererEmployeParId);
 export const selectEtatSupprimerEmploye = createSelector([selectMdlConsulterEmploye], (state: ConsulterEmployeType) => state.etatSupprimerEmploye);
-export const selectEtatListerCongeParIdEmploye = createSelector([selectMdlConsulterEmploye], (state: ConsulterEmployeType) => state.etatListerCongeParIdEmploye);
-export const selectEmploye = createSelector([selectMdlConsulterEmploye], (state: ConsulterEmployeType) => state.employe);
 export const selectListeConge = createSelector([selectMdlConsulterEmploye], (state: ConsulterEmployeType) => state.listeConge);
 
 export default SliceConsulterEmploye.reducer;

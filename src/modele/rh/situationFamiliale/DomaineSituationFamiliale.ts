@@ -1,4 +1,4 @@
-import { type IPagination } from 'modele/commun/pagination/DomainePagination';
+import { IPagination } from 'modele/commun/pagination/DomainePagination';
 
 export interface ISituationFamiliale {
     id?: string;

@@ -1,32 +1,33 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Provider as StoreProvider } from 'react-redux';
-import Avancement from 'waxant/composants/widget/Avancement';
+import Avancement from '../../composants/widget/Avancement';
 import useContexteAuth from '../auth/ContexteAuth';
-import { type ConfigAppType } from '../contexte/ContexteApp';
+import { ConfigAppType } from '../contexte/ContexteApp';
 import { listeReducer } from '../routes/PageDefinition';
-import getStore, { registerReducer } from './StoreDynamique';
+import getStore, { resetStore } from './StoreDynamique';
 
+export interface IDynamicStoreContextProps {
+}
 
-const DynamicStoreContext = createContext({});
+const DynamicStoreContext = createContext<IDynamicStoreContextProps | undefined>(undefined);
 
 export const DynamicStoreProvider = ({ config, children }: { config: ConfigAppType; children: React.ReactNode }) => {
     const { role } = useContexteAuth();
     const [loading, setLoading] = useState(true);
     const [store, setStore] = useState(getStore());
+    const [storeRole, setStoreRole] = useState<string>(null);
 
     useEffect(() => {
-        if (!role) {
-            return;
-        }
-        const domaine = config.mapDomaine[role];
-        const listeModule = domaine?.listeModule;
-        const allReducers = listeReducer({}, listeModule);
-        registerReducer(allReducers);
-        setStore(getStore());
-        setLoading(false);
-    }, []);
+        const domaine = role ? config.mapDomaine[role] : null;
+        const allReducers = domaine?.listeModule ? listeReducer({}, domaine.listeModule) : {};
 
-    if (loading) {
+        resetStore(allReducers);
+        setStore(getStore());
+        setStoreRole(role);
+        setLoading(false);
+    }, [config.mapDomaine, role]);
+
+    if (loading || storeRole !== role) {
         return <Avancement taux={2} />;
     }
 
@@ -40,7 +41,7 @@ export const DynamicStoreProvider = ({ config, children }: { config: ConfigAppTy
 const useDynamicStore = () => {
     const context = useContext(DynamicStoreContext);
     if (context === undefined) {
-        throw new Error('useContextePage must be used within a ContextePage');
+        throw new Error('useDynamicStore must be used within a DynamicStoreProvider');
     }
     return context;
 };

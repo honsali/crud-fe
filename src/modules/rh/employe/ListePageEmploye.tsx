@@ -1,6 +1,6 @@
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ContexteViewProvider, type PageDefinition } from 'waxant';
+import { ContexteViewProvider, PageDefinition } from 'waxant';
 import ViewConsulterConge from './conge/consulter/ViewConsulterConge';
 import ViewCreerConge from './conge/creer/ViewCreerConge';
 import ViewModifierConge from './conge/modifier/ViewModifierConge';
@@ -11,8 +11,8 @@ import ViewModifierEmploye from './modifier/ViewModifierEmploye';
 
 export const PageConsulterConge: PageDefinition = {
     key: 'PageConsulterConge',
-    path: '/rh/employe/:idEmploye/consulter/:idConge',
-    toPath: (args) => `/rh/employe/${args.idEmploye}/consulter/${args.idConge}`,
+    path: '/rh/employe/consulter/:idConge',
+    toPath: (args) => `/rh/employe/consulter/${args.idConge}`,
     view: (
         <ContexteViewProvider uc="UcConsulterConge">
             <ViewConsulterConge />
@@ -33,8 +33,8 @@ export const PageConsulterEmploye: PageDefinition = {
 
 export const PageCreerConge: PageDefinition = {
     key: 'PageCreerConge',
-    path: '/rh/employe/:idEmploye/conge/creer',
-    toPath: (args) => `/rh/employe/${args.idEmploye}/conge/creer`,
+    path: '/rh/employe/creer/:idConge',
+    toPath: (args) => `/rh/employe/creer/${args.idConge}`,
     view: (
         <ContexteViewProvider uc="UcCreerConge">
             <ViewCreerConge />
@@ -68,8 +68,8 @@ export const PageFiltrerEmploye: PageDefinition = {
 
 export const PageModifierConge: PageDefinition = {
     key: 'PageModifierConge',
-    path: '/rh/employe/:idEmploye/conge/modifier/:idConge',
-    toPath: (args) => `/rh/employe/${args.idEmploye}/conge/modifier/${args.idConge}`,
+    path: '/rh/employe/modifier/:idConge',
+    toPath: (args) => `/rh/employe/modifier/${args.idConge}`,
     view: (
         <ContexteViewProvider uc="UcModifierConge">
             <ViewModifierConge />

@@ -1,7 +1,6 @@
-import { faCog, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ContexteViewProvider, type ModuleDefinition, type PageDefinition } from 'waxant';
-import Test from './test';
 
 
 export const PageAccueilInvite: PageDefinition = {
@@ -17,24 +16,12 @@ export const PageAccueilInvite: PageDefinition = {
     ),
 };
 
-export const PageTest: PageDefinition = {
-    key: 'PageTest',
-    path: '/test',
-    toPath: (args) => '/test',
-    icone: <FontAwesomeIcon icon={faCog} />,
-    menu: 'test',
-    view: (
-        <ContexteViewProvider uc="UcAccueilInvite">
-            <Test />
-        </ContexteViewProvider>
-    ),
-};
 
 const ModuleAccueilInvite = (): ModuleDefinition => {
     return {
         key: 'ModuleIdentification',
-        mapI18n: { PageAccueilInvite: 'Accueil', 'UcAccueilInvite.test': 'Test', 'UcAccueilInvite.titre': 'Titre' },
-        listePage: [PageAccueilInvite, PageTest],
+        mapI18n: { PageAccueilInvite: 'Accueil', 'UcAccueilInvite.titre': 'Titre' },
+        listePage: [PageAccueilInvite],
         reducer: {},
         index: PageAccueilInvite,
     };

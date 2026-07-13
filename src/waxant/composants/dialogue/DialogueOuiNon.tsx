@@ -146,7 +146,7 @@ const DialogueOuiNon = ({ visible, nom, libelle = null, icone = null, entete = n
     };
 
     return (
-        <Composant open={visible} title={getTitre()} footer={getFooter()} width={largeur} maskClosable={false} onCancel={actionAnnuler ?? undefined}>
+        <Composant open={visible} title={getTitre()} footer={getFooter()} width={largeur} mask={{ closable: true }} onCancel={actionAnnuler ?? undefined}>
             {getEntete()}
             {erreur && (
                 <Row>

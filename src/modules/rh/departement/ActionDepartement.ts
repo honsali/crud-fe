@@ -1,5 +1,6 @@
 export const ActionDepartement = {
     UcConsulterDepartement: {
+        GO_TO_PAGE_LISTER_DEPARTEMENT: 'UcConsulterDepartement.action.goToPageListerDepartement',
         MODIFIER_DEPARTEMENT: 'UcConsulterDepartement.action.modifierDepartement',
         RECUPERER_DEPARTEMENT_PAR_ID: 'UcConsulterDepartement.action.recupererDepartementParId',
         RETOUR_LISTE_DEPARTEMENT: 'UcConsulterDepartement.action.retourListeDepartement',
@@ -7,13 +8,16 @@ export const ActionDepartement = {
     },
     UcCreerDepartement: {
         CREER_DEPARTEMENT: 'UcCreerDepartement.action.creerDepartement',
+        GO_TO_PAGE_CONSULTER_DEPARTEMENT: 'UcCreerDepartement.action.goToPageConsulterDepartement',
         RETOUR_LISTE_DEPARTEMENT: 'UcCreerDepartement.action.retourListeDepartement',
     },
     UcListerDepartement: {
         AJOUTER_DEPARTEMENT: 'UcListerDepartement.action.ajouterDepartement',
+        GO_TO_PAGE_CONSULTER_DEPARTEMENT: 'UcListerDepartement.action.goToPageConsulterDepartement',
         LISTER_DEPARTEMENT: 'UcListerDepartement.action.listerDepartement',
     },
     UcModifierDepartement: {
+        GO_TO_PAGE_CONSULTER_DEPARTEMENT: 'UcModifierDepartement.action.goToPageConsulterDepartement',
         INIT_MODIFICATION_DEPARTEMENT: 'UcModifierDepartement.action.initModificationDepartement',
         MAJ_DEPARTEMENT: 'UcModifierDepartement.action.majDepartement',
         RECUPERER_DEPARTEMENT_PAR_ID: 'UcModifierDepartement.action.recupererDepartementParId',

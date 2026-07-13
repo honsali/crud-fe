@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router';
-import { type PageDefinition } from './PageDefinition';
+import { PageDefinition } from './PageDefinition';
 
 const useGoToPage = () => {
     const navigate = useNavigate();

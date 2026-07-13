@@ -4,10 +4,10 @@ export interface IContextePageProps {
     page: any;
 }
 
-const ContextePage = createContext({} as IContextePageProps);
+const ContextePage = createContext<IContextePageProps | undefined>(undefined);
 
 export const ContextePageProvider = ({ page, children }) => {
-    return <ContextePage.Provider value={page}>{children}</ContextePage.Provider>;
+    return <ContextePage.Provider value={{ page }}>{children}</ContextePage.Provider>;
 };
 
 const useContextePage = () => {

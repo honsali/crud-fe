@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { type ModuleDefinition } from '../routes/ModuleDefinition';
+import { ModuleDefinition } from '../routes/ModuleDefinition';
 
 export type MapDomaineType = {
     listeModule?: ModuleDefinition[];
@@ -18,7 +18,7 @@ export interface ConfigAppType {
     listerReference: (params: any) => Promise<any>;
 }
 
-export const ContexteApp = createContext({} as ConfigAppType);
+export const ContexteApp = createContext<ConfigAppType | undefined>(undefined);
 
 export const ContexteAppProvider = ({ config, children }) => {
     return <ContexteApp.Provider value={config}>{children}</ContexteApp.Provider>;

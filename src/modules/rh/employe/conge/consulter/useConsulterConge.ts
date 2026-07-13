@@ -1,20 +1,19 @@
-import type { AsyncThunk, AsyncThunkConfig } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useAppDispatch } from 'waxant';
 import CtrlConsulterConge from './CtrlConsulterConge';
-import { MdlConsulterConge, type ReqConsulterConge, type ResConsulterConge, selectConge, selectEtatRecupererCongeParId, selectEtatSupprimerConge } from './MdlConsulterConge';
+import { MdlConsulterConge, ReqConsulterConge, selectConge, selectEtatRecupererCongeParId, selectEtatSupprimerConge } from './MdlConsulterConge';
 
 const useConsulterConge = () => {
 
     const dispatch = useAppDispatch();
     const params = useParams();
 
+    const conge = useSelector(selectConge);
     const etatRecupererCongeParId = useSelector(selectEtatRecupererCongeParId);
     const etatSupprimerConge = useSelector(selectEtatSupprimerConge);
-    const conge = useSelector(selectConge);
 
-    const createAction = (action: AsyncThunk<ResConsulterConge, ReqConsulterConge, AsyncThunkConfig>) => (req?: ReqConsulterConge) => dispatch(action({ ...req, ...params } as ReqConsulterConge));
+    const createAction = (action: any) => (req?: ReqConsulterConge) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions
@@ -24,9 +23,9 @@ const useConsulterConge = () => {
         resetEtatSupprimerConge: () => dispatch(MdlConsulterConge.resetEtatSupprimerConge()),
 
         // State
+        conge,
         etatRecupererCongeParId,
         etatSupprimerConge,
-        conge,
     };
 };
 

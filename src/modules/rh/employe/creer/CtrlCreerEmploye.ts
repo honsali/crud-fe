@@ -1,11 +1,11 @@
 import ServiceEmploye from 'modele/rh/employe/ServiceEmploye';
 import { action, util } from 'waxant';
 import { ActionEmploye } from '../ActionEmploye';
-import { type ReqCreerEmploye, type ResCreerEmploye } from './MdlCreerEmploye';
+import { ReqCreerEmploye, ResCreerEmploye } from './MdlCreerEmploye';
 
 const creerEmployeImpl = async (requete: ReqCreerEmploye, resultat: ResCreerEmploye, thunkAPI) => {
-    await requete.form.validateFields();
-    const dataForm = util.removeNonSerialisable(requete.form.getFieldsValue());
+    await requete.form?.validateFields();
+    const dataForm = util.removeNonSerialisable(requete.form?.getFieldsValue());
     const { id } = await ServiceEmploye.creer(dataForm);
     resultat.idEmploye = id;
 };

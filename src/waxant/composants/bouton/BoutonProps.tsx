@@ -1,6 +1,6 @@
-import type { CSSProperties, ReactNode } from 'react';
-import type { IModele } from 'waxant/noyau/domaine/modele';
-import type { PageDefinition } from 'waxant/noyau/routes/PageDefinition';
+import { CSSProperties, ReactNode } from 'react';
+import { IModele } from '../../noyau/domaine/modele';
+import { PageDefinition } from '../../noyau/routes/PageDefinition';
 
 export interface BoutonProps {
     nom?: string;
@@ -10,14 +10,14 @@ export interface BoutonProps {
     page?: PageDefinition | null;
     modele?: IModele | null;
     libelle?: string | null;
-    icone?: ReactNode | null;
+    icone?: ReactNode | undefined;
     inactif?: string | null;
     visible?: boolean;
     rid?: string | null;
     toolTip?: string | null;
     width?: number | string | null;
     forme?: 'icone' | 'texte';
-    type?: 'fort' | 'normal' | 'danger' | 'alerte' | 'lien';
+    type?: 'fort' | 'normal' | 'danger' | 'alerte' | 'lien' | 'menuItem';
     taille?: 'mini' | 'moyen' | 'large';
     style?: CSSProperties;
     cote?: 'gauche' | 'droit';

@@ -17,7 +17,6 @@ const FormulaireConsultation = ({ modele, nombreColonne = 2, children }: Formula
     const convert = useFormConverter();
     const [form] = Form.useForm();
 
-
     useEffect(() => {
         if (util.nonVide(modele)) {
             form.setFieldsValue(modele);

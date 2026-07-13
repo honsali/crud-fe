@@ -1,7 +1,7 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { type FormInstance } from 'antd';
-import { type IConge } from 'modele/rh/conge/DomaineConge';
-import { type EtatMdl, type IRequete, type IResultat, type IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
+import { FormInstance } from 'antd';
+import { IConge } from 'modele/rh/conge/DomaineConge';
+import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlModifierConge from './CtrlModifierConge';
 
 export interface ReqModifierConge extends IRequete {
@@ -63,8 +63,8 @@ const SliceModifierConge = createSlice({
 export const MdlModifierConge = SliceModifierConge.actions;
 
 const selectMdlModifierConge = (state: IRootState) => state.mdlModifierConge;
-export const selectEtatInitModificationConge = createSelector([selectMdlModifierConge], (state: ModifierCongeType) => state.etatInitModificationConge);
 export const selectConge = createSelector([selectMdlModifierConge], (state: ModifierCongeType) => state.conge);
+export const selectEtatInitModificationConge = createSelector([selectMdlModifierConge], (state: ModifierCongeType) => state.etatInitModificationConge);
 export const selectEtatMajConge = createSelector([selectMdlModifierConge], (state: ModifierCongeType) => state.etatMajConge);
 
 export default SliceModifierConge.reducer;

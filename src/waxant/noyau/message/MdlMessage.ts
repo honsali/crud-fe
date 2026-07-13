@@ -1,7 +1,7 @@
-import { createSelector, createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import _ from 'lodash';
-import { type IRootState } from '../redux/StoreDynamique';
-import type { IInfoActionEchouee, IInfoActionReussie } from './DomaineMessage';
+import { IRootState } from '../redux/StoreDynamique';
+import { IInfoActionEchouee, IInfoActionReussie } from './DomaineMessage';
 
 type MessageStateType = {
     infoActionEchouee: IInfoActionEchouee | null;

@@ -1,11 +1,11 @@
 import ServiceDepartement from 'modele/rh/departement/ServiceDepartement';
 import { action, util } from 'waxant';
 import { ActionDepartement } from '../ActionDepartement';
-import { type ReqCreerDepartement, type ResCreerDepartement } from './MdlCreerDepartement';
+import { ReqCreerDepartement, ResCreerDepartement } from './MdlCreerDepartement';
 
 const creerDepartementImpl = async (requete: ReqCreerDepartement, resultat: ResCreerDepartement, thunkAPI) => {
-    await requete.form.validateFields();
-    const dataForm = util.removeNonSerialisable(requete.form.getFieldsValue());
+    await requete.form?.validateFields();
+    const dataForm = util.removeNonSerialisable(requete.form?.getFieldsValue());
     const { id } = await ServiceDepartement.creer(dataForm);
     resultat.idDepartement = id;
 };

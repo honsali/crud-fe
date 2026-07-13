@@ -1,11 +1,11 @@
-import { createContext, useContext, useState, type ReactNode } from 'react';
+import { ReactNode, createContext, useContext, useState } from 'react';
 
 export interface IContexteAccordeonProps {
     ouvert?: string;
     setOuvert?: (id?: string) => void;
 }
 
-const ContexteAccordeon = createContext({} as IContexteAccordeonProps);
+const ContexteAccordeon = createContext<IContexteAccordeonProps | undefined>(undefined);
 
 interface ContexteAccordeonProviderProps {
     ouvertParDefaut?: string;
@@ -26,7 +26,7 @@ export const ContexteAccordeonProvider: React.FC<ContexteAccordeonProviderProps>
 const useContexteAccordeon = () => {
     const context = useContext(ContexteAccordeon);
     if (context === undefined) {
-        throw new Error('useContextePage must be used within a ContexteAccordeonProvider');
+        throw new Error('useContexteAccordeon must be used within a ContexteAccordeonProvider');
     }
     return context;
 };

@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { type IDepartement } from 'modele/rh/departement/DomaineDepartement';
-import { type EtatMdl, type IRequete, type IResultat, type IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
+import { IDepartement } from 'modele/rh/departement/DomaineDepartement';
+import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlConsulterDepartement from './CtrlConsulterDepartement';
 
 export interface ReqConsulterDepartement extends IRequete {
@@ -61,8 +61,8 @@ const SliceConsulterDepartement = createSlice({
 export const MdlConsulterDepartement = SliceConsulterDepartement.actions;
 
 const selectMdlConsulterDepartement = (state: IRootState) => state.mdlConsulterDepartement;
-export const selectEtatRecupererDepartementParId = createSelector([selectMdlConsulterDepartement], (state: ConsulterDepartementType) => state.etatRecupererDepartementParId);
 export const selectDepartement = createSelector([selectMdlConsulterDepartement], (state: ConsulterDepartementType) => state.departement);
+export const selectEtatRecupererDepartementParId = createSelector([selectMdlConsulterDepartement], (state: ConsulterDepartementType) => state.etatRecupererDepartementParId);
 export const selectEtatSupprimerDepartement = createSelector([selectMdlConsulterDepartement], (state: ConsulterDepartementType) => state.etatSupprimerDepartement);
 
 export default SliceConsulterDepartement.reducer;

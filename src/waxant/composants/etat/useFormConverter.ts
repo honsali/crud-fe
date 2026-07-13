@@ -1,4 +1,4 @@
-import util from 'waxant/noyau/util/util';
+import util from '../../noyau/util/util';
 import useI18n from '../../noyau/i18n/useI18n';
 
 const useFormConverter = () => {

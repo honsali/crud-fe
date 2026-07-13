@@ -1,21 +1,20 @@
-import type { AsyncThunk, AsyncThunkConfig } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useAppDispatch } from 'waxant';
 import CtrlFiltrerEmploye from './CtrlFiltrerEmploye';
-import { MdlFiltrerEmploye, type ReqFiltrerEmploye, type ResFiltrerEmploye, selectEtatChangerPageFiltrerEmploye, selectEtatFiltrerEmploye, selectEtatInitialiserFiltrerEmploye, selectListePagineeEmploye } from './MdlFiltrerEmploye';
+import { MdlFiltrerEmploye, ReqFiltrerEmploye, selectEtatChangerPageFiltrerEmploye, selectEtatFiltrerEmploye, selectEtatInitialiserFiltrerEmploye, selectListePagineeEmploye } from './MdlFiltrerEmploye';
 
 const useFiltrerEmploye = () => {
 
     const dispatch = useAppDispatch();
     const params = useParams();
 
-    const etatFiltrerEmploye = useSelector(selectEtatFiltrerEmploye);
-    const listePagineeEmploye = useSelector(selectListePagineeEmploye);
     const etatChangerPageFiltrerEmploye = useSelector(selectEtatChangerPageFiltrerEmploye);
+    const etatFiltrerEmploye = useSelector(selectEtatFiltrerEmploye);
     const etatInitialiserFiltrerEmploye = useSelector(selectEtatInitialiserFiltrerEmploye);
+    const listePagineeEmploye = useSelector(selectListePagineeEmploye);
 
-    const createAction = (action: AsyncThunk<ResFiltrerEmploye, ReqFiltrerEmploye, AsyncThunkConfig>) => (req?: ReqFiltrerEmploye) => dispatch(action({ ...req, ...params } as ReqFiltrerEmploye));
+    const createAction = (action: any) => (req?: ReqFiltrerEmploye) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions
@@ -27,10 +26,10 @@ const useFiltrerEmploye = () => {
         resetEtatInitialiserFiltrerEmploye: () => dispatch(MdlFiltrerEmploye.resetEtatInitialiserFiltrerEmploye()),
 
         // State
-        etatFiltrerEmploye,
-        listePagineeEmploye,
         etatChangerPageFiltrerEmploye,
+        etatFiltrerEmploye,
         etatInitialiserFiltrerEmploye,
+        listePagineeEmploye,
     };
 };
 

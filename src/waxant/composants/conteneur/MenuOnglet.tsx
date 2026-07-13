@@ -1,6 +1,6 @@
-import type { FC, ReactNode } from 'react';
-import { ContexteMenuOngletProvider } from 'waxant/noyau/contexte/ContexteMenuOnglet';
-import { ContexteTableauProvider } from 'waxant/noyau/contexte/ContexteTabeau';
+import { FC, Key, ReactNode } from 'react';
+import { ContexteMenuOngletProvider } from '../../noyau/contexte/ContexteMenuOnglet';
+import { ContexteTableauProvider } from '../../noyau/contexte/ContexteTableau';
 import MenuOngletInterne from './MenuOngletInterne';
 
 export interface MenuOngletProps {
@@ -10,7 +10,6 @@ export interface MenuOngletProps {
     marge?: string;
     children: ReactNode;
 }
-
 
 const MenuOnglet: FC<MenuOngletProps> = (props) => {
 

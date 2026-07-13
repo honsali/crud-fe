@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { type IDepartement } from 'modele/rh/departement/DomaineDepartement';
-import { type EtatMdl, type IRequete, type IResultat, type IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
+import { IDepartement } from 'modele/rh/departement/DomaineDepartement';
+import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlListerDepartement from './CtrlListerDepartement';
 
 export interface ReqListerDepartement extends IRequete {
@@ -46,7 +46,7 @@ const SliceListerDepartement = createSlice({
 export const MdlListerDepartement = SliceListerDepartement.actions;
 
 const selectMdlListerDepartement = (state: IRootState) => state.mdlListerDepartement;
-export const selectListeDepartement = createSelector([selectMdlListerDepartement], (state: ListerDepartementType) => state.listeDepartement);
 export const selectEtatListerDepartement = createSelector([selectMdlListerDepartement], (state: ListerDepartementType) => state.etatListerDepartement);
+export const selectListeDepartement = createSelector([selectMdlListerDepartement], (state: ListerDepartementType) => state.listeDepartement);
 
 export default SliceListerDepartement.reducer;

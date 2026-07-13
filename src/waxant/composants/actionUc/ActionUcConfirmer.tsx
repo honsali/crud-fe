@@ -1,9 +1,9 @@
 import { Popconfirm } from 'antd';
 import { useState } from 'react';
-import { enteteConfirmation, titreConfirmation } from 'waxant/noyau/util/libelleUtil';
+import { enteteConfirmation, titreConfirmation } from '../../noyau/util/libelleUtil';
 import useHasRight from '../../noyau/auth/useHasRight';
 import useI18n from '../../noyau/i18n/useI18n';
-import type { BoutonProps } from '../bouton/BoutonProps';
+import { BoutonProps } from '../bouton/BoutonProps';
 import BoutonTexte from '../bouton/texte/BoutonTexte';
 
 

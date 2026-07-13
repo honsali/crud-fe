@@ -1,17 +1,17 @@
 import _ from 'lodash';
 import { createContext, useContext, useEffect, useState } from 'react';
-import Avancement from 'waxant/composants/widget/Avancement';
+import Avancement from '../../composants/widget/Avancement';
 import useContexteAuth from '../auth/ContexteAuth';
-import { type ConfigAppType } from '../contexte/ContexteApp';
+import { ConfigAppType } from '../contexte/ContexteApp';
 import useAppDispatch from '../redux/useAppDispatch';
-import { type ModuleDefinition } from '../routes/ModuleDefinition';
+import { ModuleDefinition } from '../routes/ModuleDefinition';
 import { MdlI18n } from './MdlI18n';
 
 export interface IContexteI18nProps {
     config: ConfigAppType;
 }
 
-const ContexteI18n = createContext({} as IContexteI18nProps);
+const ContexteI18n = createContext<IContexteI18nProps | undefined>(undefined);
 
 interface ContexteI18nProviderProps {
     config: ConfigAppType;
@@ -24,13 +24,14 @@ export const ContexteI18nProvider: React.FC<ContexteI18nProviderProps> = ({ conf
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (!role) {
+        const domaine = role ? config.mapDomaine[role] : null;
+        if (!domaine?.listeModule) {
+            setLoading(false);
             return;
         }
-        const domaine = config.mapDomaine[role];
-        const listeModule = domaine?.listeModule;
+
         const sum = _.reduce(
-            listeModule,
+            domaine.listeModule,
             (acc, module) => {
                 const moduleI18N = mergeI18N(module);
                 return { ...acc, ...moduleI18N };
@@ -40,7 +41,7 @@ export const ContexteI18nProvider: React.FC<ContexteI18nProviderProps> = ({ conf
 
         dispatch(MdlI18n.etendreLibelle(sum));
         setLoading(false);
-    }, []);
+    }, [config.mapDomaine, dispatch, role]);
 
     if (loading) {
         return <Avancement taux={4} />;

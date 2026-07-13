@@ -1,7 +1,7 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { type FormInstance } from 'antd';
-import { type IDepartement } from 'modele/rh/departement/DomaineDepartement';
-import { type EtatMdl, type IRequete, type IResultat, type IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
+import { FormInstance } from 'antd';
+import { IDepartement } from 'modele/rh/departement/DomaineDepartement';
+import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlModifierDepartement from './CtrlModifierDepartement';
 
 export interface ReqModifierDepartement extends IRequete {
@@ -63,8 +63,8 @@ const SliceModifierDepartement = createSlice({
 export const MdlModifierDepartement = SliceModifierDepartement.actions;
 
 const selectMdlModifierDepartement = (state: IRootState) => state.mdlModifierDepartement;
-export const selectEtatMajDepartement = createSelector([selectMdlModifierDepartement], (state: ModifierDepartementType) => state.etatMajDepartement);
-export const selectEtatInitModificationDepartement = createSelector([selectMdlModifierDepartement], (state: ModifierDepartementType) => state.etatInitModificationDepartement);
 export const selectDepartement = createSelector([selectMdlModifierDepartement], (state: ModifierDepartementType) => state.departement);
+export const selectEtatInitModificationDepartement = createSelector([selectMdlModifierDepartement], (state: ModifierDepartementType) => state.etatInitModificationDepartement);
+export const selectEtatMajDepartement = createSelector([selectMdlModifierDepartement], (state: ModifierDepartementType) => state.etatMajDepartement);
 
 export default SliceModifierDepartement.reducer;

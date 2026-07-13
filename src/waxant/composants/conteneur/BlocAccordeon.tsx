@@ -2,16 +2,18 @@ import { DownOutlined, UpOutlined } from '@ant-design/icons';
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import useContexteAccordeon from 'waxant/noyau/contexte/ContexteAccordeon';
-import useContexteView from 'waxant/noyau/contexte/ContexteView';
-import useI18n from 'waxant/noyau/i18n/useI18n';
+import useContexteAccordeon from '../../noyau/contexte/ContexteAccordeon';
+import useContexteView from '../../noyau/contexte/ContexteView';
+import useI18n from '../../noyau/i18n/useI18n';
 
 const Composant = styled.div`
     &:first-child  > .closed  {
+        border-top: 1px solid #ddd;
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
     }
     &:first-child  > .opened  {
+        border-top: 1px solid #ddd;
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
     }

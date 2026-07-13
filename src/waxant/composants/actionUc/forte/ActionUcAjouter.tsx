@@ -1,6 +1,5 @@
 import { PlusCircleFilled } from '@ant-design/icons';
-import type { BoutonProps } from '../../bouton/BoutonProps';
-
+import { BoutonProps } from '../../bouton/BoutonProps';
 import ActionUcForte from '../ActionUcForte';
 
 const ActionUcAjouter = (props: BoutonProps) => {

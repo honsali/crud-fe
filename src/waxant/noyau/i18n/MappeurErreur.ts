@@ -1,4 +1,4 @@
-import type { IErreurServeur, IInfoActionEchouee, IMessageErreur } from '../message/DomaineMessage';
+import { IErreurServeur, IInfoActionEchouee, IMessageErreur } from '../message/DomaineMessage';
 import MappeurLibelle from './MappeurLibelle';
 
 const mapContexteErreur = {
@@ -12,21 +12,20 @@ const mapContexteErreur = {
 };
 
 const trouverLibelleErreur = (erreurServeur: IErreurServeur, mapErreur: Record<string, string>, mapLibelle: Record<string, string>): string => {
-    const code = erreurServeur.code ?? '';
-    let es = code ? mapErreur[code] : undefined;
+    let es = mapErreur[erreurServeur.code];
     if (!es) {
-        return erreurServeur.libelle || code || '';
+        return erreurServeur.libelle || erreurServeur.code;
     }
 
     if (erreurServeur.arguments?.length) {
         for (const arg of erreurServeur.arguments) {
-            const erreorByArg = mapErreur[arg];
-            if (erreorByArg) {
-                return erreorByArg;
+            const erreurByArg = mapErreur[arg];
+            if (erreurByArg) {
+                return erreurByArg;
             }
             let al = MappeurLibelle.libelle(arg, mapLibelle, false);
 
-            if (!al && arg.includes('.')) {
+            if (!al && arg?.includes('.')) {
                 const idx = arg.indexOf('.');
                 al = MappeurLibelle.libelle(arg.substring(idx + 1), mapLibelle, false);
             }
@@ -39,28 +38,49 @@ const trouverLibelleErreur = (erreurServeur: IErreurServeur, mapErreur: Record<s
     return es;
 };
 
-const get = ({ code, listeErreurServeur, listeErreurDirecte, erreur }: IInfoActionEchouee, mapErreur: Record<string, string>, mapLibelle: Record<string, string>): IMessageErreur => {
-    const codeKey = code ?? '';
-    const e = codeKey ? mapContexteErreur[codeKey] : undefined;
+const ajouterDetailsErreur = (messageErreur: IMessageErreur, listeErreurServeur: IErreurServeur[], listeErreurDirecte: string[], erreur: string, params: any[], mapErreur: Record<string, string>, mapLibelle: Record<string, string>) => {
+    if (listeErreurServeur?.length) {
+        messageErreur.listeErreur = listeErreurServeur.map((err) => trouverLibelleErreur(err, mapErreur, mapLibelle));
+    }
+
+    if (listeErreurDirecte?.length) {
+        messageErreur.listeErreur.push(...listeErreurDirecte);
+    }
+    if (erreur) {
+        const erreurTexte = mapErreur[erreur] || `[${erreur}]`;
+        if (params?.length > 0) {
+            messageErreur.listeErreur.push(formatMessage(erreurTexte, params));
+        } else {
+            messageErreur.listeErreur.push(erreurTexte);
+        }
+    }
+};
+
+const get = ({ code, listeErreurServeur, listeErreurDirecte, erreur, params }: IInfoActionEchouee, mapErreur: Record<string, string>, mapLibelle: Record<string, string>): IMessageErreur => {
+    const codeErreur = typeof code === 'string' ? code : null;
+    const e = codeErreur ? mapContexteErreur[codeErreur] : null;
     if (e) {
-        const listeErreur: string[] = [];
-        const messageErreur: IMessageErreur = { titre: e[0], sousTitre: e[1], listeErreur };
-        if (listeErreurServeur?.length) {
-            listeErreur.push(...listeErreurServeur.map((err) => trouverLibelleErreur(err, mapErreur, mapLibelle)));
-        }
-
-        if (listeErreurDirecte?.length) {
-            listeErreur.push(...listeErreurDirecte);
-        }
-        if (erreur) {
-            const erreurTexte = mapErreur[erreur] || `[${erreur}]`;
-            listeErreur.push(erreurTexte);
-        }
-
+        const messageErreur: IMessageErreur = { titre: e[0], sousTitre: e[1], listeErreur: [] };
+        ajouterDetailsErreur(messageErreur, listeErreurServeur, listeErreurDirecte, erreur, params, mapErreur, mapLibelle);
         return messageErreur;
     }
-    return { titre: 'ERROR', sousTitre: JSON.stringify({ code, listeErreurServeur, listeErreurDirecte, erreur }), listeErreur: [] };
+
+    const messageErreur: IMessageErreur = {
+        titre: 'Problème technique',
+        sousTitre: codeErreur && mapErreur[codeErreur] ? mapErreur[codeErreur] : 'Une erreur inattendue est survenue, veuillez contacter votre administrateur',
+        listeErreur: [],
+    };
+    ajouterDetailsErreur(messageErreur, listeErreurServeur, listeErreurDirecte, erreur, params, mapErreur, mapLibelle);
+    return messageErreur;
 };
+
+const formatMessage = (template: string, params: Array<string | number>) => {
+    return template.replace(/{(\d+)}/g, (match, index) => {
+        const value = params[Number(index)];
+        return value !== undefined ? String(value) : match;
+    });
+};
+
 const MappeurErreur = {
     get,
 };

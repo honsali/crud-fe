@@ -1,10 +1,8 @@
-import { CSSProperties, ReactNode, useEffect, useState } from 'react';
-import useHasRight from '../../noyau/auth/useHasRight';
-import useI18n from '../../noyau/i18n/useI18n';
-import { ExecuteResponse } from '../../noyau/redux/useExecute';
-import { enteteConfirmation, titreConfirmation } from '../../noyau/util/libelleUtil';
-import BoutonTexte from '../bouton/texte/BoutonTexte';
-import DialogueConfirmation from '../dialogue/DialogueConfirmation';
+import type { CSSProperties, ReactNode } from 'react';
+import { useEffect, useState } from 'react';
+import { DialogueConfirmation, enteteConfirmation, titreConfirmation, useHasRight, useI18n } from 'waxant';
+import type { ExecuteResponse } from 'waxant/noyau/redux/useExecute';
+import BoutonIcone from '../bouton/icone/BoutonIcone';
 import EnteteDialogue from '../dialogue/EnteteDialogue';
 
 type ActionUcDialogueProps = {
@@ -26,10 +24,11 @@ type ActionUcDialogueProps = {
     style?: CSSProperties;
     children?: ReactNode;
     type?: 'fort' | 'normal' | 'danger' | 'alerte' | 'lien' | 'menuItem';
+    taille?: 'mini' | 'moyen' | 'large';
 };
 
-const ActionUcDialogue = (props: ActionUcDialogueProps) => {
-    const { nom, type, icone, action, args, getArgs, form, etat, pret = true, siInit, siAnnuler, siSucces, siErreur, siErreurAnnuler, inactif, style, children } = props;
+const ActionUcDialogueIcone = (props: ActionUcDialogueProps) => {
+    const { nom, type, taille, icone, action, args, getArgs, form, etat, pret = true, siInit, siAnnuler, siSucces, siErreur, siErreurAnnuler, inactif, style, children } = props;
     const { i18n } = useI18n();
     const hasRight = useHasRight(nom);
     const [visible, setVisible] = useState(false);
@@ -93,8 +92,8 @@ const ActionUcDialogue = (props: ActionUcDialogueProps) => {
     }, [etatValue.erreur]);
 
     return (
-        <div style={{ display: 'flex', ...style }}>
-            <BoutonTexte nom={nom} type={type} icone={icone} action={ouvrir} rid={visible ? '1' : null} visible={hasRight} inactif={inactif} />
+        <div>
+            <BoutonIcone nom={nom} type={type} taille={taille} icone={icone} action={ouvrir} rid={visible ? '1' : null} visible={hasRight} inactif={inactif} />
             <DialogueConfirmation visible={visible} {...attributes} rid={etatValue.rid}>
                 <EnteteDialogue texte={attributes.entete} />
                 {children}
@@ -103,4 +102,4 @@ const ActionUcDialogue = (props: ActionUcDialogueProps) => {
     );
 };
 
-export default ActionUcDialogue;
+export default ActionUcDialogueIcone;

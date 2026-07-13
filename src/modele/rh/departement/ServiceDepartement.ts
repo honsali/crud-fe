@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { API_URL } from 'commun';
-import { type IDepartement } from './DomaineDepartement';
+import { IDepartement } from './DomaineDepartement';
 
 
 const creer = async (departement: IDepartement) => {

@@ -1,6 +1,5 @@
 import { EditOutlined } from '@ant-design/icons';
-import type { BoutonProps } from '../../bouton/BoutonProps';
-
+import { BoutonProps } from '../../bouton/BoutonProps';
 import ActionUcForte from '../ActionUcForte';
 
 const ActionUcModifier = (props: BoutonProps) => {

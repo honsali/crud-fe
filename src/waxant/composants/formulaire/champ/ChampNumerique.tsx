@@ -9,7 +9,8 @@ const ChampNumerique = (props) => {
     const getRules = () => {
         const n = _.isArray(props.attributes.name) ? _.join(props.attributes.name, '.') : props.attributes.name;
         if (props.attributes.requis || (validateur && validateur[n] && validateur[n].requis)) {
-            return { required: true, message: props.attributes.label + ' est requis.', type: 'number' };
+            const message = props.attributes.label ? props.attributes.label + ' est requis.' : 'Champ requis';
+            return { required: true, message, type: 'number' };
         }
         return { required: false };
     };

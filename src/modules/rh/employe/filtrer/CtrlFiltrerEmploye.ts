@@ -1,7 +1,7 @@
 import ServiceEmploye from 'modele/rh/employe/ServiceEmploye';
 import { action, util } from 'waxant';
 import { ActionEmploye } from '../ActionEmploye';
-import { type ReqFiltrerEmploye, type ResFiltrerEmploye } from './MdlFiltrerEmploye';
+import { ReqFiltrerEmploye, ResFiltrerEmploye } from './MdlFiltrerEmploye';
 
 const changerPageFiltrerEmployeImpl = async (requete: ReqFiltrerEmploye, resultat: ResFiltrerEmploye, thunkAPI) => {
     const { mdlFiltrerEmploye } = thunkAPI.getState() as any;
@@ -9,8 +9,8 @@ const changerPageFiltrerEmployeImpl = async (requete: ReqFiltrerEmploye, resulta
 };
 
 const filtrerEmployeImpl = async (requete: ReqFiltrerEmploye, resultat: ResFiltrerEmploye, thunkAPI) => {
-    await requete.form.validateFields();
-    const dataForm = util.removeNonSerialisable(requete.form.getFieldsValue());
+    await requete.form?.validateFields();
+    const dataForm = util.removeNonSerialisable(requete.form?.getFieldsValue());
     resultat.listePagineeEmploye = await ServiceEmploye.filtrer(dataForm);
     resultat.filtre = dataForm;
 };

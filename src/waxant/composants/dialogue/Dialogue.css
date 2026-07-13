@@ -1,0 +1,32 @@
+.ant-modal-root.waxant-dialogue {}
+
+.ant-modal-container.waxant-dialogue-container {
+    padding: 0;
+}
+
+.ant-modal-header.waxant-dialogue-header {
+    padding: 10px;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+}
+
+.ant-modal-title.waxant-dialogue-title {
+    font-weight: 500;
+    font-size: 26px;
+    color: var(--ant-color-primary);
+    margin-top: 10px;
+}
+
+.ant-modal-body.waxant-dialogue-body {
+    padding: 10px 20px;
+}
+
+.ant-modal-footer.waxant-dialogue-footer {
+    padding: 10px;
+    background-color: #fdfcfa;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-top: 1px solid #ddd;
+}

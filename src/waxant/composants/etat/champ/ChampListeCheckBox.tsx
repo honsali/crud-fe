@@ -16,7 +16,7 @@ const ChampListeCheckBox = (props: any) => {
     return (
         <Form.Item {...props.attributes}  >
             <Checkbox.Group defaultValue={props.defaultValue}>
-                <Space direction={props.direction ? props.direction : 'horizontal'}>
+                <Space orientation={props.direction ? props.direction : 'horizontal'}>
                     {props.liste.map((l) => (
                         <Checkbox value={l.id} key={l.id}>
                             {l.libelle}

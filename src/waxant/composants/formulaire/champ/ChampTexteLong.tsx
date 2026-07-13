@@ -3,9 +3,11 @@ import _ from 'lodash';
 import { useContext } from 'react';
 import FormulaireValidateur from '../FormulaireValidateur';
 
+const { TextArea } = Input;
+
 const ChampTexteLong = (props) => {
     const validateur = useContext(FormulaireValidateur);
-    const { TextArea } = Input;
+
     const getRules = () => {
         const n = _.isArray(props.attributes.name) ? _.join(props.attributes.name, '.') : props.attributes.name;
         if (props.attributes.requis || (validateur && validateur[n] && validateur[n].requis)) {

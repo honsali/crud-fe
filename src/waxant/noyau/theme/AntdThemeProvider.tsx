@@ -1,5 +1,5 @@
 import { App, ConfigProvider } from 'antd';
-import { type ConfigAppType } from '../contexte/ContexteApp';
+import { ConfigAppType } from '../contexte/ContexteApp';
 import StyledThemeProvider from './StyledThemeProvider';
 // eslint-disable-next-line no-unused-vars
 import locale from 'antd/locale/fr_FR';
@@ -11,7 +11,7 @@ const AntdThemeProvider = ({ config, children }: { config: ConfigAppType; childr
     dayjs.locale('fr');
 
     return (
-        <ConfigProvider theme={theme} locale={locale}>
+        <ConfigProvider theme={theme} locale={locale} modal={{ mask: { blur: false } }} drawer={{ mask: { blur: false } }}>
             <App>
                 <StyledThemeProvider>{children}</StyledThemeProvider>
             </App>

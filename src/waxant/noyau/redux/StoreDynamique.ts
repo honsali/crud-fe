@@ -1,5 +1,4 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import type { Action, Reducer, Store, ThunkAction, UnknownAction } from '@reduxjs/toolkit';
+import { Action, combineReducers, configureStore, Reducer, Store, ThunkAction, UnknownAction } from '@reduxjs/toolkit';
 import MdlI18n from '../i18n/MdlI18n';
 import MdlMessage from '../message/MdlMessage';
 import { AsyncStatusMiddleware } from './AsyncStatusMiddleware';
@@ -15,18 +14,28 @@ interface ReducerMap {
     [key: string]: Reducer;
 }
 
-let staticReducers: ReducerMap = {
+const coreReducers: ReducerMap = {
     mdlMessage: MdlMessage,
     mdlI18n: MdlI18n,
 };
 
+let staticReducers: ReducerMap = { ...coreReducers };
+
+const RESET_STORE_ACTION = 'waxant/store/reset';
+
+const createRootReducer = () => {
+    const appReducer = combineReducers(staticReducers);
+    return (state, action) => {
+        if (action.type === RESET_STORE_ACTION) {
+            return appReducer(undefined, action);
+        }
+        return appReducer(state, action);
+    };
+};
+
 const store = configureStore({
-    reducer: combineReducers(staticReducers),
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().prepend(
-            AsyncStatusMiddleware as any,
-            ErrorSerializationMiddleware as any
-        ),
+    reducer: createRootReducer(),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend([AsyncStatusMiddleware, ErrorSerializationMiddleware]),
 });
 
 const getStore = () => {
@@ -35,7 +44,14 @@ const getStore = () => {
 
 export const registerReducer = (newReducers: ReducerMap): Store<any> => {
     staticReducers = { ...staticReducers, ...newReducers };
-    store.replaceReducer(combineReducers(staticReducers));
+    store.replaceReducer(createRootReducer());
+    return store;
+};
+
+export const resetStore = (newReducers: ReducerMap = {}): Store<any> => {
+    staticReducers = { ...coreReducers, ...newReducers };
+    store.replaceReducer(createRootReducer());
+    store.dispatch({ type: RESET_STORE_ACTION });
     return store;
 };
 

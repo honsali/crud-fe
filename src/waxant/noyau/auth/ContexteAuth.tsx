@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { type ConfigAppType } from '../contexte/ContexteApp';
+import { ConfigAppType } from '../contexte/ContexteApp';
 
 interface IContexteAuthProps {
     user: string | null;

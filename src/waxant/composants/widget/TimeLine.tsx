@@ -32,7 +32,7 @@ const TimeLine = ({ items }) => {
 
     return (
         <div style={{ backgroundColor: '#fff', padding: '20px 20px 0px', borderRadius: '4px' }}>
-            <Steps size="small" current={courant} labelPlacement="vertical" items={mappedItem} />
+            <Steps size="small" current={courant} titlePlacement="vertical" items={mappedItem} />
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { type IConge } from 'modele/rh/conge/DomaineConge';
-import { type EtatMdl, type IRequete, type IResultat, type IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
+import { IConge } from 'modele/rh/conge/DomaineConge';
+import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlConsulterConge from './CtrlConsulterConge';
 
 export interface ReqConsulterConge extends IRequete {
@@ -61,8 +61,8 @@ const SliceConsulterConge = createSlice({
 export const MdlConsulterConge = SliceConsulterConge.actions;
 
 const selectMdlConsulterConge = (state: IRootState) => state.mdlConsulterConge;
+export const selectConge = createSelector([selectMdlConsulterConge], (state: ConsulterCongeType) => state.conge);
 export const selectEtatRecupererCongeParId = createSelector([selectMdlConsulterConge], (state: ConsulterCongeType) => state.etatRecupererCongeParId);
 export const selectEtatSupprimerConge = createSelector([selectMdlConsulterConge], (state: ConsulterCongeType) => state.etatSupprimerConge);
-export const selectConge = createSelector([selectMdlConsulterConge], (state: ConsulterCongeType) => state.conge);
 
 export default SliceConsulterConge.reducer;

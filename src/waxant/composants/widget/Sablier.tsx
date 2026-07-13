@@ -8,7 +8,6 @@ import { selectActionEnCours, useI18n } from 'waxant';
 
 
 const Composant = styled(Spin)`
-    cursor: pointer;
 
     .wrap_spinner {
         position: relative;

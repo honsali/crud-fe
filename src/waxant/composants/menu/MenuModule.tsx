@@ -1,9 +1,12 @@
-import { ConfigProvider, Menu, type MenuProps } from 'antd';
+import { Menu, MenuProps } from 'antd';
 import { useCallback } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
-import { type PageDefinition, useContexteApp, useContexteAuth, useI18n } from 'waxant';
-import { type ModuleDefinition } from 'waxant/noyau/routes/ModuleDefinition';
+import useContexteAuth from '../../noyau/auth/ContexteAuth';
+import useContexteApp from '../../noyau/contexte/ContexteApp';
+import useI18n from '../../noyau/i18n/useI18n';
+import { ModuleDefinition } from '../../noyau/routes/ModuleDefinition';
+import { PageDefinition } from '../../noyau/routes/PageDefinition';
 
 interface MenuModuleProps {
     ouvert: boolean;
@@ -33,24 +36,23 @@ const MenuModule: React.FC<MenuModuleProps> = ({ ouvert }) => {
             const pageToElementMenu = (page: PageDefinition, children?: MenuItem[]) => {
                 const path = page.toPath(params);
                 const disabled = path.indexOf('undefined') > -1;
-                const menuKey = page.menu ?? page.key;
 
                 if (location.pathname.startsWith(path)) {
-                    opened.push(menuKey);
+                    opened.push(page.menu);
                 }
-                const locationSegments = getFirstNSegments(location.pathname, 2);
-                const pathSegments = getFirstNSegments(path, 2);
+                const locationSegments = getFirstNSegments(location.pathname, 3);
+                const pathSegments = getFirstNSegments(path, 3);
 
                 if (locationSegments === pathSegments) {
-                    selected.push(menuKey);
+                    selected.push(page.menu);
                 }
 
                 return {
-                    key: menuKey,
+                    key: page.menu,
                     label: <Link to={disabled ? '#' : path}>{i18n(page.key)}</Link>,
                     icon: page.icone,
                     disabled,
-                    ...(children ? { children } : {}),
+                    children,
                 };
             };
 
@@ -61,7 +63,7 @@ const MenuModule: React.FC<MenuModuleProps> = ({ ouvert }) => {
                     const disabled = path.indexOf('undefined') > -1;
                     if (disabled) {
                         item = {
-                            key: module.index.menu ?? module.index.key,
+                            key: module.index.menu,
                             label: <Link to="#">{i18n(module.index.key)}</Link>,
                             icon: module.index.icone,
                             disabled,
@@ -89,9 +91,6 @@ const MenuModule: React.FC<MenuModuleProps> = ({ ouvert }) => {
     );
 
     const getMenu = useCallback(() => {
-        if (!role) {
-            return;
-        }
         const { items, selected, opened } = listeElementMenu(mapDomaine[role]?.listeModule || []);
         if (ouvert) {
             return <Menu items={items} mode="inline" theme="dark" defaultOpenKeys={opened} openKeys={opened} selectedKeys={selected} />;
@@ -100,11 +99,7 @@ const MenuModule: React.FC<MenuModuleProps> = ({ ouvert }) => {
         }
     }, [role, location.pathname, ouvert, mapDomaine, params, listeElementMenu]);
 
-    return (
-        <ConfigProvider theme={{ token: { motion: false } }}>
-            {getMenu()}
-        </ConfigProvider>
-    );
+    return getMenu();
 };
 
 export default MenuModule;

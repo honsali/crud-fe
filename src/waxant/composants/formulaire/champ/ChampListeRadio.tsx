@@ -20,7 +20,7 @@ const ChampListeRadio = (props: any) => {
     return (
         <Form.Item {...props.attributes} onChange={valueChanged}>
             <Radio.Group defaultValue={props.defaultValue}>
-                <Space direction={props.direction ? props.direction : 'horizontal'}>
+                <Space orientation={props.direction ? props.direction : 'horizontal'}>
                     {props.liste.map((l) => (
                         <Radio value={l.code} key={l.code}>
                             {l.libelle}

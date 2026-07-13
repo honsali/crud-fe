@@ -1,10 +1,10 @@
-import { createContext, useContext, type ReactNode } from 'react';
+import { ReactNode, createContext, useContext } from 'react';
 
 export interface IContexteTableauProps {
     type?: string;
 }
 
-const ContexteTableau = createContext({} as IContexteTableauProps);
+const ContexteTableau = createContext<IContexteTableauProps | undefined>(undefined);
 
 interface ContexteTableauProviderProps {
     type?: string;

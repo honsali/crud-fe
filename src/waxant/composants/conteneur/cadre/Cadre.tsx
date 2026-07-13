@@ -10,12 +10,12 @@ export interface CadreProps {
     etat?: string | null;
     blocAction?: ReactNode;
     children: ReactNode;
-    marge?: string;
+    marge?: string | undefined;
     largeur?: string;
 }
 
 const Cadre = (props: CadreProps) => {
-    const { type = 'normal', titre = null, libelle = null, etat = null, blocAction = null, marge = '0', largeur = '100%', children } = props;
+    const { type = 'normal', titre = null, libelle = null, etat = null, blocAction = null, marge, largeur = '100%', children } = props;
     const { i18n } = useI18n();
     const { uc } = useContexteView();
     const titreCadre = titre ? i18n(`${uc}.${titre}`) : i18n(`${uc}.titre`);
@@ -39,7 +39,7 @@ const Cadre = (props: CadreProps) => {
             title={elementTitre}
             extra={blocAction ?? undefined}
             classNames={semanticClassNames}
-            style={{ padding: marge, width: largeur }}
+            styles={{ root: { width: largeur }, body: { padding: marge ?? '20px' } }}
         >
             {children}
         </Card>

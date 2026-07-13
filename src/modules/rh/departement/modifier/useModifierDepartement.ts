@@ -1,20 +1,19 @@
-import type { AsyncThunk, AsyncThunkConfig } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useAppDispatch } from 'waxant';
 import CtrlModifierDepartement from './CtrlModifierDepartement';
-import { MdlModifierDepartement, type ReqModifierDepartement, type ResModifierDepartement, selectDepartement, selectEtatInitModificationDepartement, selectEtatMajDepartement } from './MdlModifierDepartement';
+import { MdlModifierDepartement, ReqModifierDepartement, selectDepartement, selectEtatInitModificationDepartement, selectEtatMajDepartement } from './MdlModifierDepartement';
 
 const useModifierDepartement = () => {
 
     const dispatch = useAppDispatch();
     const params = useParams();
 
-    const etatMajDepartement = useSelector(selectEtatMajDepartement);
-    const etatInitModificationDepartement = useSelector(selectEtatInitModificationDepartement);
     const departement = useSelector(selectDepartement);
+    const etatInitModificationDepartement = useSelector(selectEtatInitModificationDepartement);
+    const etatMajDepartement = useSelector(selectEtatMajDepartement);
 
-    const createAction = (action: AsyncThunk<ResModifierDepartement, ReqModifierDepartement, AsyncThunkConfig>) => (req?: ReqModifierDepartement) => dispatch(action({ ...req, ...params } as ReqModifierDepartement));
+    const createAction = (action: any) => (req?: ReqModifierDepartement) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions
@@ -24,9 +23,9 @@ const useModifierDepartement = () => {
         resetEtatMajDepartement: () => dispatch(MdlModifierDepartement.resetEtatMajDepartement()),
 
         // State
-        etatMajDepartement,
-        etatInitModificationDepartement,
         departement,
+        etatInitModificationDepartement,
+        etatMajDepartement,
     };
 };
 

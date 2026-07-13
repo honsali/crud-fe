@@ -1,10 +1,10 @@
-import { createContext, useContext, type ReactNode } from 'react';
+import { ReactNode, createContext, useContext } from 'react';
 
 export interface IContexteViewProps {
     uc: string;
 }
 
-const ContexteView = createContext({} as IContexteViewProps);
+const ContexteView = createContext<IContexteViewProps | undefined>(undefined);
 
 interface ContexteViewProviderProps {
     uc: string;
