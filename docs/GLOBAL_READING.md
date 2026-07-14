@@ -134,19 +134,27 @@ The filter page uses a paginated backend response mapped by `MapperPagination`.
 
 Location: `src/modules/rh/employe/conge`
 
+Routes:
+
+- `/rh/employe/:idEmploye/conge/consulter/:idConge`
+- `/rh/employe/:idEmploye/creer`
+- `/rh/employe/:idEmploye/modifier/:idConge`
+
 Service: `src/modele/rh/conge/ServiceConge.ts`
 
 - `POST /employe/{idEmploye}/conge`
-- `GET /employe/{idEmploye}/conge`
+- `GET /conge/employe/{idEmploye}`
 - `GET /conge/{idConge}`
 - `PUT /conge/{idConge}`
 - `DELETE /conge/{idConge}`
 
-Current route definitions need review because conge routes collide with employee routes and creation currently uses `:idConge` even though creation needs `idEmploye`.
+The employee ID remains in the route while navigating through a leave workflow. `ServiceConge` currently synthesizes the required leave code from employee, leave type, and start date before create/update; the source marks this as temporary.
 
 ## Data and form conventions
 
 - Domain interfaces are optional-field TypeScript interfaces (`id?`, business-specific fields, nested reference objects).
+- `Sexe`, `SituationFamiliale`, and `TypeConge` references currently expose IDs and `libelle`, without a `code` field.
+- Those reference entities have no dedicated frontend service; selectors use the common `ServiceReference` endpoint.
 - Forms use Ant Design `Form` through Waxant's `Formulaire` wrapper.
 - `ChampDate` maintains a string field plus a hidden/suffixed Dayjs field for the picker.
 - `ChampReference` loads options through `listerReference`, stores the selected object field and a `_libelle` field.
@@ -187,7 +195,7 @@ Failed with many TypeScript errors. Main categories:
 ## Watch list for future work
 
 1. Normalize `App` filename/import casing.
-2. Review and fix employee/conge route definitions.
+2. Replace the temporary client-generated leave code when its final ownership/rule is decided.
 3. Decide whether admin should have its own domain/routes and ACLs.
 4. Add a `typecheck` script to `package.json` when TypeScript errors are ready to be enforced.
 5. Consider making `API_URL` environment-based instead of hardcoded to localhost.

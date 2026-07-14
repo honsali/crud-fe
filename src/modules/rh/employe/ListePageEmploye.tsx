@@ -11,8 +11,8 @@ import ViewModifierEmploye from './modifier/ViewModifierEmploye';
 
 export const PageConsulterConge: PageDefinition = {
     key: 'PageConsulterConge',
-    path: '/rh/employe/consulter/:idConge',
-    toPath: (args) => `/rh/employe/consulter/${args.idConge}`,
+    path: '/rh/employe/:idEmploye/conge/consulter/:idConge',
+    toPath: (args) => `/rh/employe/${args.idEmploye}/conge/consulter/${args.idConge}`,
     view: (
         <ContexteViewProvider uc="UcConsulterConge">
             <ViewConsulterConge />
@@ -33,8 +33,8 @@ export const PageConsulterEmploye: PageDefinition = {
 
 export const PageCreerConge: PageDefinition = {
     key: 'PageCreerConge',
-    path: '/rh/employe/creer/:idConge',
-    toPath: (args) => `/rh/employe/creer/${args.idConge}`,
+    path: '/rh/employe/:idEmploye/creer',
+    toPath: (args) => `/rh/employe/${args.idEmploye}/creer`,
     view: (
         <ContexteViewProvider uc="UcCreerConge">
             <ViewCreerConge />
@@ -68,8 +68,8 @@ export const PageFiltrerEmploye: PageDefinition = {
 
 export const PageModifierConge: PageDefinition = {
     key: 'PageModifierConge',
-    path: '/rh/employe/modifier/:idConge',
-    toPath: (args) => `/rh/employe/modifier/${args.idConge}`,
+    path: '/rh/employe/:idEmploye/modifier/:idConge',
+    toPath: (args) => `/rh/employe/${args.idEmploye}/modifier/${args.idConge}`,
     view: (
         <ContexteViewProvider uc="UcModifierConge">
             <ViewModifierConge />

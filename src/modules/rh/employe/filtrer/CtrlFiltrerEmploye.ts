@@ -9,7 +9,6 @@ const changerPageFiltrerEmployeImpl = async (requete: ReqFiltrerEmploye, resulta
 };
 
 const filtrerEmployeImpl = async (requete: ReqFiltrerEmploye, resultat: ResFiltrerEmploye, thunkAPI) => {
-    await requete.form?.validateFields();
     const dataForm = util.removeNonSerialisable(requete.form?.getFieldsValue());
     resultat.listePagineeEmploye = await ServiceEmploye.filtrer(dataForm);
     resultat.filtre = dataForm;

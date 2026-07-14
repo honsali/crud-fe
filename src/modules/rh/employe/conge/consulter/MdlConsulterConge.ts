@@ -4,7 +4,7 @@ import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatIn
 import CtrlConsulterConge from './CtrlConsulterConge';
 
 export interface ReqConsulterConge extends IRequete {
-    idConge?: string;
+    idConge: string;
 }
 
 export interface ResConsulterConge extends IResultat {

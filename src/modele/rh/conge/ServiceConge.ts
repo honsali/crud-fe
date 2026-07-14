@@ -4,6 +4,7 @@ import { IConge } from './DomaineConge';
 
 
 const creer = async (idEmploye: string, conge: IConge) => {
+    conge.code = idEmploye + '-' + conge.typeConge?.id + '-' + conge.dateDebutConge;//hask to be removed
     const { data } = await axios.post(`${API_URL}/employe/${idEmploye}/conge`, conge);
     return data;
 };
@@ -14,6 +15,7 @@ const listerParIdEmploye = async (idEmploye: string) => {
 };
 
 const maj = async (conge: IConge) => {
+    conge.code = conge.employe?.id + '-' + conge.typeConge?.id + '-' + conge.dateDebutConge;//hask to be removed
     const { data } = await axios.put(`${API_URL}/conge/${conge.id}`, conge);
     return data;
 };
