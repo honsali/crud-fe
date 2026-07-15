@@ -12,7 +12,7 @@ const ActionTableauConsulter = ({ typeEntite, action = null }: ActionTableauCons
     const { uc } = useContexteView();
     const nomAction = uc + '.action.consulter' + typeEntite;
     const hasRight = useHasRight(nomAction);
-    return <BoutonIcone nom={nomAction} icone={<EyeFilled />} action={action ?? undefined} taille="mini" forme="simple" visible={hasRight} />;
+    return <BoutonIcone nom={nomAction} icone={<EyeFilled />} action={action ?? undefined} taille="mini" visible={hasRight} />;
 };
 
 export default ActionTableauConsulter;

@@ -10,8 +10,8 @@ export interface PageDefinition {
     menu?: string;
     disabled?: () => boolean;
     open?: () => boolean;
-    icone?: JSX.Element;
-    view: JSX.Element;
+    icone?: ReactElement;
+    view: ReactElement;
 }
 
 const pageRoute = (page: PageDefinition, key: string): ReactElement => {

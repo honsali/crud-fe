@@ -1,10 +1,9 @@
-import { API_URL } from 'commun';
 import { useState } from 'react';
 import { useContexteAuth } from 'waxant';
 
 // Simple login component (you'll need to implement this)
 const PageAuth = () => {
-    const { login } = useContexteAuth();
+    const { api_url, login } = useContexteAuth();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -23,7 +22,7 @@ const PageAuth = () => {
 
         try {
             // Step 1: Authenticate and get token
-            const authResponse = await fetch(API_URL + '/authenticate', {
+            const authResponse = await fetch(api_url + '/authenticate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -47,7 +46,7 @@ const PageAuth = () => {
             }
 
             // Step 2: Get user account info (including role)
-            const accountResponse = await fetch(API_URL + '/user', {
+            const accountResponse = await fetch(api_url + '/user', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,

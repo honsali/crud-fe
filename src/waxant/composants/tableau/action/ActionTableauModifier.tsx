@@ -13,7 +13,7 @@ const ActionTableauModifier = ({ typeEntite, action = null }: ActionTableauModif
     const { uc } = useContexteView();
     const nomAction = uc + '.action.modifier' + typeEntite;
     const hasRight = useHasRight(nomAction);
-    return <BoutonIcone nom={nomAction} icone={<EditFilled />} action={action ?? undefined} taille="mini" forme="simple" visible={hasRight} />;
+    return <BoutonIcone nom={nomAction} icone={<EditFilled />} action={action ?? undefined} taille="mini" visible={hasRight} />;
 };
 
 export default ActionTableauModifier;

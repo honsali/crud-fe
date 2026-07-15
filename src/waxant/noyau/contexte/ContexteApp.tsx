@@ -11,6 +11,7 @@ export interface ConfigAppType {
     formatDate: string;
     formatDateTime: string;
     apiTimeout: number;
+    api_url: string;
     theme: Record<string, any>;
     mapDroitAcces: Record<string, string[]>;
     mapRole: Record<string, string>;

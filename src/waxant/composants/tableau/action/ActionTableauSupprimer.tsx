@@ -13,7 +13,7 @@ const ActionTableauSupprimer = ({ typeEntite, action = null }: ActionTableauSupp
     const { uc } = useContexteView();
     const nomAction = uc + '.action.supprimer' + typeEntite;
     const hasRight = useHasRight(nomAction);
-    return <BoutonIcone nom={nomAction} icone={<DeleteOutlined />} action={action ?? undefined} taille="mini" forme="simple" visible={hasRight} />;
+    return <BoutonIcone nom={nomAction} icone={<DeleteOutlined />} action={action ?? undefined} taille="mini" visible={hasRight} />;
 };
 
 export default ActionTableauSupprimer;

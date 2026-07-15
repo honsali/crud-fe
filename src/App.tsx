@@ -1,4 +1,5 @@
 import 'assets/styles/default.css';
+import { API_URL } from 'commun';
 import LayoutGlobal from 'commun/layout/LayoutGlobal';
 import mapDroitAcces from 'commun/securite/mapDroitAcces';
 import mapRole from 'commun/securite/mapRole';
@@ -16,6 +17,7 @@ const App = () => {
       formatDate: 'DD/MM/YYYY',
       formatDateTime: 'DD/MM/YYYY HH:mm',
       apiTimeout: 50000,
+      api_url: API_URL,
       theme: theme,
       mapDroitAcces: mapDroitAcces,
       mapRole: mapRole,

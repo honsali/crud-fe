@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 import { ConfigAppType } from '../contexte/ContexteApp';
 
 interface IContexteAuthProps {
+    api_url: string;
     user: string | null;
     role: string | null;
     token: string | null;
@@ -198,6 +199,7 @@ export const AuthProvider = ({ children, config, onLogout }: AuthProviderProps) 
 
     return (
         <ContexteAuth.Provider value={{
+            api_url: config.api_url,
             user,
             role,
             token,

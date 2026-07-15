@@ -9,7 +9,6 @@ import useAppDispatch from '../../noyau/redux/useAppDispatch';
 import BoutonTexteFort from '../bouton/texte/BoutonTexteFort';
 import BoutonTexteNormal from '../bouton/texte/BoutonTexteNormal';
 import Dialogue, { type DialogueProps } from './Dialogue';
-import BoutonTexteFort from '../bouton/texte/BoutonTexteFort';
 
 
 const SCorps = styled(Col)`
