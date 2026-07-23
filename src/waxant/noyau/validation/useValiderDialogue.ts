@@ -4,7 +4,7 @@ import { MdlMessage } from '../message/MdlMessage';
 const useValiderDialogue = (form, dispatch, actionErreur?: () => void) => {
     form.validateFields()
         .then(() => {
-            actionErreur();
+            actionErreur?.();
         })
         .catch((errorInfo) => {
             const messageErreur: IInfoActionEchouee = { code: 'error.validation.form' };

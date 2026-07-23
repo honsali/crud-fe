@@ -1,5 +1,4 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import _ from 'lodash';
 import { IRootState } from '../redux/StoreDynamique';
 import { IInfoActionEchouee, IInfoActionReussie } from './DomaineMessage';
 
@@ -33,7 +32,7 @@ export const MessageSlice = createSlice({
             state.actionEnCours[action.payload.rid] = m;
         },
         finAction: (state, action: PayloadAction<string>) => {
-            state.actionEnCours = _.omit(state.actionEnCours, [action.payload]);
+            delete state.actionEnCours[action.payload];
         },
         setInfoActionReussie: (state, action: PayloadAction<IInfoActionReussie>) => {
             state.infoActionReussie = action.payload;

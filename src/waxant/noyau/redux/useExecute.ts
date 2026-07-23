@@ -1,11 +1,17 @@
 import _ from 'lodash';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import useContexteAuth from '../auth/ContexteAuth';
 import { MdlMessage } from '../message/MdlMessage';
 import util from '../util/util';
 import { IResultat, serializeError } from './action';
 import useAppDispatch from './useAppDispatch';
+
+export interface ExecuteResponse {
+    rid: string | null;
+    success: boolean;
+    erreur: boolean;
+}
 
 const estActionReussie = (actionToBeExecuted, actionResult): boolean => {
     return actionToBeExecuted?.fulfilled?.match?.(actionResult) || actionResult?.type?.endsWith('/fulfilled');
@@ -19,7 +25,7 @@ const useExecute = (resultat?: IResultat) => {
     const dispatch = useAppDispatch();
     const params = useParams();
     const { user, role } = useContexteAuth();
-    const [rid, setRid] = useState(null);
+    const [rid, setRid] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
     const [erreur, setErreur] = useState(false);
     const ridRef = useRef<string | null>(null);

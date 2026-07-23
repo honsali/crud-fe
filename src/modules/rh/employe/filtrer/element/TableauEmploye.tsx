@@ -7,7 +7,7 @@ const TableauEmploye = () => {
     const { changerPageFiltrerEmploye, listePagineeEmploye } = useFiltrerEmploye();
 
     const actionChangementPage = (pageCourante: number) => {
-        changerPageFiltrerEmploye({ pageCourante });
+            changerPageFiltrerEmploye({ pageCourante });
     };
 
     const goToPageConsulterEmploye = (employe) => {

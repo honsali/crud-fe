@@ -1,75 +1,62 @@
 import { useState } from 'react';
-import { useContexteAuth } from 'waxant';
+import { useNavigate } from 'react-router-dom';
+import useContexteAuth from './ContexteAuth';
 
-// Simple login component (you'll need to implement this)
+interface LoginResponse {
+    accessToken?: string;
+}
+
+interface ProblemDetails {
+    title?: string;
+    detail?: string;
+}
+
 const PageAuth = () => {
     const { api_url, login } = useContexteAuth();
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleLogin = async (e: React.SubmitEvent) => {
-        e.preventDefault();
+    const handleLogin = async (event: React.SubmitEvent) => {
+        event.preventDefault();
         setError('');
-        setIsLoading(true);
 
         if (!username.trim() || !password.trim()) {
-            setError('Please enter both username and password');
-            setIsLoading(false);
+            setError("Saisissez le nom d'utilisateur et le mot de passe.");
             return;
         }
 
+        setIsLoading(true);
         try {
-            // Step 1: Authenticate and get token
-            const authResponse = await fetch(api_url + '/authenticate', {
+            const response = await fetch(`${api_url}/login`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     username: username.trim(),
-                    password: password
-                })
+                    password,
+                }),
             });
 
-            if (!authResponse.ok) {
-                const errorData = await authResponse.json().catch(() => ({}));
-                throw new Error(errorData.message || 'Authentication failed');
+            const data = await response.json().catch(() => ({})) as LoginResponse & ProblemDetails;
+            if (!response.ok) {
+                throw new Error(data.detail || data.title || 'Authentification impossible.');
+            }
+            if (!data.accessToken) {
+                throw new Error("Le serveur n'a pas retourné de jeton d'accès.");
             }
 
-            const authData = await authResponse.json();
-            const token = authData.token || authData.id_token || authData.access_token;
-
-            if (!token) {
-                throw new Error('No token received from authentication');
-            }
-
-            // Step 2: Get user account info (including role)
-            const accountResponse = await fetch(api_url + '/user', {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (!accountResponse.ok) {
-                throw new Error('Failed to fetch user account information');
-            }
-
-            const accountData = await accountResponse.json();
-
-
-            const success = await login(token, accountData);
-
+            const success = await login(data.accessToken);
             if (!success) {
-                throw new Error('Login failed - invalid credentials or insufficient permissions');
+                throw new Error("Le jeton retourné est invalide ou son rôle n'est pas pris en charge.");
             }
 
-        } catch (err) {
-            console.error('Login error:', err);
-            setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
+            navigate('/', { replace: true });
+        } catch (exception) {
+            setError(exception instanceof Error ? exception.message : 'Authentification impossible.');
         } finally {
             setIsLoading(false);
         }
@@ -81,7 +68,7 @@ const PageAuth = () => {
             justifyContent: 'center',
             alignItems: 'center',
             minHeight: '100vh',
-            backgroundColor: '#f5f5f5'
+            backgroundColor: '#f5f5f5',
         }}>
             <div style={{
                 background: 'white',
@@ -90,65 +77,66 @@ const PageAuth = () => {
                 boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
                 minWidth: '300px',
                 maxWidth: '400px',
-                width: '100%'
+                width: '100%',
             }}>
                 <h2 style={{ textAlign: 'center', marginBottom: '1.5rem', color: '#333' }}>
-                    Login
+                    Connexion
                 </h2>
                 <form onSubmit={handleLogin}>
                     <div style={{ marginBottom: '1rem' }}>
-                        <label htmlFor="username" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                            Username:
+                        <label htmlFor="username" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>
+                            Nom d&apos;utilisateur
                         </label>
                         <input
                             id="username"
                             type="text"
                             value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            onChange={(event) => setUsername(event.target.value)}
                             disabled={isLoading}
+                            maxLength={50}
                             style={{
                                 width: '100%',
                                 padding: '0.75rem',
                                 border: '1px solid #ddd',
                                 borderRadius: '4px',
                                 fontSize: '14px',
-                                boxSizing: 'border-box'
+                                boxSizing: 'border-box',
                             }}
-                            placeholder="Enter your username"
                             autoComplete="username"
+                            autoFocus
                         />
                     </div>
                     <div style={{ marginBottom: '1.5rem' }}>
-                        <label htmlFor="password" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
-                            Password:
+                        <label htmlFor="password" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>
+                            Mot de passe
                         </label>
                         <input
                             id="password"
                             type="password"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(event) => setPassword(event.target.value)}
                             disabled={isLoading}
+                            maxLength={256}
                             style={{
                                 width: '100%',
                                 padding: '0.75rem',
                                 border: '1px solid #ddd',
                                 borderRadius: '4px',
                                 fontSize: '14px',
-                                boxSizing: 'border-box'
+                                boxSizing: 'border-box',
                             }}
-                            placeholder="Enter your password"
                             autoComplete="current-password"
                         />
                     </div>
                     {error && (
-                        <div style={{
-                            color: '#dc3545',
+                        <div role="alert" style={{
+                            color: '#842029',
                             marginBottom: '1rem',
-                            padding: '0.5rem',
+                            padding: '0.75rem',
                             backgroundColor: '#f8d7da',
-                            border: '1px solid #f5c6cb',
+                            border: '1px solid #f5c2c7',
                             borderRadius: '4px',
-                            fontSize: '14px'
+                            fontSize: '14px',
                         }}>
                             {error}
                         </div>
@@ -159,16 +147,16 @@ const PageAuth = () => {
                         style={{
                             width: '100%',
                             padding: '0.75rem',
-                            backgroundColor: isLoading ? '#6c757d' : '#007bff',
+                            backgroundColor: isLoading ? '#6c757d' : '#1677ff',
                             color: 'white',
                             border: 'none',
                             borderRadius: '4px',
                             cursor: isLoading ? 'not-allowed' : 'pointer',
                             fontSize: '16px',
-                            fontWeight: '500'
+                            fontWeight: 500,
                         }}
                     >
-                        {isLoading ? 'Logging in...' : 'Login'}
+                        {isLoading ? 'Connexion…' : 'Se connecter'}
                     </button>
                 </form>
             </div>

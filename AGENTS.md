@@ -1,0 +1,13 @@
+# Frontend agent notes
+
+- Read [`../Context.md`](../Context.md) and [`../WORKSPACE.md`](../WORKSPACE.md) before architectural or coordinated work. This repository owns the runnable browser experience; backend security remains authoritative.
+- Inspect this repository's status before and after work. Preserve existing changes, do not stage or commit unless requested, and keep `dist/` disposable.
+- Files under `src/modele/rh` and `src/modules/rh` are generator-shaped. Correct repeated patterns in `../engine` first, run the engine from its root, review `engine/result/fe`, and selectively transfer changes without overwriting runtime customizations.
+- Keep API identifiers as `string` in domain models, services, form/reference values, account models, and URL parameters. The backend keeps `Long` internally and emits strings through `@JsonId`; do not introduce numeric coercion, `string | number`, or per-service ID mappers.
+- Generated and runtime API services use normal TypeScript imports, not `import type`. The project intentionally has `verbatimModuleSyntax: false`, allowing TypeScript/Bun to erase their type-only usage.
+- Generated and runtime Axios services put the payload type on the Axios call, use `const { data } = await ...`, return `data` separately, and infer async return types. Do not duplicate the same type with `Promise<T>` or write `return (await axios...).data`. Delete calls only await Axios. Keep mapped pagination access null-safe where the shared model is optional.
+- Authentication uses `POST /api/login`, stores only `accessToken` in `sessionStorage`, derives `sub`, scalar `role`, and `exp` from the JWT, attaches bearer headers, and logs out on expiry or an authenticated `401`. Do not add refresh-token or `/api/user` assumptions.
+- `ROLE_GESTIONNAIRE_RH` selects only HR modules; `ROLE_ADMIN` selects only account administration. Frontend ACLs hide UI but never replace backend authorization or create an implicit role hierarchy.
+- HR APIs live under `/api/rh/**`, account administration under `/api/admin/accounts/**`, and reference data under `/api/rh/reference/**`. Dates use `DD/MM/YYYY` in the UI and `dd/MM/yyyy` on the wire. Errors consume backend Problem Details `detail` and validation `fields`.
+- `BUN_PUBLIC_API_URL` must include `/api`; `FRONTEND_PORT` configures the Bun server. `/app-config.json` may expose only non-secret resolved runtime configuration.
+- Validate with `bun install --frozen-lockfile`, `bun run typecheck`, and `bun run build` as appropriate. Remove generated `dist/` after verification. Real-browser checks are useful, but do not claim full E2E while `../crud-e2e` remains a scaffold.

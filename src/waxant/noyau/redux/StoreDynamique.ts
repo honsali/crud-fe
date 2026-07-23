@@ -35,7 +35,7 @@ const createRootReducer = () => {
 
 const store = configureStore({
     reducer: createRootReducer(),
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend([AsyncStatusMiddleware, ErrorSerializationMiddleware]),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(AsyncStatusMiddleware, ErrorSerializationMiddleware),
 });
 
 const getStore = () => {

@@ -3,7 +3,7 @@ export const mapLibelle = {
     oui: 'Oui',
     non: 'Non',
     'global.action.logout': 'Déconnexion',
-    invite: 'Invité',
-    admin: 'Administrateur',
+    ROLE_GESTIONNAIRE_RH: 'Gestionnaire RH',
+    ROLE_ADMIN: 'Administrateur',
     'aucun.resultat': 'Aucun Resultat',
 };

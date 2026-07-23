@@ -15,7 +15,7 @@ export const DynamicStoreProvider = ({ config, children }: { config: ConfigAppTy
     const { role } = useContexteAuth();
     const [loading, setLoading] = useState(true);
     const [store, setStore] = useState(getStore());
-    const [storeRole, setStoreRole] = useState<string>(null);
+    const [storeRole, setStoreRole] = useState<string | null>(null);
 
     useEffect(() => {
         const domaine = role ? config.mapDomaine[role] : null;

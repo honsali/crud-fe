@@ -3,7 +3,7 @@ import { BoutonProps } from '../bouton/BoutonProps';
 import BoutonFort from '../bouton/texte/BoutonTexteFort';
 
 const ActionUcForte = (props: BoutonProps) => {
-    const hasRight = useHasRight(props.nom);
+    const hasRight = useHasRight(props.nom ?? '');
 
     return <BoutonFort {...props} visible={hasRight} />;
 };

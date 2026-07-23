@@ -1,26 +1,23 @@
 import { aclCommun } from './acl/aclCommun';
 import { aclDepartement } from './acl/aclDepartement';
 import { aclEmploye } from './acl/aclEmploye';
-import { ROLE_ADMIN, ROLE_INVITE } from './mapRole';
+import { ROLE_ADMIN, ROLE_GESTIONNAIRE_RH } from './mapRole';
 
-const ALL = [
+const ACL_COMMUN = [
     ...aclCommun
 ];
 
-const CONSULTATION = [
-    ...aclDepartement, ...aclEmploye
+const ACL_RH = [
+    ...ACL_COMMUN,
+    ...aclDepartement,
+    ...aclEmploye
+];
+const ACL_ADMIN = [
+    ...ACL_COMMUN
 ];
 
-const EDITION = [
-];
-
-const ADMIN = [
-];
-
-const ACL_CONSULTATION = [...ALL, ...CONSULTATION];
-const ACL_ADMIN = [...ALL, ...EDITION, ...ADMIN];
-const mapDroitAcces = {
-    [ROLE_INVITE]: ACL_CONSULTATION,
+const mapDroitAcces: Record<string, string[]> = {
+    [ROLE_GESTIONNAIRE_RH]: ACL_RH,
     [ROLE_ADMIN]: ACL_ADMIN,
 };
 

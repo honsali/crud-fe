@@ -1,42 +1,32 @@
-import { serve } from "bun";
-import index from "./index.html";
+import { serve } from 'bun';
+import index from './index.html';
+
+const DEFAULT_API_URL = 'http://localhost:8080/api';
+const DEFAULT_PORT = 9000;
+
+const configuredPort = Number.parseInt(Bun.env.FRONTEND_PORT ?? String(DEFAULT_PORT), 10);
+if (!Number.isInteger(configuredPort) || configuredPort < 1 || configuredPort > 65_535) {
+    throw new Error('FRONTEND_PORT must be an integer between 1 and 65535.');
+}
+
+const apiUrl = (Bun.env.BUN_PUBLIC_API_URL?.trim() || DEFAULT_API_URL).replace(/\/+$/, '');
 
 const server = serve({
-  port: 9000,
-  routes: {
-    // Serve index.html for all unmatched routes.
-    "/*": index,
-
-    "/api/hello": {
-      async GET(req) {
-        return Response.json({
-          message: "Hello, world!",
-          method: "GET",
-        });
-      },
-      async PUT(req) {
-        return Response.json({
-          message: "Hello, world!",
-          method: "PUT",
-        });
-      },
+    port: configuredPort,
+    routes: {
+        '/app-config.json': {
+            GET: () => Response.json({ apiUrl }, {
+                headers: {
+                    'Cache-Control': 'no-store',
+                },
+            }),
+        },
+        '/*': index,
     },
-
-    "/api/hello/:name": async req => {
-      const name = req.params.name;
-      return Response.json({
-        message: `Hello, ${name}!`,
-      });
+    development: process.env.NODE_ENV !== 'production' && {
+        hmr: true,
+        console: true,
     },
-  },
-
-  development: process.env.NODE_ENV !== "production" && {
-    // Enable browser hot reloading in development
-    hmr: true,
-
-    // Echo console logs from the browser to the server
-    console: true,
-  },
 });
 
-console.log(`🚀 Server running at ${server.url}`);
+console.log(`Frontend running at ${server.url} with API ${apiUrl}`);

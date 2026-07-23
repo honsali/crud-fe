@@ -1,6 +1,5 @@
-import _ from 'lodash';
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { ConfigAppType } from '../contexte/ContexteApp';
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
+import type { ConfigAppType } from '../contexte/ContexteApp';
 
 interface IContexteAuthProps {
     api_url: string;
@@ -8,16 +7,21 @@ interface IContexteAuthProps {
     role: string | null;
     token: string | null;
     isAuthenticated: boolean;
-    login: (token: string, accountData: any) => Promise<boolean>;
+    login: (token: string) => Promise<boolean>;
     logout: () => void;
-    refreshToken: () => Promise<boolean>;
 }
 
-interface JWTPayload {
-    preferred_username: string;
-    exp: number;
-    iat: number;
-    [key: string]: any;
+interface JwtPayload {
+    sub?: unknown;
+    role?: unknown;
+    exp?: unknown;
+}
+
+interface AuthSession {
+    user: string;
+    role: string;
+    token: string;
+    expiresAt: number;
 }
 
 interface AuthProviderProps {
@@ -26,187 +30,108 @@ interface AuthProviderProps {
     onLogout?: () => void;
 }
 
-const ContexteAuth = createContext({} as IContexteAuthProps);
+const AUTH_TOKEN_KEY = 'auth_token';
+const MAX_TIMEOUT_MS = 2_147_483_647;
 
-// JWT utility functions
-const decodeJWT = (token: string): JWTPayload | null => {
+const ContexteAuth = createContext<IContexteAuthProps | undefined>(undefined);
+
+const decodeJwt = (token: string): JwtPayload | null => {
     try {
-        const payload = token.split('.')[1];
-        if (!payload) {
+        const encodedPayload = token.split('.')[1];
+        if (!encodedPayload) {
             return null;
         }
-        return JSON.parse(atob(payload));
-    } catch (error) {
-        console.error('Failed to decode JWT:', error);
+
+        const base64 = encodedPayload.replace(/-/g, '+').replace(/_/g, '/').padEnd(Math.ceil(encodedPayload.length / 4) * 4, '=');
+        const bytes = Uint8Array.from(atob(base64), (character) => character.charCodeAt(0));
+        return JSON.parse(new TextDecoder().decode(bytes)) as JwtPayload;
+    } catch {
         return null;
     }
 };
 
-const isTokenExpired = (token: string): boolean => {
-    const payload = decodeJWT(token);
-    if (!payload) return true;
+const createSession = (token: string, mapRole: Record<string, string>): AuthSession | null => {
+    const payload = decodeJwt(token);
+    if (!payload || typeof payload.sub !== 'string' || !payload.sub.trim()) {
+        return null;
+    }
+    if (typeof payload.role !== 'string') {
+        return null;
+    }
+    if (typeof payload.exp !== 'number' || !Number.isFinite(payload.exp)) {
+        return null;
+    }
 
-    const currentTime = Math.floor(Date.now() / 1000);
-    return payload.exp < currentTime;
+    const role = mapRole[payload.role];
+    const expiresAt = payload.exp * 1000;
+    if (!role || expiresAt <= Date.now()) {
+        return null;
+    }
+
+    return {
+        user: payload.sub,
+        role,
+        token,
+        expiresAt,
+    };
 };
 
-const isTokenExpiringSoon = (token: string, bufferMinutes: number = 5): boolean => {
-    const payload = decodeJWT(token);
-    if (!payload) return true;
-
-    const currentTime = Math.floor(Date.now() / 1000);
-    const bufferTime = bufferMinutes * 60;
-    return payload.exp < (currentTime + bufferTime);
+const clearStoredSession = () => {
+    sessionStorage.removeItem(AUTH_TOKEN_KEY);
 };
 
 export const AuthProvider = ({ children, config, onLogout }: AuthProviderProps) => {
-    const [user, setUser] = useState<string | null>(() => sessionStorage.getItem('auth_user'));
-    const [role, setRole] = useState<string | null>(() => sessionStorage.getItem('auth_role'));
-    const [token, setToken] = useState<string | null>(() => sessionStorage.getItem('auth_token'));
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [session, setSession] = useState<AuthSession | null>(() => {
+        const storedToken = sessionStorage.getItem(AUTH_TOKEN_KEY);
+        const storedSession = storedToken ? createSession(storedToken, config.mapRole) : null;
+        if (!storedSession) {
+            clearStoredSession();
+        }
+        return storedSession;
+    });
 
-    // Authentication functions
-    const login = async (newToken: string, accountData: any): Promise<boolean> => {
-        try {
-            if (isTokenExpired(newToken)) {
-                console.error('Token is expired');
-                return false;
-            }
-
-            const payload = decodeJWT(newToken);
-            if (!payload) {
-                console.error('Invalid token format');
-                return false;
-            }
-
-            // Find matching role
-            let roleNormalise: string | null = null;
-            const roleTrouve = _.some(accountData.authorities, (r) => {
-                roleNormalise = config.mapRole[r] ?? null;
-                return !!roleNormalise;
-            });
-
-            if (!roleTrouve || !roleNormalise) {
-                console.error('No valid role found in token');
-                return false;
-            }
-
-            // Store authentication data
-            sessionStorage.setItem('auth_token', newToken);
-            sessionStorage.setItem('auth_user', payload.sub);
-            sessionStorage.setItem('auth_role', roleNormalise);
-
-            // Update state
-            setToken(newToken);
-            setUser(payload.sub);
-            setRole(roleNormalise);
-            setIsAuthenticated(true);
-
-            return true;
-        } catch (error) {
-            console.error('Login failed:', error);
+    const login = useCallback(async (newToken: string): Promise<boolean> => {
+        const newSession = createSession(newToken, config.mapRole);
+        if (!newSession) {
             return false;
         }
-    };
 
-    const logout = () => {
-        // Clear session storage
-        sessionStorage.removeItem('auth_token');
-        sessionStorage.removeItem('auth_user');
-        sessionStorage.removeItem('auth_role');
+        clearStoredSession();
+        sessionStorage.setItem(AUTH_TOKEN_KEY, newToken);
+        setSession(newSession);
+        return true;
+    }, [config.mapRole]);
 
-        // Clear state
-        setToken(null);
-        setUser(null);
-        setRole(null);
-        setIsAuthenticated(false);
+    const logout = useCallback(() => {
+        clearStoredSession();
+        setSession(null);
+        onLogout?.();
+    }, [onLogout]);
 
-        // Call external logout handler if provided
-        if (onLogout) {
-            onLogout();
-        } else {
-            // Default redirect behavior
-            const redirectUri = window.location.origin + '/';
-            window.location.href = redirectUri;
+    useEffect(() => {
+        if (!session) {
+            return;
         }
-    };
 
-    const refreshToken = async (): Promise<boolean> => {
-        try {
-            if (!token) return false;
-
-            if (isTokenExpired(token)) {
-                logout();
-                return false;
-            }
-
-            // If token is expiring soon, you might want to refresh it
-            if (isTokenExpiringSoon(token)) {
-                // Call your refresh token API endpoint here
-                // const response = await fetch('/api/auth/refresh', {
-                //     method: 'POST',
-                //     headers: { 'Authorization': `Bearer ${token}` }
-                // });
-                // if (response.ok) {
-                //     const { token: newToken } = await response.json();
-                //     return await login(newToken);
-                // }
-
-                console.warn('Token is expiring soon, consider refreshing');
-            }
-
-            return true;
-        } catch (error) {
-            console.error('Token refresh failed:', error);
+        const remainingLifetime = session.expiresAt - Date.now();
+        if (remainingLifetime <= 0) {
             logout();
-            return false;
+            return;
         }
-    };
 
-    // Initialize authentication state
-    useEffect(() => {
-        const initAuth = async () => {
-            const storedToken = sessionStorage.getItem('auth_token');
-            const storedUser = sessionStorage.getItem('auth_user');
-            const storedRole = sessionStorage.getItem('auth_role');
-
-            if (storedToken && storedUser && storedRole) {
-                if (isTokenExpired(storedToken)) {
-                    console.log('Stored token is expired, logging out');
-                    logout();
-                } else {
-                    setToken(storedToken);
-                    setUser(storedUser);
-                    setRole(storedRole);
-                    setIsAuthenticated(true);
-                }
-            }
-        };
-
-        initAuth();
-    }, []);
-
-    // Set up token refresh interval
-    useEffect(() => {
-        if (!token || !isAuthenticated) return;
-
-        const interval = setInterval(async () => {
-            await refreshToken();
-        }, 60000); // Check every minute
-
-        return () => clearInterval(interval);
-    }, [token, isAuthenticated]);
+        const timeout = window.setTimeout(logout, Math.min(remainingLifetime, MAX_TIMEOUT_MS));
+        return () => window.clearTimeout(timeout);
+    }, [logout, session]);
 
     return (
         <ContexteAuth.Provider value={{
             api_url: config.api_url,
-            user,
-            role,
-            token,
-            isAuthenticated,
+            user: session?.user ?? null,
+            role: session?.role ?? null,
+            token: session?.token ?? null,
+            isAuthenticated: session !== null,
             login,
             logout,
-            refreshToken
         }}>
             {children}
         </ContexteAuth.Provider>
@@ -215,7 +140,7 @@ export const AuthProvider = ({ children, config, onLogout }: AuthProviderProps) 
 
 const useContexteAuth = () => {
     const context = useContext(ContexteAuth);
-    if (context === undefined) {
+    if (!context) {
         throw new Error('useContexteAuth must be used within an AuthProvider');
     }
     return context;

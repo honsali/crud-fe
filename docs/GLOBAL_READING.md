@@ -1,201 +1,99 @@
-# Global Reading - CRUD RH Frontend
+# CRUD RH Frontend Architecture
 
-Generated: 2026-06-08
+Updated: 2026-07-23
 
-## Snapshot
+See [`../README.md`](../README.md) for setup, runtime configuration, security contracts, and validation commands.
 
-- Package name: `bun-react-template`
-- App title/name: `CRUD`
-- Runtime: Bun server + browser React app
-- Frontend stack: React 19, TypeScript, Ant Design, Redux Toolkit, React Router, Axios, styled-components
-- Local framework: `src/waxant`
-- Source file count: about 315 TS/TSX files, with most code in `src/waxant`, `src/modules`, and `src/modele`
+## Architecture
 
-## High-level purpose
-
-This is a French-language CRUD application for RH (human resources). The main business entities are:
-
-- `Departement`
-- `Employe`
-- `Conge`
-- Reference entities: `Sexe`, `SituationFamiliale`, `TypeConge`, generic `Reference`
-
-## Entry points
-
-| File | Role |
-| --- | --- |
-| `src/index.ts` | Bun server on port `9000`, serves `src/index.html`, provides sample `/api/hello` routes. |
-| `src/index.html` | HTML shell with `#root` and `frontend.tsx` module script. |
-| `src/frontend.tsx` | Creates React root and renders `App` with HMR support. |
-| `src/app.tsx` | Builds `WaxantApp` config and renders `LayoutGlobal`. |
-
-## App configuration
-
-`src/app.tsx` passes this to `WaxantApp`:
-
-- `appName`: `CRUD`
-- `langue`: `fr`
-- `formatDate`: `DD/MM/YYYY`
-- `formatDateTime`: `DD/MM/YYYY HH:mm`
-- `apiTimeout`: `50000`
-- `theme`: `src/commun/theme/theme.ts`
-- `mapDroitAcces`: `src/commun/securite/mapDroitAcces.ts`
-- `mapRole`: `src/commun/securite/mapRole.ts`
-- `mapDomaine`: `src/domaines/mapDomaine.ts`
-- `listerReference`: `ServiceReference.lister`
-
-## Waxant framework
-
-`src/waxant` contains a local reusable framework:
-
-- `composants/`: buttons/actions, dialogs, forms, consultation state, tables, widgets, containers, menu.
-- `noyau/auth/`: JWT/session-based authentication and login page.
-- `noyau/axios/`: Axios timeout/auth header/401 refresh handling.
-- `noyau/contexte/`: app, page/view/table/tab/accordion contexts.
-- `noyau/i18n/`: label/error/success mapping and hooks.
-- `noyau/message/`: action success/error/loading state.
-- `noyau/redux/`: dynamic store, async action wrapper, typed hooks, status/error middlewares.
-- `noyau/routes/`: module/page definitions, route generation, navigation helpers.
-- `noyau/theme/`: Ant Design + styled-components theme providers.
-- `noyau/validation/` and `noyau/util/`: validation and utility helpers.
-
-`src/waxant/index.ts` is the public barrel imported as `waxant`.
-
-## Authentication and domains
-
-`PageAuth` posts credentials to `API_URL + '/authenticate'`, then fetches `API_URL + '/user'`. `ContexteAuth` stores `auth_token`, `auth_user`, and `auth_role` in `sessionStorage`.
-
-Backend authorities are mapped as:
-
-```ts
-ROLE_USER  -> invite
-ROLE_ADMIN -> admin
+```text
+src/App.tsx
+├── commun       application shell, configuration, role maps, ACLs, and labels
+├── domaines     authenticated role → module hierarchy
+├── modele       API types and explicit services
+├── modules      pages, controllers, Redux slices, hooks, forms, and tables
+└── waxant       reusable local UI/application framework
 ```
 
-Current `mapDomaine` only defines the `invite` domain. The `invite` domain loads:
+A CRUD operation normally follows:
 
-1. Home module
-2. Commun module
-3. RH module with Departement and Employe submodules
+```text
+View → action component → use* hook → Ctrl* thunk → Service* request → Mdl* reducer
+```
 
-## Layout
+This structure is intentionally explicit and generator-friendly. `src/waxant` and host security infrastructure are maintained in the runnable frontend; repetitive HR model/module output is compared with `engine/result/fe` before transfer.
 
-`src/commun/layout/LayoutGlobal.tsx` provides the main authenticated layout:
+## Authentication and authorization display
 
-- Ant Design layout with sidebar, header, content, footer.
-- `LayoutContext` stores sidebar/GED flags in `localStorage`.
-- i18n maps are loaded into `MdlI18n` at layout mount.
-- Success messages are displayed through Ant Design notifications.
-- `DialogueErreur` handles errors.
+`PageAuth` posts credentials to `/api/login`, reads `accessToken`, and passes it to `ContexteAuth`. The context decodes the JWT `sub`, scalar `role`, and `exp` claims. It accepts only roles declared in `mapRole`.
 
-## Business modules
+Only the token is stored in `sessionStorage`. Axios adds the bearer header. Expiry or a backend `401` clears the session; no refresh endpoint or user-info endpoint is assumed.
 
-### Departement
+The role-selected domain graph is:
 
-Location: `src/modules/rh/departement`
+- `ROLE_GESTIONNAIRE_RH` → the HR home, department, employee, and leave modules;
+- `ROLE_ADMIN` → account administration only.
 
-Routes:
+`mapDroitAcces` assigns generated HR actions only to the HR manager. These ACLs hide controls but never replace backend authorization.
 
-- `/rh/departement/lister`
-- `/rh/departement/creer`
-- `/rh/departement/consulter/:idDepartement`
-- `/rh/departement/modifier/:idDepartement`
+## Backend API alignment
 
-Service: `src/modele/rh/departement/ServiceDepartement.ts`
+| Area | Frontend routes |
+|---|---|
+| Authentication | `POST /api/login` |
+| Accounts | `/api/admin/accounts/**` |
+| Departments | `/api/rh/departement/**` |
+| Employees | `/api/rh/employe/**` |
+| Leave | `/api/rh/conge/**` and `/api/rh/employe/{id}/conge` |
+| References | `/api/rh/reference/**` |
 
-- `POST /departement`
-- `GET /departement`
-- `GET /departement/{id}`
-- `PUT /departement/{id}`
-- `DELETE /departement/{id}`
+Employee filtering consumes the backend `PageResponse` fields. API identifiers are serialized by the backend as JSON strings and stay as `string` values in frontend domain models and URL parameters; no numeric ID coercion is performed. UI dates use `DD/MM/YYYY`, matching the backend's `dd/MM/yyyy` JSON representation.
 
-### Employe
+Backend Problem Details are normalized by `ErrorSerializationMiddleware`, including `detail` and validation `fields`.
 
-Location: `src/modules/rh/employe`
+## Generated service convention
 
-Routes:
+Runtime and generated RH services intentionally use normal TypeScript imports rather than `import type`. The Axios response generic owns the HTTP payload type, `const { data }` keeps the response readable and debuggable, and TypeScript infers the async function return type. The code therefore avoids both redundant `Promise<T>` annotations and inline `(await axios...).data` returns. This convention is covered in the engine by `FeServicePrinterTest`.
 
-- `/rh/employe/filtrer`
-- `/rh/employe/creer`
-- `/rh/employe/consulter/:idEmploye`
-- `/rh/employe/modifier/:idEmploye`
+String IDs flow through these services unchanged. Paginated filtering maps backend `Page<IEmploye>` data into `{ liste, pagination }`; generated Redux pagination access remains null-safe because the shared pagination interface permits absent state before loading.
 
-Service: `src/modele/rh/employe/ServiceEmploye.ts`
+## Administrator module
 
-- `POST /employe`
-- `POST /employe/filtrer?page=&size=`
-- `GET /employe/{id}`
-- `PUT /employe/{id}`
-- `DELETE /employe/{id}`
+`src/modules/admin/account` provides direct account management for the backend's singular-role policy:
 
-The filter page uses a paginated backend response mapped by `MapperPagination`.
+- list accounts;
+- create an initially active account;
+- change another account's role or activation;
+- reset passwords;
+- log out immediately after resetting the current administrator's password because the backend revokes that token.
 
-### Conge
+The UI prevents editing the current administrator's role/activation. Backend locking and policy checks remain authoritative.
 
-Location: `src/modules/rh/employe/conge`
+## Generator relationship
 
-Routes:
+The runnable frontend remains close to `engine/result/fe`. Known deliberate runtime differences include:
 
-- `/rh/employe/:idEmploye/conge/consulter/:idConge`
-- `/rh/employe/:idEmploye/creer`
-- `/rh/employe/:idEmploye/modifier/:idConge`
+- corrected parent-child leave routes and required route parameters;
+- temporary leave-code generation in `ServiceConge`;
+- host-owned authentication, account administration, deployment configuration, and error handling.
 
-Service: `src/modele/rh/conge/ServiceConge.ts`
+Generated-pattern corrections should be implemented in the engine, regenerated, reviewed, and then transferred selectively. The JSON-string ID contract, typed/destructured Axios service style, and null-safe pagination access are now synchronized with the engine; parent-child route derivation and final leave-code ownership remain deliberate follow-up work.
 
-- `POST /employe/{idEmploye}/conge`
-- `GET /conge/employe/{idEmploye}`
-- `GET /conge/{idConge}`
-- `PUT /conge/{idConge}`
-- `DELETE /conge/{idConge}`
+## Verification status
 
-The employee ID remains in the route while navigating through a leave workflow. `ServiceConge` currently synthesizes the required leave code from employee, leave type, and start date before create/update; the source marks this as temporary.
+On 2026-07-21:
 
-## Data and form conventions
+- `bun run typecheck` passed;
+- `bun run build` passed;
+- real-browser login passed for both showcase roles against the running backend;
+- HR employee pagination and `/rh/reference` loading passed;
+- backend `@JsonId` string identifiers passed through reference selection and employee filtering without numeric coercion;
+- administrator account listing and role-specific routing passed;
+- no account records were mutated during browser verification;
+- full-stack E2E remains unavailable because `crud-e2e` is still a scaffold.
 
-- Domain interfaces are optional-field TypeScript interfaces (`id?`, business-specific fields, nested reference objects).
-- `Sexe`, `SituationFamiliale`, and `TypeConge` references currently expose IDs and `libelle`, without a `code` field.
-- Those reference entities have no dedicated frontend service; selectors use the common `ServiceReference` endpoint.
-- Forms use Ant Design `Form` through Waxant's `Formulaire` wrapper.
-- `ChampDate` maintains a string field plus a hidden/suffixed Dayjs field for the picker.
-- `ChampReference` loads options through `listerReference`, stores the selected object field and a `_libelle` field.
-- Tables use `Tableau` and `Colonne`; `tc="reference"`, `tc="date"`, etc. control rendering.
+Latest local validation on 2026-07-23:
 
-## i18n
-
-Global i18n maps live under `src/commun/i18n` and module-specific maps under each module (`I18nDepartement`, `I18nEmploye`, etc.). Labels and action messages are keyed by page keys, use-case keys, action constants, and helpers such as `titreConfirmation`, `enteteConfirmation`, and `messageSuccess`.
-
-## Security/ACL
-
-Action constants are collected by ACL files:
-
-- `src/commun/securite/acl/aclDepartement.ts`
-- `src/commun/securite/acl/aclEmploye.ts`
-- `src/commun/securite/acl/aclCommun.ts`
-- `src/commun/securite/acl/aclRh.ts`
-
-Buttons of type `ActionUc*` call `useHasRight(actionName)` and are hidden when the current role lacks the action.
-
-## Validation performed during reading
-
-### `bun run build`
-
-Passes after removing the obsolete invite test page.
-
-### `bunx tsc --noEmit --pretty false`
-
-Failed with many TypeScript errors. Main categories:
-
-- Missing export/import mismatch (`ExecuteResponse`).
-- Filename casing mismatch (`src/app.tsx` imported as `./App`).
-- Strict null/undefined issues around route params, auth role, reducer state, message mapping, and utility return types.
-- Duplicate import identifier in `DialogueConfirmation.tsx`.
-- Route parameter and pagination typing issues in RH modules.
-- JSX namespace typing issue in `PageDefinition.tsx`.
-
-## Watch list for future work
-
-1. Normalize `App` filename/import casing.
-2. Replace the temporary client-generated leave code when its final ownership/rule is decided.
-3. Decide whether admin should have its own domain/routes and ACLs.
-4. Add a `typecheck` script to `package.json` when TypeScript errors are ready to be enforced.
-5. Consider making `API_URL` environment-based instead of hardcoded to localhost.
+- `bun install --frozen-lockfile` passed without changing dependencies;
+- `bun run build` passed;
+- `bun run typecheck` reported 15 errors involving optional route identifiers passed to strict service methods and optional employee pagination used without complete narrowing.

@@ -53,7 +53,7 @@ const sommer = (tableau): number => {
         function (sum, n) {
             return +n ? sum + n : sum;
         },
-        null
+        0
     );
 };
 const sommerPar = (tableau, champ): number => {
@@ -62,7 +62,7 @@ const sommerPar = (tableau, champ): number => {
         function (sum, o) {
             return o && o[champ] ? sum + o[champ] : sum;
         },
-        null
+        0
     );
 };
 const contient = (objet, champ): boolean => {

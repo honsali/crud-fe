@@ -9,14 +9,15 @@ import BoutonTexte from '../bouton/texte/BoutonTexte';
 
 const ActionUcConfirmer = (props: BoutonProps) => {
     const { i18n } = useI18n();
-    const hasRight = useHasRight(props.nom);
+    const actionName = props.nom ?? '';
+    const hasRight = useHasRight(actionName);
     const [visible, setVisible] = useState(false);
     const style = { display: 'flex', marginLeft: props.cote === 'droit' ? 'auto' : '' };
 
     const attributes = {
         nom: props.nom,
-        title: i18n(titreConfirmation(props.nom)),
-        description: i18n(enteteConfirmation(props.nom)),
+        title: i18n(titreConfirmation(actionName)),
+        description: i18n(enteteConfirmation(actionName)),
         okText: i18n('confirmer'),
         cancelText: i18n('annuler'),
         onConfirm: () => confirmer(),

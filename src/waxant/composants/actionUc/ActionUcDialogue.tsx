@@ -34,7 +34,7 @@ const ActionUcDialogue = (props: ActionUcDialogueProps) => {
     const hasRight = useHasRight(nom);
     const [visible, setVisible] = useState(false);
     const [pretVisible, setPretVisible] = useState(false);
-    const etatValue = etat ?? {};
+    const etatValue: ExecuteResponse = etat ?? { rid: null, success: false, erreur: false };
 
     const attributes = {
         nom: nom,
@@ -73,13 +73,13 @@ const ActionUcDialogue = (props: ActionUcDialogueProps) => {
     };
 
     useEffect(() => {
-        if (etatValue.succes) {
+        if (etatValue.success) {
             if (siSucces) {
                 siSucces(true);
             }
             annuler();
         }
-    }, [etatValue.succes]);
+    }, [etatValue.success]);
 
     useEffect(() => {
         if (etatValue.erreur) {

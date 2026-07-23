@@ -4,29 +4,29 @@ import { IConge } from './DomaineConge';
 
 
 const creer = async (idEmploye: string, conge: IConge) => {
-    conge.code = idEmploye + '-' + conge.typeConge?.id + '-' + conge.dateDebutConge;//hask to be removed
-    const { data } = await axios.post(`${API_URL}/employe/${idEmploye}/conge`, conge);
+    conge.code = `${idEmploye}-${conge.typeConge?.id}-${conge.dateDebutConge}`; // Temporary until leave-code ownership is decided.
+    const { data } = await axios.post<IConge>(`${API_URL}/rh/employe/${idEmploye}/conge`, conge);
     return data;
 };
 
 const listerParIdEmploye = async (idEmploye: string) => {
-    const listeConge: IConge[] = (await axios.get<IConge[]>(`${API_URL}/conge/employe/${idEmploye}`)).data;
-    return listeConge;
+    const { data } = await axios.get<IConge[]>(`${API_URL}/rh/conge/employe/${idEmploye}`);
+    return data;
 };
 
 const maj = async (conge: IConge) => {
-    conge.code = conge.employe?.id + '-' + conge.typeConge?.id + '-' + conge.dateDebutConge;//hask to be removed
-    const { data } = await axios.put(`${API_URL}/conge/${conge.id}`, conge);
+    conge.code = `${conge.employe?.id}-${conge.typeConge?.id}-${conge.dateDebutConge}`; // Temporary until leave-code ownership is decided.
+    const { data } = await axios.put<IConge>(`${API_URL}/rh/conge/${conge.id}`, conge);
     return data;
 };
 
 const recupererParId = async (idConge: string) => {
-    const { data } = await axios.get<IConge>(`${API_URL}/conge/${idConge}`);
+    const { data } = await axios.get<IConge>(`${API_URL}/rh/conge/${idConge}`);
     return data;
 };
 
 const supprimer = async (idConge: string) => {
-    await axios.delete(`${API_URL}/conge/${idConge}`);
+    await axios.delete(`${API_URL}/rh/conge/${idConge}`);
 };
 
 const ServiceConge = {

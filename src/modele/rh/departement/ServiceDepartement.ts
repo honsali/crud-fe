@@ -4,27 +4,27 @@ import { IDepartement } from './DomaineDepartement';
 
 
 const creer = async (departement: IDepartement) => {
-    const { data } = await axios.post(`${API_URL}/departement`, departement);
+    const { data } = await axios.post<IDepartement>(`${API_URL}/rh/departement`, departement);
     return data;
 };
 
 const lister = async () => {
-    const listeDepartement: IDepartement[] = (await axios.get<IDepartement[]>(`${API_URL}/departement`)).data;
-    return listeDepartement;
+    const { data } = await axios.get<IDepartement[]>(`${API_URL}/rh/departement`);
+    return data;
 };
 
 const maj = async (departement: IDepartement) => {
-    const { data } = await axios.put(`${API_URL}/departement/${departement.id}`, departement);
+    const { data } = await axios.put<IDepartement>(`${API_URL}/rh/departement/${departement.id}`, departement);
     return data;
 };
 
 const recupererParId = async (idDepartement: string) => {
-    const { data } = await axios.get<IDepartement>(`${API_URL}/departement/${idDepartement}`);
+    const { data } = await axios.get<IDepartement>(`${API_URL}/rh/departement/${idDepartement}`);
     return data;
 };
 
 const supprimer = async (idDepartement: string) => {
-    await axios.delete(`${API_URL}/departement/${idDepartement}`);
+    await axios.delete(`${API_URL}/rh/departement/${idDepartement}`);
 };
 
 const ServiceDepartement = {

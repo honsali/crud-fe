@@ -16,7 +16,7 @@ export const PageConsulterConge: PageDefinition = {
     view: (
         <ContexteViewProvider uc="UcConsulterConge">
             <ViewConsulterConge />
-        </ContexteViewProvider>
+        </ContexteViewProvider> 
     ),
 };
 

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { IInfoActionEchouee, IInfoActionReussie, IMessageErreur } from '../message/DomaineMessage';
+import type { IInfoActionEchouee, IInfoActionReussie, IMessageErreur } from '../message/DomaineMessage';
 import MappeurErreur from './MappeurErreur';
 import MappeurInfoActionReussie from './MappeurInfoActionReussie';
 import MappeurLibelle from './MappeurLibelle';
@@ -10,33 +10,25 @@ const useI18n = () => {
     const mapLibelleI18n = useSelector(libelleI18nSelecteur);
     const mapErreurI18n = useSelector(erreurI18nSelecteur);
     const mapInfoActionI18n = useSelector(infoActionI18nSelecteur);
+
     const i18n = useCallback(
-        (key: string, safe?: boolean): string => {
-            const lib = MappeurLibelle.libelle(key, mapLibelleI18n, safe);
-            return lib;
-        },
-        [mapLibelleI18n]
+        (key: string, safe?: boolean): string => MappeurLibelle.libelle(key, mapLibelleI18n, safe),
+        [mapLibelleI18n],
     );
 
     const erreurI18n = useCallback(
-        (key: IInfoActionEchouee): IMessageErreur => {
-            return MappeurErreur.get(key, mapErreurI18n, mapLibelleI18n);
-        },
-        [mapErreurI18n]
+        (key: IInfoActionEchouee): IMessageErreur => MappeurErreur.get(key, mapErreurI18n, mapLibelleI18n),
+        [mapErreurI18n, mapLibelleI18n],
     );
 
     const infoActionI18n = useCallback(
-        (key: IInfoActionReussie): string => {
-            return MappeurInfoActionReussie.get(key, mapInfoActionI18n, mapLibelleI18n);
-        },
-        [mapLibelleI18n, mapInfoActionI18n]
+        (key: IInfoActionReussie | null): string | null => MappeurInfoActionReussie.get(key, mapInfoActionI18n, mapLibelleI18n),
+        [mapLibelleI18n, mapInfoActionI18n],
     );
 
     const journalI18n = useCallback(
-        (key: string): string => {
-            return MappeurLibelle.journal(key, mapLibelleI18n);
-        },
-        [mapLibelleI18n]
+        (key: string): string => MappeurLibelle.journal(key, mapLibelleI18n),
+        [mapLibelleI18n],
     );
 
     return { i18n, erreurI18n, infoActionI18n, journalI18n };

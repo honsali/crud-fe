@@ -5,7 +5,7 @@ import CtrlCreerConge from './CtrlCreerConge';
 
 export interface ReqCreerConge extends IRequete {
     form?: FormInstance;
-    idEmploye: string;
+    idEmploye?: string;
 }
 
 export interface ResCreerConge extends IResultat {

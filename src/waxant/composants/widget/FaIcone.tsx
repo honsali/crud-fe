@@ -1,10 +1,17 @@
-import { library } from '@fortawesome/fontawesome-svg-core';
+import { library, type IconName } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const FaIcone = ({ nomIcone, className = null }) => {
-    library.add(fas)
-    return <FontAwesomeIcon icon={nomIcone?.substring(2).toLowerCase()} className={className} />;
+interface FaIconeProps {
+    nomIcone?: string;
+    className?: string;
 }
+
+library.add(fas);
+
+const FaIcone = ({ nomIcone, className }: FaIconeProps) => {
+    const iconName = (nomIcone?.substring(2).toLowerCase() || 'circle') as IconName;
+    return <FontAwesomeIcon icon={['fas', iconName]} className={className} />;
+};
 
 export default FaIcone;

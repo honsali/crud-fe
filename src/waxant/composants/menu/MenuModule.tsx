@@ -1,27 +1,27 @@
-import { Menu, MenuProps } from 'antd';
+import { Menu, type MenuProps } from 'antd';
 import { useCallback } from 'react';
-import { useLocation, useParams } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import useContexteAuth from '../../noyau/auth/ContexteAuth';
 import useContexteApp from '../../noyau/contexte/ContexteApp';
 import useI18n from '../../noyau/i18n/useI18n';
-import { ModuleDefinition } from '../../noyau/routes/ModuleDefinition';
-import { PageDefinition } from '../../noyau/routes/PageDefinition';
+import type { ModuleDefinition } from '../../noyau/routes/ModuleDefinition';
+import type { PageDefinition } from '../../noyau/routes/PageDefinition';
 
 interface MenuModuleProps {
     ouvert: boolean;
 }
 
-type MenuItem = Required<MenuProps>['items'][number];
+type MenuItem = NonNullable<MenuProps['items']>[number];
+type MenuPage = PageDefinition & { menu: string };
 
-const getFirstNSegments = (str: string, n: number) => {
-    return str
-        .split('/')
-        .slice(0, n + 1)
-        .join('/');
-};
+const getFirstNSegments = (value: string, numberOfSegments: number) => value
+    .split('/')
+    .slice(0, numberOfSegments + 1)
+    .join('/');
 
-const MenuModule: React.FC<MenuModuleProps> = ({ ouvert }) => {
+const hasMenu = (page?: PageDefinition): page is MenuPage => Boolean(page?.menu);
+
+const MenuModule = ({ ouvert }: MenuModuleProps) => {
     const { i18n } = useI18n();
     const { mapDomaine } = useContexteApp();
     const { role } = useContexteAuth();
@@ -33,17 +33,14 @@ const MenuModule: React.FC<MenuModuleProps> = ({ ouvert }) => {
             const selected: string[] = [];
             const opened: string[] = [];
 
-            const pageToElementMenu = (page: PageDefinition, children?: MenuItem[]) => {
+            const pageToElementMenu = (page: MenuPage, children?: MenuItem[]): MenuItem => {
                 const path = page.toPath(params);
-                const disabled = path.indexOf('undefined') > -1;
+                const disabled = path.includes('undefined');
 
                 if (location.pathname.startsWith(path)) {
                     opened.push(page.menu);
                 }
-                const locationSegments = getFirstNSegments(location.pathname, 3);
-                const pathSegments = getFirstNSegments(path, 3);
-
-                if (locationSegments === pathSegments) {
+                if (getFirstNSegments(location.pathname, 3) === getFirstNSegments(path, 3)) {
                     selected.push(page.menu);
                 }
 
@@ -52,54 +49,41 @@ const MenuModule: React.FC<MenuModuleProps> = ({ ouvert }) => {
                     label: <Link to={disabled ? '#' : path}>{i18n(page.key)}</Link>,
                     icon: page.icone,
                     disabled,
-                    children,
-                };
+                    ...(children?.length ? { children } : {}),
+                } as MenuItem;
             };
 
-            const items = listeModule?.reduce<MenuItem[]>((acc, module) => {
-                if (module.index && module.index.menu) {
-                    let item;
-                    const path = module.index.toPath(params);
-                    const disabled = path.indexOf('undefined') > -1;
-                    if (disabled) {
-                        item = {
-                            key: module.index.menu,
-                            label: <Link to="#">{i18n(module.index.key)}</Link>,
-                            icon: module.index.icone,
-                            disabled,
-                        };
-                    } else if (module.listeSousModule?.length) {
-                        const children = module.listeSousModule.reduce<MenuItem[]>((acc, sousModule) => {
-                            if (sousModule.index && sousModule.index.menu) {
-                                acc.push(pageToElementMenu(sousModule.index));
-                            }
-                            return acc;
-                        }, []);
-
-                        item = pageToElementMenu(module.index, children);
-                    } else {
-                        item = pageToElementMenu(module.index);
-                    }
-                    if (item) acc.push(item);
+            const items = listeModule.reduce<MenuItem[]>((result, module) => {
+                if (!hasMenu(module.index)) {
+                    return result;
                 }
-                return acc;
+
+                const children = (module.listeSousModule ?? [])
+                    .filter((submodule) => hasMenu(submodule.index))
+                    .map((submodule) => pageToElementMenu(submodule.index as MenuPage));
+                result.push(pageToElementMenu(module.index, children));
+                return result;
             }, []);
 
-            return { items: items || [], selected, opened };
+            return { items, selected, opened };
         },
-        [i18n, params, location.pathname]
+        [i18n, location.pathname, params],
     );
 
-    const getMenu = useCallback(() => {
-        const { items, selected, opened } = listeElementMenu(mapDomaine[role]?.listeModule || []);
-        if (ouvert) {
-            return <Menu items={items} mode="inline" theme="dark" defaultOpenKeys={opened} openKeys={opened} selectedKeys={selected} />;
-        } else {
-            return <Menu items={items} mode="inline" theme="dark" defaultOpenKeys={opened} selectedKeys={selected} inlineCollapsed={false} />;
-        }
-    }, [role, location.pathname, ouvert, mapDomaine, params, listeElementMenu]);
+    const domainModules = role ? mapDomaine[role]?.listeModule ?? [] : [];
+    const { items, selected, opened } = listeElementMenu(domainModules);
 
-    return getMenu();
+    return (
+        <Menu
+            items={items}
+            mode="inline"
+            theme="dark"
+            defaultOpenKeys={opened}
+            openKeys={ouvert ? opened : undefined}
+            selectedKeys={selected}
+            inlineCollapsed={false}
+        />
+    );
 };
 
 export default MenuModule;
