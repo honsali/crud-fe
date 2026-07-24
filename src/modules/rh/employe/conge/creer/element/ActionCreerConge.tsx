@@ -1,10 +1,11 @@
+import { FormInstance } from 'antd';
 import { useEffect } from 'react';
 import { ActionUcCreer, useGoToPage } from 'waxant';
 import { ActionEmploye } from '../../../ActionEmploye';
 import { PageConsulterConge } from '../../../ListePageEmploye';
 import useCreerConge from '../useCreerConge';
 
-const ActionCreerConge = ({ form }) => {
+const ActionCreerConge = ({ form }: { form: FormInstance }) => {
     const goToPage = useGoToPage();
     const { creerConge, etatCreerConge, idConge, resetEtatCreerConge } = useCreerConge();
 

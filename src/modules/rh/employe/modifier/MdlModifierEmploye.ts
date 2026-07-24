@@ -42,19 +42,19 @@ const SliceModifierEmploye = createSlice({
                 state.employe = action.payload.employe;
                 state.etatInitModificationEmploye = createEtatSuccess();
             })
-            .addCase(CtrlModifierEmploye.initModificationEmploye.pending, (state, action) => {
+            .addCase(CtrlModifierEmploye.initModificationEmploye.pending, (state) => {
                 state.etatInitModificationEmploye = createEtatPending();
             })
-            .addCase(CtrlModifierEmploye.initModificationEmploye.rejected, (state, action) => {
+            .addCase(CtrlModifierEmploye.initModificationEmploye.rejected, (state) => {
                 state.etatInitModificationEmploye = createEtatError();
             })
-            .addCase(CtrlModifierEmploye.majEmploye.fulfilled, (state, action) => {
+            .addCase(CtrlModifierEmploye.majEmploye.fulfilled, (state) => {
                 state.etatMajEmploye = createEtatSuccess();
             })
-            .addCase(CtrlModifierEmploye.majEmploye.pending, (state, action) => {
+            .addCase(CtrlModifierEmploye.majEmploye.pending, (state) => {
                 state.etatMajEmploye = createEtatPending();
             })
-            .addCase(CtrlModifierEmploye.majEmploye.rejected, (state, action) => {
+            .addCase(CtrlModifierEmploye.majEmploye.rejected, (state) => {
                 state.etatMajEmploye = createEtatError();
             });
     },

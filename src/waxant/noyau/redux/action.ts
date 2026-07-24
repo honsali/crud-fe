@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AsyncThunkConfig, GetThunkAPI, createAsyncThunk } from '@reduxjs/toolkit';
 import _ from 'lodash';
 import { MdlMessage } from '../message/MdlMessage';
 import util from '../util/util';
@@ -13,6 +13,12 @@ export interface IRequete {
 export interface IResultat {
     rid?: string;
 }
+
+export type ActionOperation<Req extends IRequete, Res extends IResultat> = (
+    requete: Req,
+    resultat: Res,
+    thunkAPI: GetThunkAPI<AsyncThunkConfig>,
+) => void | Promise<void>;
 
 interface SerializedError {
     data?: any;
@@ -63,7 +69,7 @@ export const serializeError = (value: any): SerializedError => {
     return { message: String(value) };
 };
 
-const action = <Req extends IRequete, Res extends IResultat>(operation, actionName) => {
+const action = <Req extends IRequete, Res extends IResultat>(operation: ActionOperation<Req, Res>, actionName: string) => {
     return createAsyncThunk(actionName, async (requete: Req, thunkAPI) => {
         const rid = requete.rid ? requete.rid : _.uniqueId();
 

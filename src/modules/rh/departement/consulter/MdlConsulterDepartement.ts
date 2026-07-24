@@ -40,19 +40,19 @@ const SliceConsulterDepartement = createSlice({
                 state.departement = action.payload.departement;
                 state.etatRecupererDepartementParId = createEtatSuccess();
             })
-            .addCase(CtrlConsulterDepartement.recupererDepartementParId.pending, (state, action) => {
+            .addCase(CtrlConsulterDepartement.recupererDepartementParId.pending, (state) => {
                 state.etatRecupererDepartementParId = createEtatPending();
             })
-            .addCase(CtrlConsulterDepartement.recupererDepartementParId.rejected, (state, action) => {
+            .addCase(CtrlConsulterDepartement.recupererDepartementParId.rejected, (state) => {
                 state.etatRecupererDepartementParId = createEtatError();
             })
-            .addCase(CtrlConsulterDepartement.supprimerDepartement.fulfilled, (state, action) => {
+            .addCase(CtrlConsulterDepartement.supprimerDepartement.fulfilled, (state) => {
                 state.etatSupprimerDepartement = createEtatSuccess();
             })
-            .addCase(CtrlConsulterDepartement.supprimerDepartement.pending, (state, action) => {
+            .addCase(CtrlConsulterDepartement.supprimerDepartement.pending, (state) => {
                 state.etatSupprimerDepartement = createEtatPending();
             })
-            .addCase(CtrlConsulterDepartement.supprimerDepartement.rejected, (state, action) => {
+            .addCase(CtrlConsulterDepartement.supprimerDepartement.rejected, (state) => {
                 state.etatSupprimerDepartement = createEtatError();
             });
     },

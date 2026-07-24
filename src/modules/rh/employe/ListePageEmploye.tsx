@@ -16,7 +16,7 @@ export const PageConsulterConge: PageDefinition = {
     view: (
         <ContexteViewProvider uc="UcConsulterConge">
             <ViewConsulterConge />
-        </ContexteViewProvider> 
+        </ContexteViewProvider>
     ),
 };
 
@@ -45,7 +45,7 @@ export const PageCreerConge: PageDefinition = {
 export const PageCreerEmploye: PageDefinition = {
     key: 'PageCreerEmploye',
     path: '/rh/employe/creer',
-    toPath: (args) => '/rh/employe/creer',
+    toPath: () => '/rh/employe/creer',
     view: (
         <ContexteViewProvider uc="UcCreerEmploye">
             <ViewCreerEmploye />
@@ -56,7 +56,7 @@ export const PageCreerEmploye: PageDefinition = {
 export const PageFiltrerEmploye: PageDefinition = {
     key: 'PageFiltrerEmploye',
     path: '/rh/employe/filtrer',
-    toPath: (args) => '/rh/employe/filtrer',
+    toPath: () => '/rh/employe/filtrer',
     icone: <FontAwesomeIcon icon={faUser} />,
     menu: 'rh/employe',
     view: (

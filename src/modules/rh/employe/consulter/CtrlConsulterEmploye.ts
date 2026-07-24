@@ -1,18 +1,18 @@
 import ServiceConge from 'modele/rh/conge/ServiceConge';
 import ServiceEmploye from 'modele/rh/employe/ServiceEmploye';
-import { action } from 'waxant';
+import { ActionOperation, action } from 'waxant';
 import { ActionEmploye } from '../ActionEmploye';
 import { ReqConsulterEmploye, ResConsulterEmploye } from './MdlConsulterEmploye';
 
-const listerCongeParIdEmployeImpl = async (requete: ReqConsulterEmploye, resultat: ResConsulterEmploye, thunkAPI) => {
+const listerCongeParIdEmployeImpl: ActionOperation<ReqConsulterEmploye, ResConsulterEmploye> = async (requete, resultat, _thunkAPI) => {
     resultat.listeConge = await ServiceConge.listerParIdEmploye(requete.idEmploye);
 };
 
-const recupererEmployeParIdImpl = async (requete: ReqConsulterEmploye, resultat: ResConsulterEmploye, thunkAPI) => {
+const recupererEmployeParIdImpl: ActionOperation<ReqConsulterEmploye, ResConsulterEmploye> = async (requete, resultat, _thunkAPI) => {
     resultat.employe = await ServiceEmploye.recupererParId(requete.idEmploye);
 };
 
-const supprimerEmployeImpl = async (requete: ReqConsulterEmploye, resultat: ResConsulterEmploye, thunkAPI) => {
+const supprimerEmployeImpl: ActionOperation<ReqConsulterEmploye, ResConsulterEmploye> = async (requete, _resultat, _thunkAPI) => {
     await ServiceEmploye.supprimer(requete.idEmploye);
 };
 

@@ -1,10 +1,11 @@
+import { FormInstance } from 'antd';
 import { useEffect } from 'react';
 import { ActionUcCreer, useGoToPage } from 'waxant';
 import { ActionEmploye } from '../../ActionEmploye';
 import { PageConsulterEmploye } from '../../ListePageEmploye';
 import useCreerEmploye from '../useCreerEmploye';
 
-const ActionCreerEmploye = ({ form }) => {
+const ActionCreerEmploye = ({ form }: { form: FormInstance }) => {
     const goToPage = useGoToPage();
     const { creerEmploye, etatCreerEmploye, idEmploye, resetEtatCreerEmploye } = useCreerEmploye();
 

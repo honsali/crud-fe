@@ -1,13 +1,13 @@
 import ServiceEmploye from 'modele/rh/employe/ServiceEmploye';
-import { action, util } from 'waxant';
+import { ActionOperation, action, util } from 'waxant';
 import { ActionEmploye } from '../ActionEmploye';
 import { ReqModifierEmploye, ResModifierEmploye } from './MdlModifierEmploye';
 
-const initModificationEmployeImpl = async (requete: ReqModifierEmploye, resultat: ResModifierEmploye, thunkAPI) => {
+const initModificationEmployeImpl: ActionOperation<ReqModifierEmploye, ResModifierEmploye> = async (requete, resultat, _thunkAPI) => {
     resultat.employe = await ServiceEmploye.recupererParId(requete.idEmploye);
 };
 
-const majEmployeImpl = async (requete: ReqModifierEmploye, resultat: ResModifierEmploye, thunkAPI) => {
+const majEmployeImpl: ActionOperation<ReqModifierEmploye, ResModifierEmploye> = async (requete, _resultat, _thunkAPI) => {
     await requete.form?.validateFields();
     const dataForm = util.removeNonSerialisable(requete.form?.getFieldsValue());
     await ServiceEmploye.maj(dataForm);

@@ -1,13 +1,13 @@
 import ServiceDepartement from 'modele/rh/departement/ServiceDepartement';
-import { action } from 'waxant';
+import { ActionOperation, action } from 'waxant';
 import { ActionDepartement } from '../ActionDepartement';
 import { ReqConsulterDepartement, ResConsulterDepartement } from './MdlConsulterDepartement';
 
-const recupererDepartementParIdImpl = async (requete: ReqConsulterDepartement, resultat: ResConsulterDepartement, thunkAPI) => {
+const recupererDepartementParIdImpl: ActionOperation<ReqConsulterDepartement, ResConsulterDepartement> = async (requete, resultat, _thunkAPI) => {
     resultat.departement = await ServiceDepartement.recupererParId(requete.idDepartement);
 };
 
-const supprimerDepartementImpl = async (requete: ReqConsulterDepartement, resultat: ResConsulterDepartement, thunkAPI) => {
+const supprimerDepartementImpl: ActionOperation<ReqConsulterDepartement, ResConsulterDepartement> = async (requete, _resultat, _thunkAPI) => {
     await ServiceDepartement.supprimer(requete.idDepartement);
 };
 

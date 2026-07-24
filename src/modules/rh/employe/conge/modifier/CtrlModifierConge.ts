@@ -1,13 +1,13 @@
 import ServiceConge from 'modele/rh/conge/ServiceConge';
-import { action, util } from 'waxant';
+import { ActionOperation, action, util } from 'waxant';
 import { ActionEmploye } from '../../ActionEmploye';
 import { ReqModifierConge, ResModifierConge } from './MdlModifierConge';
 
-const initModificationCongeImpl = async (requete: ReqModifierConge, resultat: ResModifierConge, thunkAPI) => {
+const initModificationCongeImpl: ActionOperation<ReqModifierConge, ResModifierConge> = async (requete, resultat, _thunkAPI) => {
     resultat.conge = await ServiceConge.recupererParId(requete.idConge);
 };
 
-const majCongeImpl = async (requete: ReqModifierConge, resultat: ResModifierConge, thunkAPI) => {
+const majCongeImpl: ActionOperation<ReqModifierConge, ResModifierConge> = async (requete, _resultat, _thunkAPI) => {
     await requete.form?.validateFields();
     const dataForm = util.removeNonSerialisable(requete.form?.getFieldsValue());
     await ServiceConge.maj(dataForm);

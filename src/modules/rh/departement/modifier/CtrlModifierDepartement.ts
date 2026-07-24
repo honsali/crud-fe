@@ -1,13 +1,13 @@
 import ServiceDepartement from 'modele/rh/departement/ServiceDepartement';
-import { action, util } from 'waxant';
+import { ActionOperation, action, util } from 'waxant';
 import { ActionDepartement } from '../ActionDepartement';
 import { ReqModifierDepartement, ResModifierDepartement } from './MdlModifierDepartement';
 
-const initModificationDepartementImpl = async (requete: ReqModifierDepartement, resultat: ResModifierDepartement, thunkAPI) => {
+const initModificationDepartementImpl: ActionOperation<ReqModifierDepartement, ResModifierDepartement> = async (requete, resultat, _thunkAPI) => {
     resultat.departement = await ServiceDepartement.recupererParId(requete.idDepartement);
 };
 
-const majDepartementImpl = async (requete: ReqModifierDepartement, resultat: ResModifierDepartement, thunkAPI) => {
+const majDepartementImpl: ActionOperation<ReqModifierDepartement, ResModifierDepartement> = async (requete, _resultat, _thunkAPI) => {
     await requete.form?.validateFields();
     const dataForm = util.removeNonSerialisable(requete.form?.getFieldsValue());
     await ServiceDepartement.maj(dataForm);

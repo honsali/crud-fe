@@ -20,7 +20,7 @@ export const PageConsulterDepartement: PageDefinition = {
 export const PageCreerDepartement: PageDefinition = {
     key: 'PageCreerDepartement',
     path: '/rh/departement/creer',
-    toPath: (args) => '/rh/departement/creer',
+    toPath: () => '/rh/departement/creer',
     view: (
         <ContexteViewProvider uc="UcCreerDepartement">
             <ViewCreerDepartement />
@@ -31,7 +31,7 @@ export const PageCreerDepartement: PageDefinition = {
 export const PageListerDepartement: PageDefinition = {
     key: 'PageListerDepartement',
     path: '/rh/departement/lister',
-    toPath: (args) => '/rh/departement/lister',
+    toPath: () => '/rh/departement/lister',
     icone: <FontAwesomeIcon icon={faSitemap} />,
     menu: 'rh/departement',
     view: (

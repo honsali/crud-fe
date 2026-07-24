@@ -11,7 +11,7 @@ L'audit reste une source de constats à vérifier, pas une spécification. Chaqu
 | Action | État | Prochaine décision |
 |---|---|---|
 | 1. Remettre `bun run typecheck` au vert | **Terminée** | Maintenir le typecheck à zéro erreur |
-| 2. Renforcer progressivement les garde-fous TypeScript et le formatage | **En cours — format et bruit initial mesurés** | Corriger d'abord les signatures générées, puis traiter Waxant par lots |
+| 2. Renforcer progressivement les garde-fous TypeScript et le formatage | **En cours — signatures générées assainies** | Analyser les 21 avertissements de hooks générés avant de traiter Waxant |
 | 3. Corriger les routes parent/enfant et la propriété du code congé | À faire | Décider d'abord si le code est saisi ou dérivé par le backend |
 | 4. Corriger les risques d'intégrité des formulaires | À vérifier puis faire | Définir explicitement la sémantique « conserver / vider / null » avec le backend |
 | 5. Stabiliser les défauts Waxant à fort impact | À faire par petits lots | Error boundary, clavier, logout, chargement des références |
@@ -110,7 +110,7 @@ Objectif : rendre les futurs défauts visibles sans lancer une refonte général
 
 1. **Terminé le 2026-07-24 :** reproduire séparément les diagnostics avec `noImplicitAny`, les règles de hooks et les vérifications de code inutilisé.
 2. **Terminé le 2026-07-24 :** classer les erreurs entre Waxant, code généré, runtime spécifique et déclarations de bibliothèques.
-3. Corriger les patterns générés dans l'engine avant les occurrences RH répétées.
+3. **En cours :** les patterns générés `noImplicitAny` et code inutilisé sont corrigés ; les 21 avertissements de hooks générés restent à analyser.
 4. Choisir un outillage minimal : éviter d'ajouter plusieurs linters/formatters concurrents.
 5. **Terminé le 2026-07-24 :** imposer LF et un unique saut final afin de supprimer le bruit du comparateur.
 6. Activer une règle seulement lorsqu'elle est verte sur l'arbre courant et possède une commande documentée.
@@ -137,7 +137,29 @@ Le typecheck normal reste vert avec zéro diagnostic. Les règles désactivées 
 
 L'ESLint transitif actuellement installé (`eslint` 8.57.1, parseur TypeScript 5.62.0) plante avec TypeScript 7.0.2 et ne peut donc pas devenir le garde-fou permanent. La mesure des hooks a été recoupée avec le parseur Babel installé puis avec une pile compatible temporaire hors dépôt (`eslint` 10.7.0, parseur TypeScript 8.65.0, plugin hooks 7.1.1) ; les deux ont produit les mêmes 65 avertissements de hooks. Aucune dépendance ou configuration de lint n'a été ajoutée pendant cette mesure.
 
-La prochaine correction doit rester bornée : traiter dans l'engine les signatures générées responsables des `thunkAPI`, `form`, paramètres de tableau et callbacks Redux inutilisés, ajouter un test focalisé, régénérer puis mesurer de nouveau. Les 294 diagnostics `noImplicitAny` et 42 avertissements de hooks propres à Waxant formeront des lots séparés ; ils ne doivent pas être masqués par une activation globale prématurée.
+Le premier correctif borné retenu porte donc sur les signatures générées responsables des `thunkAPI`, `form`, paramètres de tableau et callbacks Redux inutilisés. Les diagnostics propres à Waxant restent des lots séparés et ne doivent pas être masqués par une activation globale prématurée.
+
+### Lot 2.3 terminé — signatures générées assainies
+
+L'engine génère maintenant :
+
+- des contrôleurs conformes à `ActionOperation<Req, Res>`, avec typage contextuel de la requête, du résultat et du contexte thunk, et préfixe `_` uniquement pour les paramètres réellement inutilisés ;
+- des callbacks Redux sans paramètre `action` lorsqu'aucun payload n'est lu ;
+- des props `form` typées `FormInstance` et des paramètres de ligne typés avec l'interface de l'entité ;
+- des fonctions `toPath` sans argument pour les routes constantes ;
+- des contrôleurs sans action métier et des ACL sans entrée visible sans import inutilisé ; les prédicats d'import correspondent aux prédicats d'émission.
+
+Waxant expose le contrat `ActionOperation` depuis `src/waxant/noyau/redux/action.ts`. `FePageContractPrinterTest` protège les signatures de contrôleur, les callbacks Redux, les props formulaire, les différents types d'action de ligne, les routes constantes et paramétrées, ainsi que les contrôleurs et ACL sans import utile.
+
+Mesure après régénération et transfert sélectif :
+
+- `noImplicitAny` passe de 323 à 292 diagnostics et de 29 à **0** dans les fichiers générés ; les 292 restants appartiennent tous à Waxant ;
+- le code inutilisé passe de 105 à 26 diagnostics et de 79 à **0** dans les fichiers générés ; il reste 21 diagnostics Waxant et 5 runtime spécifiques ;
+- les hooks restent inchangés : 65 avertissements `exhaustive-deps`, dont 21 générés, 42 Waxant et 2 dans `LayoutGlobal.tsx` ; aucune violation de `rules-of-hooks`.
+
+Validation du lot : 7 tests engine passés après compilation propre, génération réussie, `bun run typecheck` et `bun run build` réussis, `git diff --check` vert et comparaison exacte pour 88 fichiers sur 90. Les deux différences restantes sont toujours les routes parent/enfant de `ListePageEmploye.tsx` et la dérivation temporaire dans `ServiceConge.ts`. Aucun navigateur, backend ou E2E full-stack n'a été exécuté.
+
+La prochaine étape générée est d'analyser les 21 avertissements `exhaustive-deps` sans ajouter mécaniquement des dépendances susceptibles de recréer des boucles de rendu. Les diagnostics Waxant resteront un lot distinct.
 
 Critères d'acceptation :
 

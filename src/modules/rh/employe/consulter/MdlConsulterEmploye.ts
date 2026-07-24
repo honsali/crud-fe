@@ -49,29 +49,29 @@ const SliceConsulterEmploye = createSlice({
                 state.listeConge = action.payload.listeConge;
                 state.etatListerCongeParIdEmploye = createEtatSuccess();
             })
-            .addCase(CtrlConsulterEmploye.listerCongeParIdEmploye.pending, (state, action) => {
+            .addCase(CtrlConsulterEmploye.listerCongeParIdEmploye.pending, (state) => {
                 state.etatListerCongeParIdEmploye = createEtatPending();
             })
-            .addCase(CtrlConsulterEmploye.listerCongeParIdEmploye.rejected, (state, action) => {
+            .addCase(CtrlConsulterEmploye.listerCongeParIdEmploye.rejected, (state) => {
                 state.etatListerCongeParIdEmploye = createEtatError();
             })
             .addCase(CtrlConsulterEmploye.recupererEmployeParId.fulfilled, (state, action) => {
                 state.employe = action.payload.employe;
                 state.etatRecupererEmployeParId = createEtatSuccess();
             })
-            .addCase(CtrlConsulterEmploye.recupererEmployeParId.pending, (state, action) => {
+            .addCase(CtrlConsulterEmploye.recupererEmployeParId.pending, (state) => {
                 state.etatRecupererEmployeParId = createEtatPending();
             })
-            .addCase(CtrlConsulterEmploye.recupererEmployeParId.rejected, (state, action) => {
+            .addCase(CtrlConsulterEmploye.recupererEmployeParId.rejected, (state) => {
                 state.etatRecupererEmployeParId = createEtatError();
             })
-            .addCase(CtrlConsulterEmploye.supprimerEmploye.fulfilled, (state, action) => {
+            .addCase(CtrlConsulterEmploye.supprimerEmploye.fulfilled, (state) => {
                 state.etatSupprimerEmploye = createEtatSuccess();
             })
-            .addCase(CtrlConsulterEmploye.supprimerEmploye.pending, (state, action) => {
+            .addCase(CtrlConsulterEmploye.supprimerEmploye.pending, (state) => {
                 state.etatSupprimerEmploye = createEtatPending();
             })
-            .addCase(CtrlConsulterEmploye.supprimerEmploye.rejected, (state, action) => {
+            .addCase(CtrlConsulterEmploye.supprimerEmploye.rejected, (state) => {
                 state.etatSupprimerEmploye = createEtatError();
             });
     },

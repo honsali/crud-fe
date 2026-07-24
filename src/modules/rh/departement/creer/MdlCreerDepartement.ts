@@ -34,10 +34,10 @@ const SliceCreerDepartement = createSlice({
                 state.idDepartement = action.payload.idDepartement;
                 state.etatCreerDepartement = createEtatSuccess();
             })
-            .addCase(CtrlCreerDepartement.creerDepartement.pending, (state, action) => {
+            .addCase(CtrlCreerDepartement.creerDepartement.pending, (state) => {
                 state.etatCreerDepartement = createEtatPending();
             })
-            .addCase(CtrlCreerDepartement.creerDepartement.rejected, (state, action) => {
+            .addCase(CtrlCreerDepartement.creerDepartement.rejected, (state) => {
                 state.etatCreerDepartement = createEtatError();
             });
     },

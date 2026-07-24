@@ -1,3 +1,4 @@
+import { IDepartement } from 'modele/rh/departement/DomaineDepartement';
 import { useEffect } from 'react';
 import { Bloc, Colonne, Tableau, useGoToPage } from 'waxant';
 import { PageConsulterDepartement } from '../../ListePageDepartement';
@@ -7,7 +8,7 @@ const TableauDepartement = () => {
     const goToPage = useGoToPage();
     const { listeDepartement, listerDepartement } = useListerDepartement();
 
-    const goToPageConsulterDepartement = (departement) => {
+    const goToPageConsulterDepartement = (departement: IDepartement) => {
         goToPage(PageConsulterDepartement, departement);
     };
 

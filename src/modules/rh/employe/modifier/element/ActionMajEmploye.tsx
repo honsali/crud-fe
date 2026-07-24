@@ -1,10 +1,11 @@
+import { FormInstance } from 'antd';
 import { useEffect } from 'react';
 import { ActionUcMaj, useGoToPage } from 'waxant';
 import { ActionEmploye } from '../../ActionEmploye';
 import { PageConsulterEmploye } from '../../ListePageEmploye';
 import useModifierEmploye from '../useModifierEmploye';
 
-const ActionMajEmploye = ({ form }) => {
+const ActionMajEmploye = ({ form }: { form: FormInstance }) => {
     const goToPage = useGoToPage();
     const { etatMajEmploye, majEmploye, resetEtatMajEmploye } = useModifierEmploye();
 

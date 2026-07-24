@@ -52,10 +52,10 @@ const SliceFiltrerEmploye = createSlice({
                 state.pageCourante = action.payload.listePagineeEmploye?.pagination?.pageCourante;
                 state.etatChangerPageFiltrerEmploye = createEtatSuccess();
             })
-            .addCase(CtrlFiltrerEmploye.changerPageFiltrerEmploye.pending, (state, action) => {
+            .addCase(CtrlFiltrerEmploye.changerPageFiltrerEmploye.pending, (state) => {
                 state.etatChangerPageFiltrerEmploye = createEtatPending();
             })
-            .addCase(CtrlFiltrerEmploye.changerPageFiltrerEmploye.rejected, (state, action) => {
+            .addCase(CtrlFiltrerEmploye.changerPageFiltrerEmploye.rejected, (state) => {
                 state.etatChangerPageFiltrerEmploye = createEtatError();
             })
             .addCase(CtrlFiltrerEmploye.filtrerEmploye.fulfilled, (state, action) => {
@@ -64,10 +64,10 @@ const SliceFiltrerEmploye = createSlice({
                 state.pageCourante = 0;
                 state.etatFiltrerEmploye = createEtatSuccess();
             })
-            .addCase(CtrlFiltrerEmploye.filtrerEmploye.pending, (state, action) => {
+            .addCase(CtrlFiltrerEmploye.filtrerEmploye.pending, (state) => {
                 state.etatFiltrerEmploye = createEtatPending();
             })
-            .addCase(CtrlFiltrerEmploye.filtrerEmploye.rejected, (state, action) => {
+            .addCase(CtrlFiltrerEmploye.filtrerEmploye.rejected, (state) => {
                 state.etatFiltrerEmploye = createEtatError();
             })
             .addCase(CtrlFiltrerEmploye.initialiserFiltrerEmploye.fulfilled, (state, action) => {
@@ -76,10 +76,10 @@ const SliceFiltrerEmploye = createSlice({
                 state.filtre = action.payload.filtre;
                 state.etatInitialiserFiltrerEmploye = createEtatSuccess();
             })
-            .addCase(CtrlFiltrerEmploye.initialiserFiltrerEmploye.pending, (state, action) => {
+            .addCase(CtrlFiltrerEmploye.initialiserFiltrerEmploye.pending, (state) => {
                 state.etatInitialiserFiltrerEmploye = createEtatPending();
             })
-            .addCase(CtrlFiltrerEmploye.initialiserFiltrerEmploye.rejected, (state, action) => {
+            .addCase(CtrlFiltrerEmploye.initialiserFiltrerEmploye.rejected, (state) => {
                 state.etatInitialiserFiltrerEmploye = createEtatError();
             });
     },

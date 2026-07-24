@@ -40,19 +40,19 @@ const SliceConsulterConge = createSlice({
                 state.conge = action.payload.conge;
                 state.etatRecupererCongeParId = createEtatSuccess();
             })
-            .addCase(CtrlConsulterConge.recupererCongeParId.pending, (state, action) => {
+            .addCase(CtrlConsulterConge.recupererCongeParId.pending, (state) => {
                 state.etatRecupererCongeParId = createEtatPending();
             })
-            .addCase(CtrlConsulterConge.recupererCongeParId.rejected, (state, action) => {
+            .addCase(CtrlConsulterConge.recupererCongeParId.rejected, (state) => {
                 state.etatRecupererCongeParId = createEtatError();
             })
-            .addCase(CtrlConsulterConge.supprimerConge.fulfilled, (state, action) => {
+            .addCase(CtrlConsulterConge.supprimerConge.fulfilled, (state) => {
                 state.etatSupprimerConge = createEtatSuccess();
             })
-            .addCase(CtrlConsulterConge.supprimerConge.pending, (state, action) => {
+            .addCase(CtrlConsulterConge.supprimerConge.pending, (state) => {
                 state.etatSupprimerConge = createEtatPending();
             })
-            .addCase(CtrlConsulterConge.supprimerConge.rejected, (state, action) => {
+            .addCase(CtrlConsulterConge.supprimerConge.rejected, (state) => {
                 state.etatSupprimerConge = createEtatError();
             });
     },

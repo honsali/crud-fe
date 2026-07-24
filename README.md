@@ -128,6 +128,8 @@ Most files under `src/modele/rh` and `src/modules/rh` are generator-shaped. Repe
 
 A generated page shares aggregate `Req*` and `Res*` interfaces across several actions. Strict service inputs such as route identifiers are required in `Req*`; shared UI values such as `form` and `pageCourante` remain optional. Hooks accept `Partial<Req*>` because router parameters complete the dispatched request, without adding frontend `throw` validation. The backend remains authoritative for request validation. Results use optional properties rather than misleading `T | {}` unions, and consumers remain null-safe.
 
+Waxant exposes `ActionOperation<Req, Res>` as the typed contract for generated controller implementations. Generated callbacks keep only meaningful Redux and route parameters, prefix genuinely unused operation parameters with `_`, and type form and table-row inputs. These conventions keep the generated overlay free of `noImplicitAny`, `noUnusedLocals`, and `noUnusedParameters` diagnostics without changing runtime behavior.
+
 ## Current limitations
 
 - `ServiceConge` still derives the leave code in the browser, which violates the frontend/backend boundary. Decide whether the user supplies the code or the backend derives it, then remove the client-side formula.

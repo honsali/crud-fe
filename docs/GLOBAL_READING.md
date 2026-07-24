@@ -27,6 +27,8 @@ These frontend layers organize presentation, navigation, interaction state, and 
 
 Generated page contracts deliberately separate the complete action request from the values supplied by a component. Strict service inputs such as route identifiers are required in `Req*`; `form` and `pageCourante` remain optional because several actions share one page contract. Hooks accept `Partial<Req*>`, merge URL parameters, and dispatch without adding controller `throw` validation. Each `Res*` property remains optional because an action populates only its own subset; the former `T | {}` result pattern is no longer generated.
 
+Generated controller implementations use Waxant's `ActionOperation<Req, Res>` contract. Form props and table rows are typed, genuinely unused operation parameters use the `_` convention, Redux handlers omit unused callback parameters, constant routes take no unused argument, and empty ACLs import no action catalog. The generated overlay therefore contributes no `noImplicitAny`, `noUnusedLocals`, or `noUnusedParameters` diagnostic.
+
 ## Authentication and authorization display
 
 `PageAuth` posts credentials to `/api/login`, reads `accessToken`, and passes it to `ContexteAuth`. The context decodes the JWT `sub`, scalar `role`, and `exp` claims. It accepts only roles declared in `mapRole`.
@@ -98,8 +100,9 @@ On 2026-07-21:
 
 Latest local validation on 2026-07-24:
 
-- the engine's `mvn test` passed all 6 focused tests, including the generated page-contract regression test;
-- the engine was regenerated and intended request/result/hook/pagination changes were transferred selectively;
+- the engine's `mvn test` passed all 7 focused tests, including the generated page-contract and text-normalization regression tests;
+- the engine was regenerated and intended request/result/hook/pagination/signature changes were transferred selectively;
+- opt-in `noImplicitAny`, `noUnusedLocals`, and `noUnusedParameters` checks report zero diagnostics in the 90 generated frontend files;
 - runtime and generated frontend overlays now differ semantically only for the known parent-child leave routes and temporary `ServiceConge` behavior;
 - `bun run typecheck` passed with zero errors;
 - `bun run build` passed.

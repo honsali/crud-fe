@@ -35,10 +35,10 @@ const SliceCreerConge = createSlice({
                 state.idConge = action.payload.idConge;
                 state.etatCreerConge = createEtatSuccess();
             })
-            .addCase(CtrlCreerConge.creerConge.pending, (state, action) => {
+            .addCase(CtrlCreerConge.creerConge.pending, (state) => {
                 state.etatCreerConge = createEtatPending();
             })
-            .addCase(CtrlCreerConge.creerConge.rejected, (state, action) => {
+            .addCase(CtrlCreerConge.creerConge.rejected, (state) => {
                 state.etatCreerConge = createEtatError();
             });
     },

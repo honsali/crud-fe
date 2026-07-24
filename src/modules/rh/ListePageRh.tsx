@@ -6,7 +6,7 @@ import { ContexteViewProvider, PageDefinition } from 'waxant';
 export const PageRh: PageDefinition = {
     key: 'PageRh',
     path: '/rh',
-    toPath: (args) => '/rh',
+    toPath: () => '/rh',
     icone: <FontAwesomeIcon icon={faPeopleLine} />,
     menu: 'rh',
     view: (

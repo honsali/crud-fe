@@ -1,9 +1,9 @@
 import ServiceDepartement from 'modele/rh/departement/ServiceDepartement';
-import { action } from 'waxant';
+import { ActionOperation, action } from 'waxant';
 import { ActionDepartement } from '../ActionDepartement';
 import { ReqListerDepartement, ResListerDepartement } from './MdlListerDepartement';
 
-const listerDepartementImpl = async (requete: ReqListerDepartement, resultat: ResListerDepartement, thunkAPI) => {
+const listerDepartementImpl: ActionOperation<ReqListerDepartement, ResListerDepartement> = async (_requete, resultat, _thunkAPI) => {
     resultat.listeDepartement = await ServiceDepartement.lister();
 };
 

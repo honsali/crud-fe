@@ -42,19 +42,19 @@ const SliceModifierDepartement = createSlice({
                 state.departement = action.payload.departement;
                 state.etatInitModificationDepartement = createEtatSuccess();
             })
-            .addCase(CtrlModifierDepartement.initModificationDepartement.pending, (state, action) => {
+            .addCase(CtrlModifierDepartement.initModificationDepartement.pending, (state) => {
                 state.etatInitModificationDepartement = createEtatPending();
             })
-            .addCase(CtrlModifierDepartement.initModificationDepartement.rejected, (state, action) => {
+            .addCase(CtrlModifierDepartement.initModificationDepartement.rejected, (state) => {
                 state.etatInitModificationDepartement = createEtatError();
             })
-            .addCase(CtrlModifierDepartement.majDepartement.fulfilled, (state, action) => {
+            .addCase(CtrlModifierDepartement.majDepartement.fulfilled, (state) => {
                 state.etatMajDepartement = createEtatSuccess();
             })
-            .addCase(CtrlModifierDepartement.majDepartement.pending, (state, action) => {
+            .addCase(CtrlModifierDepartement.majDepartement.pending, (state) => {
                 state.etatMajDepartement = createEtatPending();
             })
-            .addCase(CtrlModifierDepartement.majDepartement.rejected, (state, action) => {
+            .addCase(CtrlModifierDepartement.majDepartement.rejected, (state) => {
                 state.etatMajDepartement = createEtatError();
             });
     },

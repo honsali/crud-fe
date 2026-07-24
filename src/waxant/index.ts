@@ -115,7 +115,7 @@ export { default as useI18n } from './noyau/i18n/useI18n';
 export * from './noyau/message/DomaineMessage';
 export { MdlMessage, selectActionEnCours, selectInfoActionEchouee, selectInfoActionEchoueeDansDialogue, selectInfoActionReussie } from './noyau/message/MdlMessage';
 export { default as action, serializeError } from './noyau/redux/action';
-export type { IRequete, IResultat } from './noyau/redux/action';
+export type { ActionOperation, IRequete, IResultat } from './noyau/redux/action';
 export { createEtatError, createEtatInit, createEtatPending, createEtatSuccess, isEnCours, isErreur, isInitial, isSuccess } from './noyau/redux/EtatMdl';
 export type { EtatMdl } from './noyau/redux/EtatMdl';
 export type { IRootState } from './noyau/redux/StoreDynamique';

@@ -34,10 +34,10 @@ const SliceCreerEmploye = createSlice({
                 state.idEmploye = action.payload.idEmploye;
                 state.etatCreerEmploye = createEtatSuccess();
             })
-            .addCase(CtrlCreerEmploye.creerEmploye.pending, (state, action) => {
+            .addCase(CtrlCreerEmploye.creerEmploye.pending, (state) => {
                 state.etatCreerEmploye = createEtatPending();
             })
-            .addCase(CtrlCreerEmploye.creerEmploye.rejected, (state, action) => {
+            .addCase(CtrlCreerEmploye.creerEmploye.rejected, (state) => {
                 state.etatCreerEmploye = createEtatError();
             });
     },

@@ -1,10 +1,11 @@
+import { FormInstance } from 'antd';
 import { useEffect } from 'react';
 import { ActionUcMaj, useGoToPage } from 'waxant';
 import { ActionDepartement } from '../../ActionDepartement';
 import { PageConsulterDepartement } from '../../ListePageDepartement';
 import useModifierDepartement from '../useModifierDepartement';
 
-const ActionMajDepartement = ({ form }) => {
+const ActionMajDepartement = ({ form }: { form: FormInstance }) => {
     const goToPage = useGoToPage();
     const { etatMajDepartement, majDepartement, resetEtatMajDepartement } = useModifierDepartement();
 

@@ -1,3 +1,4 @@
+import { IEmploye } from 'modele/rh/employe/DomaineEmploye';
 import { Bloc, Colonne, Tableau, useGoToPage } from 'waxant';
 import { PageConsulterEmploye } from '../../ListePageEmploye';
 import useFiltrerEmploye from '../useFiltrerEmploye';
@@ -10,7 +11,7 @@ const TableauEmploye = () => {
         changerPageFiltrerEmploye({ pageCourante });
     };
 
-    const goToPageConsulterEmploye = (employe) => {
+    const goToPageConsulterEmploye = (employe: IEmploye) => {
         goToPage(PageConsulterEmploye, employe);
     };
     //

@@ -42,19 +42,19 @@ const SliceModifierConge = createSlice({
                 state.conge = action.payload.conge;
                 state.etatInitModificationConge = createEtatSuccess();
             })
-            .addCase(CtrlModifierConge.initModificationConge.pending, (state, action) => {
+            .addCase(CtrlModifierConge.initModificationConge.pending, (state) => {
                 state.etatInitModificationConge = createEtatPending();
             })
-            .addCase(CtrlModifierConge.initModificationConge.rejected, (state, action) => {
+            .addCase(CtrlModifierConge.initModificationConge.rejected, (state) => {
                 state.etatInitModificationConge = createEtatError();
             })
-            .addCase(CtrlModifierConge.majConge.fulfilled, (state, action) => {
+            .addCase(CtrlModifierConge.majConge.fulfilled, (state) => {
                 state.etatMajConge = createEtatSuccess();
             })
-            .addCase(CtrlModifierConge.majConge.pending, (state, action) => {
+            .addCase(CtrlModifierConge.majConge.pending, (state) => {
                 state.etatMajConge = createEtatPending();
             })
-            .addCase(CtrlModifierConge.majConge.rejected, (state, action) => {
+            .addCase(CtrlModifierConge.majConge.rejected, (state) => {
                 state.etatMajConge = createEtatError();
             });
     },
