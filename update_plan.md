@@ -11,7 +11,7 @@ L'audit reste une source de constats à vérifier, pas une spécification. Chaqu
 | Action | État | Prochaine décision |
 |---|---|---|
 | 1. Remettre `bun run typecheck` au vert | **Terminée** | Maintenir le typecheck à zéro erreur |
-| 2. Renforcer progressivement les garde-fous TypeScript et le formatage | À faire | Choisir le plus petit outillage utile et mesurer son bruit initial |
+| 2. Renforcer progressivement les garde-fous TypeScript et le formatage | **En cours — format et bruit initial mesurés** | Corriger d'abord les signatures générées, puis traiter Waxant par lots |
 | 3. Corriger les routes parent/enfant et la propriété du code congé | À faire | Décider d'abord si le code est saisi ou dérivé par le backend |
 | 4. Corriger les risques d'intégrité des formulaires | À vérifier puis faire | Définir explicitement la sémantique « conserver / vider / null » avec le backend |
 | 5. Stabiliser les défauts Waxant à fort impact | À faire par petits lots | Error boundary, clavier, logout, chargement des références |
@@ -108,13 +108,36 @@ Non validé dans ce lot : navigateur réel, backend exécuté, base PostgreSQL e
 
 Objectif : rendre les futurs défauts visibles sans lancer une refonte générale.
 
-1. Reproduire séparément les diagnostics avec `noImplicitAny`, les règles de hooks et les vérifications de code inutilisé.
-2. Classer les erreurs entre Waxant, code généré, runtime spécifique et déclarations de bibliothèques.
+1. **Terminé le 2026-07-24 :** reproduire séparément les diagnostics avec `noImplicitAny`, les règles de hooks et les vérifications de code inutilisé.
+2. **Terminé le 2026-07-24 :** classer les erreurs entre Waxant, code généré, runtime spécifique et déclarations de bibliothèques.
 3. Corriger les patterns générés dans l'engine avant les occurrences RH répétées.
 4. Choisir un outillage minimal : éviter d'ajouter plusieurs linters/formatters concurrents.
-5. Ajouter une règle stable de fin de fichier et de fin de ligne afin de supprimer le bruit du comparateur.
+5. **Terminé le 2026-07-24 :** imposer LF et un unique saut final afin de supprimer le bruit du comparateur.
 6. Activer une règle seulement lorsqu'elle est verte sur l'arbre courant et possède une commande documentée.
 7. Ne pas mélanger ce lot avec un nettoyage fonctionnel de Waxant.
+
+### Lot 2.1 terminé — fins de ligne et de fichier
+
+- `crud-fe/.gitattributes` impose LF aux fichiers texte suivis, indépendamment de `core.autocrlf`.
+- `crud-fe/.editorconfig` demande LF et un saut final aux éditeurs compatibles.
+- Tous les fichiers texte suivis de `crud-fe` ont été normalisés sans changement fonctionnel.
+- L'engine porte la même configuration et son `Printer` normalise toujours les contenus générés en LF avec exactement un saut final, même si le fichier précédent était en CRLF.
+- `engine/src/test/java/dev/cruding/engine/printer/PrinterTest.java` protège ce comportement.
+- Après régénération, 88 des 90 fichiers frontend partagés sont identiques octet pour octet. Les deux seules différences restent les personnalisations déjà connues de `ServiceConge.ts` et `ListePageEmploye.tsx` ; il n'existe plus de faux positif de fin de ligne ou de fichier.
+
+Validation du lot : 7 tests engine passés, génération réussie, `bun run typecheck` et `bun run build` réussis. Aucun navigateur, backend ou E2E full-stack n'a été exécuté pour ce changement purement textuel.
+
+### Lot 2.2 terminé — mesure séparée du bruit initial
+
+Le typecheck normal reste vert avec zéro diagnostic. Les règles désactivées ont ensuite été mesurées sans modifier `tsconfig.json`, `package.json` ou le lockfile :
+
+- `noImplicitAny` : 323 diagnostics dans 87 fichiers ; 294 dans Waxant et 29 dans 20 fichiers générés, aucun dans le runtime spécifique ni dans `node_modules`. Les 29 occurrences générées se répartissent en 20 paramètres `thunkAPI`, 6 props `form` déstructurées et 3 paramètres de ligne de tableau. Waxant concentre notamment 98 accès indexés TS7053 ; un TS7016 signale aussi l'absence de déclaration de `base-64` depuis `ChampFichier.tsx`.
+- code inutilisé : 105 diagnostics dans 49 fichiers. `noUnusedLocals` produit 15 diagnostics (12 Waxant, 1 généré, 2 runtime) et `noUnusedParameters` en produit 90 (78 générés, 9 Waxant, 3 runtime). Les occurrences générées sont principalement 46 paramètres `action`, 19 `thunkAPI`, 6 `resultat`, 5 `args`, 2 `requete` et un import `ActionRh`.
+- hooks React : aucune violation de `rules-of-hooks`, mais 65 avertissements `exhaustive-deps` dans 47 fichiers : 42 dans Waxant, 21 dans 17 fichiers générés et 2 dans `LayoutGlobal.tsx`.
+
+L'ESLint transitif actuellement installé (`eslint` 8.57.1, parseur TypeScript 5.62.0) plante avec TypeScript 7.0.2 et ne peut donc pas devenir le garde-fou permanent. La mesure des hooks a été recoupée avec le parseur Babel installé puis avec une pile compatible temporaire hors dépôt (`eslint` 10.7.0, parseur TypeScript 8.65.0, plugin hooks 7.1.1) ; les deux ont produit les mêmes 65 avertissements de hooks. Aucune dépendance ou configuration de lint n'a été ajoutée pendant cette mesure.
+
+La prochaine correction doit rester bornée : traiter dans l'engine les signatures générées responsables des `thunkAPI`, `form`, paramètres de tableau et callbacks Redux inutilisés, ajouter un test focalisé, régénérer puis mesurer de nouveau. Les 294 diagnostics `noImplicitAny` et 42 avertissements de hooks propres à Waxant formeront des lots séparés ; ils ne doivent pas être masqués par une activation globale prématurée.
 
 Critères d'acceptation :
 

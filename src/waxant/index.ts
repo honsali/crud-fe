@@ -135,4 +135,3 @@ export { default as util } from './noyau/util/util';
 export { default as useValider } from './noyau/validation/useValider';
 export { default as useValiderDialogue } from './noyau/validation/useValiderDialogue';
 export { default as WaxantApp } from './noyau/WaxantApp';
-
