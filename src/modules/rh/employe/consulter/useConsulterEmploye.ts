@@ -15,7 +15,7 @@ const useConsulterEmploye = () => {
     const etatSupprimerEmploye = useSelector(selectEtatSupprimerEmploye);
     const listeConge = useSelector(selectListeConge);
 
-    const createAction = (action: any) => (req?: ReqConsulterEmploye) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: any) => (req?: Partial<ReqConsulterEmploye>) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions

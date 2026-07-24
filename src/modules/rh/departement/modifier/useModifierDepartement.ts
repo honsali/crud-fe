@@ -13,7 +13,7 @@ const useModifierDepartement = () => {
     const etatInitModificationDepartement = useSelector(selectEtatInitModificationDepartement);
     const etatMajDepartement = useSelector(selectEtatMajDepartement);
 
-    const createAction = (action: any) => (req?: ReqModifierDepartement) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: any) => (req?: Partial<ReqModifierDepartement>) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions

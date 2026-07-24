@@ -1,13 +1,13 @@
 # Deep discovery summary
 
-> Historical snapshot: the original review below predates the July 2026 backend-alignment work and is retained as discovery evidence, not current guidance. See [`README.md`](README.md) and [`docs/GLOBAL_READING.md`](docs/GLOBAL_READING.md) for current behavior.
+> Historical snapshot: the original review below predates the July 2026 backend-alignment work and is retained as discovery evidence, not current guidance. See [`README.md`](README.md) and [`docs/GLOBAL_READING.md`](docs/GLOBAL_READING.md) for current behavior, and [`update_plan.md`](update_plan.md) for the active follow-up sequence.
 
-## Resolution status — 2026-07-22
+## Resolution status — 2026-07-24
 
 | Historical finding | Current status |
 |---|---|
 | Duplicate router runtimes and authenticated-route crash | Resolved; dependency resolution is locked and browser routing passes |
-| TypeScript reported 67 errors and was not enforced | Partially resolved; the script is enforced, but the 2026-07-23 current tree reports 15 route-identifier and pagination nullability errors |
+| TypeScript reported 67 errors and was not enforced | Resolved; `bun run typecheck` passes with zero errors after engine-owned required transport identifiers, honest aggregate result contracts, and null-safe pagination corrections, protected by one focused generator regression test |
 | Roles, domains, ACLs, and backend authorization disagreed | Resolved; singular `ROLE_GESTIONNAIRE_RH` and `ROLE_ADMIN` contexts are intentionally separate |
 | Login expected `/authenticate`, `/user`, and refresh support | Resolved; `/api/login`, JWT claims, token-only session state, expiry, and `401` logout match the backend |
 | API URL, frontend port, sample routes, and lockfile were unsuitable for deployment | Resolved through external runtime configuration, `/app-config.json`, `FRONTEND_PORT`, and tracked `bun.lock` intent |

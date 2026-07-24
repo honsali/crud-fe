@@ -12,7 +12,7 @@ const useListerDepartement = () => {
     const etatListerDepartement = useSelector(selectEtatListerDepartement);
     const listeDepartement = useSelector(selectListeDepartement);
 
-    const createAction = (action: any) => (req?: ReqListerDepartement) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: any) => (req?: Partial<ReqListerDepartement>) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions

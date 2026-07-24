@@ -13,7 +13,7 @@ const useModifierEmploye = () => {
     const etatInitModificationEmploye = useSelector(selectEtatInitModificationEmploye);
     const etatMajEmploye = useSelector(selectEtatMajEmploye);
 
-    const createAction = (action: any) => (req?: ReqModifierEmploye) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: any) => (req?: Partial<ReqModifierEmploye>) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions

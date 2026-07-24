@@ -4,11 +4,11 @@ import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatIn
 import CtrlConsulterDepartement from './CtrlConsulterDepartement';
 
 export interface ReqConsulterDepartement extends IRequete {
-    idDepartement?: string;
+    idDepartement: string;
 }
 
 export interface ResConsulterDepartement extends IResultat {
-    departement: IDepartement | {};
+    departement?: IDepartement;
 }
 
 interface ConsulterDepartementType {

@@ -6,11 +6,11 @@ import CtrlModifierConge from './CtrlModifierConge';
 
 export interface ReqModifierConge extends IRequete {
     form?: FormInstance;
-    idConge?: string;
+    idConge: string;
 }
 
 export interface ResModifierConge extends IResultat {
-    conge: IConge | {};
+    conge?: IConge;
 }
 
 interface ModifierCongeType {

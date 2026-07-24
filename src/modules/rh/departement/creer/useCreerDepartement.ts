@@ -12,7 +12,7 @@ const useCreerDepartement = () => {
     const etatCreerDepartement = useSelector(selectEtatCreerDepartement);
     const idDepartement = useSelector(selectIdDepartement);
 
-    const createAction = (action: any) => (req?: ReqCreerDepartement) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: any) => (req?: Partial<ReqCreerDepartement>) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions

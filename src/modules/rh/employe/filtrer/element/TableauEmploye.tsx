@@ -7,7 +7,7 @@ const TableauEmploye = () => {
     const { changerPageFiltrerEmploye, listePagineeEmploye } = useFiltrerEmploye();
 
     const actionChangementPage = (pageCourante: number) => {
-            changerPageFiltrerEmploye({ pageCourante });
+        changerPageFiltrerEmploye({ pageCourante });
     };
 
     const goToPageConsulterEmploye = (employe) => {
@@ -16,7 +16,7 @@ const TableauEmploye = () => {
     //
     return (
         <Bloc>
-            <Tableau listeDonnee={listePagineeEmploye.liste} pagination={listePagineeEmploye.pagination} siClicLigne={goToPageConsulterEmploye} siChangementPage={actionChangementPage} texteAucunResultat="aucun.employe">
+            <Tableau listeDonnee={listePagineeEmploye?.liste} pagination={listePagineeEmploye?.pagination} siClicLigne={goToPageConsulterEmploye} siChangementPage={actionChangementPage} texteAucunResultat="aucun.employe">
                 <Colonne nom="matricule" />
                 <Colonne nom="nom" />
                 <Colonne nom="prenom" />

@@ -2,7 +2,7 @@
 
 Runnable React frontend for the HR showcase. It consumes the sibling `../crud-be` API and uses candidate overlays generated under `../engine/result/fe`.
 
-Shared workspace decisions are documented in [`../Context.md`](../Context.md) and [`../WORKSPACE.md`](../WORKSPACE.md).
+Shared workspace decisions are documented in [`../Context.md`](../Context.md) and [`../WORKSPACE.md`](../WORKSPACE.md). The active follow-up sequence from the July frontend review is recorded in [`update_plan.md`](update_plan.md).
 
 ## Responsibilities
 
@@ -15,6 +15,16 @@ This project owns:
 - the administrator account-management screens.
 
 Frontend ACLs only control presentation. The backend remains the security boundary.
+
+## Frontend/backend boundary
+
+The frontend and backend are developed and delivered as one application. The API remains an explicit transport and security boundary, but it is not an independently evolving product by default.
+
+This frontend owns components, layouts, navigation, presentation, interaction state, and API orchestration. It does not own business decisions, authoritative validation, authorization, transactions, or data integrity. Those remain backend responsibilities and must hold even when the API is called without React.
+
+Form-level checks such as Ant Design `Form` validation are intentionally allowed for immediate inline feedback. They do not create a second validation authority: every request is still validated by the backend, and backend Problem Details remain canonical. The frontend displays their `detail` and validation `fields` rather than reproducing the same business rules.
+
+TypeScript API types and services document the internal transport contract. Keep them accurate and simple, but do not turn them into a parallel frontend domain layer. Add Redux, controllers, hooks, or other abstractions only when they materially clarify UI state or a repeated generated workflow.
 
 ## Requirements
 
@@ -114,11 +124,12 @@ src/
 └── waxant/      reusable UI, routing, Redux, authentication, and error infrastructure
 ```
 
-Most files under `src/modele/rh` and `src/modules/rh` are generator-shaped. Repeated changes to those files normally belong in the engine first, followed by generation, comparison, and selective transfer. Host-owned authentication and account administration remain explicit runtime frontend code.
+Most files under `src/modele/rh` and `src/modules/rh` are generator-shaped. Repeated changes to those files normally belong in the engine first, followed by generation, comparison, and selective transfer. Their controllers, models, and services orchestrate UI state and transport; they must not become a second implementation of backend business behavior. Host-owned authentication and account administration remain explicit runtime frontend code.
+
+A generated page shares aggregate `Req*` and `Res*` interfaces across several actions. Strict service inputs such as route identifiers are required in `Req*`; shared UI values such as `form` and `pageCourante` remain optional. Hooks accept `Partial<Req*>` because router parameters complete the dispatched request, without adding frontend `throw` validation. The backend remains authoritative for request validation. Results use optional properties rather than misleading `T | {}` unions, and consumers remain null-safe.
 
 ## Current limitations
 
-- As of 2026-07-23, `bun run build` passes but `bun run typecheck` reports 15 errors where optional route identifiers reach strict service calls and optional employee pagination is consumed without complete narrowing.
-- Leave-code ownership is still temporary in `ServiceConge` and must be decided with the backend contract.
+- `ServiceConge` still derives the leave code in the browser, which violates the frontend/backend boundary. Decide whether the user supplies the code or the backend derives it, then remove the client-side formula.
 - The engine still needs to absorb deliberate runtime differences such as parent-child leave routes and stronger route parameter types.
 - Full-stack E2E orchestration is not yet available because `../crud-e2e` remains a scaffold.

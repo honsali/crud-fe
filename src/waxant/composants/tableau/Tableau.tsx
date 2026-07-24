@@ -32,7 +32,7 @@ type TableauProps = {
     indexElementSelectionne?: number | null;
     siSelectionChange?: ((rows: any[]) => void) | null;
     siClicLigne?: ((record: any, index?: number) => void) | null;
-    siChangementPage?: ((page?: number) => void) | null;
+    siChangementPage?: ((page: number) => void) | null;
     sansEntete?: boolean;
     scroll?: any;
     children?: ReactNode;

@@ -12,7 +12,7 @@ const useCreerConge = () => {
     const etatCreerConge = useSelector(selectEtatCreerConge);
     const idConge = useSelector(selectIdConge);
 
-    const createAction = (action: any) => (req?: ReqCreerConge) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: any) => (req?: Partial<ReqCreerConge>) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions

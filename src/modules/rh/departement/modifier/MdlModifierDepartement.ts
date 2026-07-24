@@ -6,11 +6,11 @@ import CtrlModifierDepartement from './CtrlModifierDepartement';
 
 export interface ReqModifierDepartement extends IRequete {
     form?: FormInstance;
-    idDepartement?: string;
+    idDepartement: string;
 }
 
 export interface ResModifierDepartement extends IResultat {
-    departement: IDepartement | {};
+    departement?: IDepartement;
 }
 
 interface ModifierDepartementType {

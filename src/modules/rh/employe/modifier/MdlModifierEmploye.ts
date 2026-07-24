@@ -6,11 +6,11 @@ import CtrlModifierEmploye from './CtrlModifierEmploye';
 
 export interface ReqModifierEmploye extends IRequete {
     form?: FormInstance;
-    idEmploye?: string;
+    idEmploye: string;
 }
 
 export interface ResModifierEmploye extends IResultat {
-    employe: IEmploye | {};
+    employe?: IEmploye;
 }
 
 interface ModifierEmployeType {

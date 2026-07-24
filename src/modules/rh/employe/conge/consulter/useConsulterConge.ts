@@ -13,7 +13,7 @@ const useConsulterConge = () => {
     const etatRecupererCongeParId = useSelector(selectEtatRecupererCongeParId);
     const etatSupprimerConge = useSelector(selectEtatSupprimerConge);
 
-    const createAction = (action: any) => (req?: ReqConsulterConge) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: any) => (req?: Partial<ReqConsulterConge>) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions

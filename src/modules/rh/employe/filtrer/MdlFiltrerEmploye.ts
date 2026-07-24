@@ -10,8 +10,8 @@ export interface ReqFiltrerEmploye extends IRequete {
 }
 
 export interface ResFiltrerEmploye extends IResultat {
-    filtre: IRequeteEmploye | {};
-    listePagineeEmploye: IListePagineeEmploye | {};
+    filtre?: IRequeteEmploye;
+    listePagineeEmploye?: IListePagineeEmploye;
 }
 
 interface FiltrerEmployeType {
@@ -49,7 +49,7 @@ const SliceFiltrerEmploye = createSlice({
         builder
             .addCase(CtrlFiltrerEmploye.changerPageFiltrerEmploye.fulfilled, (state, action) => {
                 state.listePagineeEmploye = action.payload.listePagineeEmploye;
-                state.pageCourante = action.payload.listePagineeEmploye.pagination?.pageCourante;
+                state.pageCourante = action.payload.listePagineeEmploye?.pagination?.pageCourante;
                 state.etatChangerPageFiltrerEmploye = createEtatSuccess();
             })
             .addCase(CtrlFiltrerEmploye.changerPageFiltrerEmploye.pending, (state, action) => {

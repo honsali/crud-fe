@@ -13,7 +13,7 @@ const useModifierConge = () => {
     const etatInitModificationConge = useSelector(selectEtatInitModificationConge);
     const etatMajConge = useSelector(selectEtatMajConge);
 
-    const createAction = (action: any) => (req?: ReqModifierConge) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: any) => (req?: Partial<ReqModifierConge>) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions

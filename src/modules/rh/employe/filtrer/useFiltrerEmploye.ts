@@ -14,7 +14,7 @@ const useFiltrerEmploye = () => {
     const etatInitialiserFiltrerEmploye = useSelector(selectEtatInitialiserFiltrerEmploye);
     const listePagineeEmploye = useSelector(selectListePagineeEmploye);
 
-    const createAction = (action: any) => (req?: ReqFiltrerEmploye) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: any) => (req?: Partial<ReqFiltrerEmploye>) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions

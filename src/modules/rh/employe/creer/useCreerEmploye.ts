@@ -12,7 +12,7 @@ const useCreerEmploye = () => {
     const etatCreerEmploye = useSelector(selectEtatCreerEmploye);
     const idEmploye = useSelector(selectIdEmploye);
 
-    const createAction = (action: any) => (req?: ReqCreerEmploye) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: any) => (req?: Partial<ReqCreerEmploye>) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions

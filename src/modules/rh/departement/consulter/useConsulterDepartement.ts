@@ -13,7 +13,7 @@ const useConsulterDepartement = () => {
     const etatRecupererDepartementParId = useSelector(selectEtatRecupererDepartementParId);
     const etatSupprimerDepartement = useSelector(selectEtatSupprimerDepartement);
 
-    const createAction = (action: any) => (req?: ReqConsulterDepartement) => dispatch(action({ ...req, ...params }));
+    const createAction = (action: any) => (req?: Partial<ReqConsulterDepartement>) => dispatch(action({ ...req, ...params }));
 
     return {
         // Actions

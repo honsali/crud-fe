@@ -1,8 +1,8 @@
 # CRUD RH Frontend Architecture
 
-Updated: 2026-07-23
+Updated: 2026-07-24
 
-See [`../README.md`](../README.md) for setup, runtime configuration, security contracts, and validation commands.
+See [`../README.md`](../README.md) for setup, runtime configuration, security contracts, and validation commands, and [`../update_plan.md`](../update_plan.md) for the active review follow-up sequence. Shared frontend/backend ownership is defined authoritatively in [`../../Context.md`](../../Context.md), with operational consequences in [`../../WORKSPACE.md`](../../WORKSPACE.md); this document only describes how the frontend implements that boundary.
 
 ## Architecture
 
@@ -22,6 +22,10 @@ View → action component → use* hook → Ctrl* thunk → Service* request →
 ```
 
 This structure is intentionally explicit and generator-friendly. `src/waxant` and host security infrastructure are maintained in the runnable frontend; repetitive HR model/module output is compared with `engine/result/fe` before transfer.
+
+These frontend layers organize presentation, navigation, interaction state, and API transport. They do not own business rules or authoritative validation. Ant Design form checks provide inline feedback only; the co-delivered backend validates every request and its Problem Details remain canonical.
+
+Generated page contracts deliberately separate the complete action request from the values supplied by a component. Strict service inputs such as route identifiers are required in `Req*`; `form` and `pageCourante` remain optional because several actions share one page contract. Hooks accept `Partial<Req*>`, merge URL parameters, and dispatch without adding controller `throw` validation. Each `Res*` property remains optional because an action populates only its own subset; the former `T | {}` result pattern is no longer generated.
 
 ## Authentication and authorization display
 
@@ -49,7 +53,7 @@ The role-selected domain graph is:
 
 Employee filtering consumes the backend `PageResponse` fields. API identifiers are serialized by the backend as JSON strings and stay as `string` values in frontend domain models and URL parameters; no numeric ID coercion is performed. UI dates use `DD/MM/YYYY`, matching the backend's `dd/MM/yyyy` JSON representation.
 
-Backend Problem Details are normalized by `ErrorSerializationMiddleware`, including `detail` and validation `fields`.
+Backend Problem Details are normalized by `ErrorSerializationMiddleware`, including `detail` and validation `fields`. The frontend presents these authoritative failures instead of reimplementing backend business validation.
 
 ## Generated service convention
 
@@ -73,11 +77,11 @@ The UI prevents editing the current administrator's role/activation. Backend loc
 
 The runnable frontend remains close to `engine/result/fe`. Known deliberate runtime differences include:
 
-- corrected parent-child leave routes and required route parameters;
-- temporary leave-code generation in `ServiceConge`;
+- corrected parent-child leave routes and their runtime parameter names;
+- client-side leave-code derivation in `ServiceConge`, a known boundary violation to remove; either the backend derives the code or the user supplies it according to the business requirement;
 - host-owned authentication, account administration, deployment configuration, and error handling.
 
-Generated-pattern corrections should be implemented in the engine, regenerated, reviewed, and then transferred selectively. The JSON-string ID contract, typed/destructured Axios service style, and null-safe pagination access are now synchronized with the engine; parent-child route derivation and final leave-code ownership remain deliberate follow-up work.
+Generated-pattern corrections should be implemented in the engine, regenerated, reviewed, and then transferred selectively. The JSON-string ID contract, typed/destructured Axios service style, and null-safe pagination access are now synchronized with the engine. Parent-child route derivation remains engine follow-up work; leave-code semantics remain a backend/business decision, but the frontend must not derive the code.
 
 ## Verification status
 
@@ -92,8 +96,10 @@ On 2026-07-21:
 - no account records were mutated during browser verification;
 - full-stack E2E remains unavailable because `crud-e2e` is still a scaffold.
 
-Latest local validation on 2026-07-23:
+Latest local validation on 2026-07-24:
 
-- `bun install --frozen-lockfile` passed without changing dependencies;
-- `bun run build` passed;
-- `bun run typecheck` reported 15 errors involving optional route identifiers passed to strict service methods and optional employee pagination used without complete narrowing.
+- the engine's `mvn test` passed all 6 focused tests, including the generated page-contract regression test;
+- the engine was regenerated and intended request/result/hook/pagination changes were transferred selectively;
+- runtime and generated frontend overlays now differ semantically only for the known parent-child leave routes and temporary `ServiceConge` behavior;
+- `bun run typecheck` passed with zero errors;
+- `bun run build` passed.

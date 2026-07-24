@@ -5,11 +5,11 @@ import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatIn
 import CtrlConsulterEmploye from './CtrlConsulterEmploye';
 
 export interface ReqConsulterEmploye extends IRequete {
-    idEmploye?: string;
+    idEmploye: string;
 }
 
 export interface ResConsulterEmploye extends IResultat {
-    employe: IEmploye | {};
+    employe?: IEmploye;
     listeConge?: IConge[];
 }
 
