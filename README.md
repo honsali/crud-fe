@@ -124,7 +124,9 @@ src/
 └── waxant/      reusable UI, routing, Redux, authentication, and error infrastructure
 ```
 
-Most files under `src/modele/rh` and `src/modules/rh` are generator-shaped. Repeated changes to those files normally belong in the engine first, followed by generation, comparison, and selective transfer. Their controllers, models, and services orchestrate UI state and transport; they must not become a second implementation of backend business behavior. Host-owned authentication and account administration remain explicit runtime frontend code.
+Most files under `src/modele/rh` and `src/modules/rh` are generator-shaped. Repeated changes to those files normally belong in the engine first, followed by generation, comparison, and selective transfer. Their controllers, models, and services orchestrate UI state and transport; they must not become a second implementation of backend business behavior.
+
+Account administration now follows the same selective workflow: the engine generates its list, detail, create, and update page structure, while the runnable files under `src/modele/admin/account` and `src/modules/admin/account` retain explicit adaptations for the secure plural API, separate request payloads, canonical identifiers, role presentation, self-update feedback, and password reset. Generated Account backend files are not transferred over the backend's host-owned security implementation.
 
 A generated page shares aggregate `Req*` and `Res*` interfaces across several actions. Strict service inputs such as route identifiers are required in `Req*`; shared UI values such as `form` and `pageCourante` remain optional. Hooks accept `Partial<Req*>` because router parameters complete the dispatched request, without adding frontend `throw` validation. The backend remains authoritative for request validation. Results use optional properties rather than misleading `T | {}` unions, and consumers remain null-safe.
 

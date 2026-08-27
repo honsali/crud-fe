@@ -69,6 +69,7 @@ export { default as ChampImmatriculation } from './composants/formulaire/champ/C
 export { default as ChampImmatriculationSimple } from './composants/formulaire/champ/ChampImmatriculationSimple';
 export { default as ChampListe } from './composants/formulaire/champ/ChampListe';
 export { default as ChampListeRadio } from './composants/formulaire/champ/ChampListeRadio';
+export { default as ChampMotDePasse } from './composants/formulaire/champ/ChampMotDePasse';
 export { default as ChampNumerique } from './composants/formulaire/champ/ChampNumerique';
 export { default as ChampOuiNon } from './composants/formulaire/champ/ChampOuiNon';
 export { default as ChampReference } from './composants/formulaire/champ/ChampReference';

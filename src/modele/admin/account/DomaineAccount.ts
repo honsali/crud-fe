@@ -1,20 +1,21 @@
-import type { AppRole } from 'commun/securite/mapRole';
+import { IReference } from 'modele/commun/reference/DomaineReference';
 
 export interface IAccount {
     id: string;
+    idAccount: string;
     username: string;
-    role: AppRole;
+    role: IReference;
     activated: boolean;
 }
 
 export interface ICreateAccountRequest {
     username: string;
     password: string;
-    role: AppRole;
+    role: IReference;
 }
 
 export interface IUpdateAccountRequest {
-    role: AppRole;
+    role: IReference;
     activated: boolean;
 }
 

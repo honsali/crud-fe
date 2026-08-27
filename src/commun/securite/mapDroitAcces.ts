@@ -1,3 +1,4 @@
+import { aclAccount } from './acl/aclAccount';
 import { aclCommun } from './acl/aclCommun';
 import { aclDepartement } from './acl/aclDepartement';
 import { aclEmploye } from './acl/aclEmploye';
@@ -13,7 +14,8 @@ const ACL_RH = [
     ...aclEmploye
 ];
 const ACL_ADMIN = [
-    ...ACL_COMMUN
+    ...ACL_COMMUN,
+    ...aclAccount
 ];
 
 const mapDroitAcces: Record<string, string[]> = {

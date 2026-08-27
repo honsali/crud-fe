@@ -23,13 +23,14 @@ type ActionUcDialogueProps = {
     siErreur?: (() => void);
     siErreurAnnuler?: (() => void);
     inactif?: string;
+    largeur?: number;
     style?: CSSProperties;
     children?: ReactNode;
     type?: 'fort' | 'normal' | 'danger' | 'alerte' | 'lien' | 'menuItem';
 };
 
 const ActionUcDialogue = (props: ActionUcDialogueProps) => {
-    const { nom, type, icone, action, args, getArgs, form, etat, pret = true, siInit, siAnnuler, siSucces, siErreur, siErreurAnnuler, inactif, style, children } = props;
+    const { nom, type, icone, action, args, getArgs, form, etat, pret = true, siInit, siAnnuler, siSucces, siErreur, siErreurAnnuler, inactif, largeur, style, children } = props;
     const { i18n } = useI18n();
     const hasRight = useHasRight(nom);
     const [visible, setVisible] = useState(false);
@@ -44,6 +45,7 @@ const ActionUcDialogue = (props: ActionUcDialogueProps) => {
         actionConfirmer: () => confirmer(),
         actionAnnuler: () => annuler(),
         icone,
+        largeur,
     };
 
     useEffect(() => {

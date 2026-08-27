@@ -1,29 +1,68 @@
 import { Form, Radio, Space } from 'antd';
-import {useEffect} from 'react';
+import type { FormInstance, FormItemProps } from 'antd';
+import { useEffect } from 'react';
 
-const ChampListeRadio = (props: any) => {
+interface OptionListeRadio {
+    code: string;
+    libelle: string;
+}
 
-    const { form } = props;
+interface ChampListeRadioAttributes extends FormItemProps {
+    arg?: unknown;
+    cls?: string;
+    cname?: string;
+    entite?: unknown;
+    fallBackLabel?: string;
+    lname?: string;
+    onChange?: (value: string | undefined) => void;
+    requis?: boolean | string;
+    siChange?: unknown;
+    slabel?: string;
+    sname?: string;
+}
 
-    useEffect(() => {
-        if (props.defaultValue) {
-            form.setFieldsValue({ [props.attributes.name]: props.defaultValue });
-        }
-    }, []);
+interface ChampListeRadioProps {
+    attributes?: ChampListeRadioAttributes;
+    defaultValue?: string;
+    direction?: 'horizontal' | 'vertical';
+    form?: FormInstance;
+    libelle?: string;
+    liste: OptionListeRadio[];
+    nom?: string;
+    requis?: boolean | string;
+}
 
-    const valueChanged = (v) => {
-        if (props.attributes.onChange) {
-            props.attributes.onChange(v.target?.value);
-        }
+const ChampListeRadio = ({ attributes, defaultValue, direction = 'horizontal', form, libelle, liste, nom, requis }: ChampListeRadioProps) => {
+    const resolvedAttributes = attributes ?? {
+        label: libelle,
+        name: nom,
+        requis,
     };
 
+    useEffect(() => {
+        if (defaultValue) {
+            form?.setFieldValue(resolvedAttributes.name, defaultValue);
+        }
+    }, [defaultValue, form, resolvedAttributes.name]);
+
+    const valueChanged = (event: { target?: { value?: string } }) => {
+        resolvedAttributes.onChange?.(event.target?.value);
+    };
+
+    const label = resolvedAttributes.label ?? resolvedAttributes.fallBackLabel ?? '';
+    const rules = resolvedAttributes.requis ? [{ required: true, message: `${label} est requis.` }] : [];
+    const formItemProps = { ...resolvedAttributes };
+    for (const key of ['arg', 'cls', 'cname', 'entite', 'fallBackLabel', 'lname', 'onChange', 'requis', 'siChange', 'slabel', 'sname'] as const) {
+        delete formItemProps[key];
+    }
+
     return (
-        <Form.Item {...props.attributes} onChange={valueChanged}>
-            <Radio.Group defaultValue={props.defaultValue}>
-                <Space orientation={props.direction ? props.direction : 'horizontal'}>
-                    {props.liste.map((l) => (
-                        <Radio value={l.code} key={l.code}>
-                            {l.libelle}
+        <Form.Item {...formItemProps} rules={rules}>
+            <Radio.Group onChange={valueChanged}>
+                <Space orientation={direction}>
+                    {liste.map((option) => (
+                        <Radio value={option.code} key={option.code}>
+                            {option.libelle}
                         </Radio>
                     ))}
                 </Space>
