@@ -32,6 +32,7 @@ const FormulaireEmploye = () => {
                             <ChampTexte nom="fonction" />
                             <ChampTexteLong nom="description" surTouteLaLigne />
                             <ChampCache nom="id" />
+                            <ChampCache nom="version" />
                         </Formulaire>
                     </Bloc>
                 </CadreSimple>

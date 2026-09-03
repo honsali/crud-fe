@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BlocInline, CadreFort, FormulaireConsultation, Reference, Texte } from 'waxant';
+import { BlocInline, CadreFort, DateFormatee, FormulaireConsultation, Reference, Texte } from 'waxant';
 import useConsulterEmploye from '../useConsulterEmploye';
 
 const EtatEmploye = () => {
@@ -14,7 +14,7 @@ const EtatEmploye = () => {
             <CadreFort titre="employe" largeur="500px">
                 <FormulaireConsultation modele={employe}>
                     <Texte nom="matricule" />
-                    <Texte nom="dateEntree" />
+                    <DateFormatee nom="dateEntree" />
                     <Reference nom="departement" />
                     <Texte nom="fonction" />
                     <Texte nom="description" surTouteLaLigne />
@@ -24,7 +24,7 @@ const EtatEmploye = () => {
                 <FormulaireConsultation modele={employe}>
                     <Texte nom="nom" />
                     <Texte nom="prenom" />
-                    <Texte nom="dateNaissance" />
+                    <DateFormatee nom="dateNaissance" />
                     <Reference nom="sexe" />
                     <Reference nom="situationFamiliale" />
                 </FormulaireConsultation>

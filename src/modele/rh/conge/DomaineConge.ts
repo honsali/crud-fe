@@ -1,16 +1,16 @@
 import { IPagination } from 'modele/commun/pagination/DomainePagination';
-import { IEmploye } from 'modele/rh/employe/DomaineEmploye';
-import { ITypeConge } from 'modele/rh/typeConge/DomaineTypeConge';
+import { IReference } from 'modele/commun/reference/DomaineReference';
 
 export interface IConge {
     id?: string;
     idConge?: string;
+    version?: number;
     code?: string;
-    typeConge?: ITypeConge;
+    typeConge?: IReference;
     dateDebutConge?: string;
     dateFinConge?: string;
     commentaire?: string;
-    employe?: IEmploye;
+    employe?: IReference;
 }
 
 export interface IRequeteConge extends IConge, IPagination { }

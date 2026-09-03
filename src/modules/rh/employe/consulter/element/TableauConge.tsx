@@ -9,7 +9,7 @@ const TableauConge = () => {
     const { listeConge, listerCongeParIdEmploye } = useConsulterEmploye();
 
     const goToPageConsulterConge = (conge: IConge) => {
-        goToPage(PageConsulterConge, conge);
+        goToPage(PageConsulterConge, { idConge: conge.id });
     };
 
     useEffect(() => {
@@ -19,6 +19,7 @@ const TableauConge = () => {
     return (
         <Bloc>
             <Tableau listeDonnee={listeConge} siClicLigne={goToPageConsulterConge} texteAucunResultat="aucun.conge">
+                <Colonne nom="code" />
                 <Colonne tc="reference" nom="typeConge" />
                 <Colonne tc="date" nom="dateDebutConge" />
                 <Colonne tc="date" nom="dateFinConge" />

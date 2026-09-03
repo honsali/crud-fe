@@ -1,6 +1,7 @@
+import { KeyOutlined } from '@ant-design/icons';
 import { Form } from 'antd';
 import { IResetPasswordRequest } from 'modele/admin/account/DomaineAccount';
-import { ActionUcDialogue, ChampMotDePasse, ChampTexte, Formulaire, useContexteAuth, useI18n } from 'waxant';
+import { ActionUcDialogue, ChampMotDePasse, ChampTexte, Formulaire, useContexteAuth } from 'waxant';
 import { ActionAccount } from '../../ActionAccount';
 import useConsulterAccount from '../useConsulterAccount';
 
@@ -9,10 +10,9 @@ interface FormulaireMotDePasseAccount extends IResetPasswordRequest {
 }
 
 const ActionReinitialiserMotDePasseAccount = () => {
-    const {account, etatReinitialiserMotDePasseAccount, reinitialiserMotDePasseAccount, resetEtatReinitialiserMotDePasseAccount,     } = useConsulterAccount();
-    const [form] = Form.useForm();
+    const { account, etatReinitialiserMotDePasseAccount, reinitialiserMotDePasseAccount, resetEtatReinitialiserMotDePasseAccount } = useConsulterAccount();
+    const [form] = Form.useForm<FormulaireMotDePasseAccount>();
     const { logout, user } = useContexteAuth();
-    const { i18n } = useI18n();
 
     const initialiser = () => {
         resetEtatReinitialiserMotDePasseAccount();
@@ -33,21 +33,20 @@ const ActionReinitialiserMotDePasseAccount = () => {
         }
     };
 
-    useEffect(() => {
-        if (etatReinitialiserMotDePasseAccount.succes) {
-            resetEtatReinitialiserMotDePasseAccount();
-        }
-    }, [etatReinitialiserMotDePasseAccount.succes]);
-    //
     return (
         <ActionUcDialogue
             nom={ActionAccount.UcConsulterAccount.REINITIALISER_MOT_DE_PASSE_ACCOUNT} //
-            icone={<FontAwesomeIcon icon={faEdit} />}
+            icone={<KeyOutlined />}
             action={reinitialiser}
             form={form}
-            etat={etatReinitialiserMotDePasseAccount}
+            etat={{
+                rid: etatReinitialiserMotDePasseAccount.rid ?? null,
+                success: etatReinitialiserMotDePasseAccount.succes,
+                erreur: !!etatReinitialiserMotDePasseAccount.erreur,
+            }}
             largeur={600}
             siInit={initialiser}
+            siSucces={apresSucces}
         >
             <Formulaire form={form} nombreColonne={1}>
                 <ChampTexte nom="username" disabled/>

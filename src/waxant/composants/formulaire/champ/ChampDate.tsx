@@ -5,6 +5,8 @@ import { useContext, useEffect, useState } from 'react';
 import useContexteApp from '../../../noyau/contexte/ContexteApp';
 import FormulaireValidateur from '../FormulaireValidateur';
 
+const API_DATE_FORMAT = 'YYYY-MM-DD';
+
 const ChampDate = (props: any) => {
     const { formatDate } = useContexteApp();
     const [localAttributes, setLocalAttributes] = useState({});
@@ -14,7 +16,7 @@ const ChampDate = (props: any) => {
 
     useEffect(() => {
         const stringDate = newValue;
-        const binaryDate = stringDate ? dayjs(stringDate, formatDate) : null;
+        const binaryDate = stringDate ? dayjs(stringDate) : null;
 
         if (_.isArray(attributes.name)) {
             const v = {};
@@ -31,21 +33,22 @@ const ChampDate = (props: any) => {
 
     }, [newValue]);
 
-    const changerValeur = (binaryDate, stringDate) => {
+    const changerValeur = (binaryDate) => {
+        const apiDate = binaryDate ? binaryDate.format(API_DATE_FORMAT) : null;
         if (_.isArray(attributes.name)) {
             const v = {};
             const d = {};
-            d[attributes.name[1]] = stringDate;
+            d[attributes.name[1]] = apiDate;
             v[attributes.name[0]] = d;
             form.setFieldsValue(v);
         } else {
             const d = {};
-            d[attributes.name] = stringDate;
+            d[attributes.name] = apiDate;
             form.setFieldsValue(d);
         }
 
         if (attributes.onChange) {
-            attributes.onChange(stringDate);
+            attributes.onChange(apiDate);
         }
     };
 

@@ -9,7 +9,7 @@ const TableauDepartement = () => {
     const { listeDepartement, listerDepartement } = useListerDepartement();
 
     const goToPageConsulterDepartement = (departement: IDepartement) => {
-        goToPage(PageConsulterDepartement, departement);
+        goToPage(PageConsulterDepartement, { idDepartement: departement.id });
     };
 
     useEffect(() => {

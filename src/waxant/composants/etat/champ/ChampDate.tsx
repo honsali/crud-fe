@@ -5,13 +5,14 @@ import useContexteApp from '../../../noyau/contexte/ContexteApp';
 
 const ChampDate = (props: any) => {
     const { formatDate } = useContexteApp();
-    const { form, attributes } = props;
+    const { form, modele, attributes } = props;
 
     useEffect(() => {
-        const stringDate = form.getFieldValue(attributes.name);
-        const formattedDate = stringDate ? dayjs(stringDate).format(formatDate) : null;
+        const stringDate = modele?.[attributes.name];
+        const date = stringDate ? dayjs(stringDate) : null;
+        const formattedDate = date?.isValid() ? date.format(formatDate) : null;
         form.setFieldsValue({ [attributes.name]: formattedDate });
-    }, [form, attributes, formatDate]);
+    }, [form, modele, attributes, formatDate]);
 
 
     return (

@@ -53,6 +53,7 @@ export { default as EnteteDialogue } from './composants/dialogue/EnteteDialogue'
 export { default as Champ } from './composants/etat/Champ';
 export { default as OuiNon } from './composants/etat/champ/OuiNon';
 export { default as Reference } from './composants/etat/champ/Reference';
+export { default as DateFormatee } from './composants/etat/champ/ChampDate';
 export { default as Texte } from './composants/etat/champ/Texte';
 export { default as Etat } from './composants/etat/Etat';
 export { default as FormulaireConsultation } from './composants/etat/FormulaireConsultation';

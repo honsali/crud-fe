@@ -22,7 +22,7 @@ The frontend and backend are developed and delivered as one application. The API
 
 This frontend owns components, layouts, navigation, presentation, interaction state, and API orchestration. It does not own business decisions, authoritative validation, authorization, transactions, or data integrity. Those remain backend responsibilities and must hold even when the API is called without React.
 
-Form-level checks such as Ant Design `Form` validation are intentionally allowed for immediate inline feedback. They do not create a second validation authority: every request is still validated by the backend, and backend Problem Details remain canonical. The frontend displays their `detail` and validation `fields` rather than reproducing the same business rules.
+Form-level checks such as Ant Design `Form` validation are intentionally allowed for immediate inline feedback. They do not create a second validation authority: every request is still validated by the backend, and backend `ApiError` responses remain canonical. The frontend displays their `message` and validation `fieldErrors` rather than reproducing the same business rules.
 
 TypeScript API types and services document the internal transport contract. Keep them accurate and simple, but do not turn them into a parallel frontend domain layer. Add Redux, controllers, hooks, or other abstractions only when they materially clarify UI state or a repeated generated workflow.
 
@@ -69,7 +69,7 @@ The development server listens on port `9000`. `dist/` is disposable build outpu
 
 ## Security contract
 
-Authentication uses `POST /api/login` with `username` and `password`. The backend returns `{ "accessToken": "..." }`.
+Authentication uses `POST /api/login` with `username` and `password`. The backend returns `{ "accessToken": "...", "tokenType": "Bearer", "expiresIn": 900 }`.
 
 The frontend derives display identity from the JWT `sub` and scalar `role` claims. It stores only the bearer token in `sessionStorage`, attaches it to Axios requests, logs out when it expires, and logs out after an authenticated request receives `401`. There is no refresh-token flow and no `/api/user` endpoint.
 
@@ -87,11 +87,13 @@ An administrator cannot access HR routes, and an HR manager cannot access accoun
 - Login: `/api/login`
 - Account administration: `/api/admin/accounts/**`
 - HR CRUD: `/api/rh/**`
-- HR reference data: `/api/rh/reference/**`
+- Department choices: `GET /api/rh/departements`
 
 All API identifiers are JSON strings and remain `string` throughout frontend models, services, URL parameters, form values, and strict comparisons. The backend preserves `Long` internally and applies `@JsonId` only at the JSON boundary.
 
-Dates use `DD/MM/YYYY` in the UI and `dd/MM/yyyy` JSON values. Employee pagination consumes the backend-owned `PageResponse` shape.
+Dates use `DD/MM/YYYY` in the UI and ISO `yyyy-MM-dd` JSON values. Employee pagination consumes the backend-owned `PageResponse` shape with `items`, `page`, `size`, `totalElements`, `totalPages`, `first`, and `last`.
+
+The current backend does not expose generic reference-data endpoints. Department options come from its department collection; the immutable sex, marital-status, and leave-type options mirror the Liquibase seed data shipped with the backend.
 
 ## TypeScript and service conventions
 
@@ -102,7 +104,7 @@ import { IDepartement } from './DomaineDepartement';
 
 const creer = async (departement: IDepartement) => {
     const { data } = await axios.post<IDepartement>(
-        `${API_URL}/rh/departement`,
+        `${API_URL}/rh/departements`,
         departement,
     );
     return data;
@@ -134,6 +136,5 @@ Waxant exposes `ActionOperation<Req, Res>` as the typed contract for generated c
 
 ## Current limitations
 
-- `ServiceConge` still derives the leave code in the browser, which violates the frontend/backend boundary. Decide whether the user supplies the code or the backend derives it, then remove the client-side formula.
-- The engine still needs to absorb deliberate runtime differences such as parent-child leave routes and stronger route parameter types.
+- The three immutable reference lists without API endpoints mirror backend seed identifiers and must be updated if those Liquibase datasets change.
 - Full-stack E2E orchestration is not yet available because `../crud-e2e` remains a scaffold.

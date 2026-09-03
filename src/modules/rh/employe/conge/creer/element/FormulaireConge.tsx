@@ -1,5 +1,5 @@
 import { Form } from 'antd';
-import { ActionUcRetourListe, Bloc, BlocAction, ChampDate, ChampReference, Formulaire } from 'waxant';
+import { ActionUcRetourListe, Bloc, BlocAction, ChampDate, ChampReference, ChampTexte, ChampTexteLong, Formulaire } from 'waxant';
 import { ActionEmploye } from '../../../ActionEmploye';
 import { PageConsulterEmploye } from '../../../ListePageEmploye';
 import ActionCreerConge from './ActionCreerConge';
@@ -10,9 +10,11 @@ const FormulaireConge = () => {
     return (
         <Bloc largeur="600px" marge="20px" fond="blanc">
             <Formulaire form={form} nombreColonne={1}>
+                <ChampTexte nom="code" requis="true" />
                 <ChampReference nom="typeConge" />
                 <ChampDate nom="dateDebutConge" />
                 <ChampDate nom="dateFinConge" />
+                <ChampTexteLong nom="commentaire" />
             </Formulaire>
             <BlocAction>
                 <ActionCreerConge form={form} />

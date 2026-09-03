@@ -1,19 +1,18 @@
 import { IPagination } from 'modele/commun/pagination/DomainePagination';
-import { IDepartement } from 'modele/rh/departement/DomaineDepartement';
-import { ISexe } from 'modele/rh/sexe/DomaineSexe';
-import { ISituationFamiliale } from 'modele/rh/situationFamiliale/DomaineSituationFamiliale';
+import { IReference } from 'modele/commun/reference/DomaineReference';
 
 export interface IEmploye {
     id?: string;
     idEmploye?: string;
+    version?: number;
     matricule?: string;
     nom?: string;
     prenom?: string;
     dateNaissance?: string;
     debutDateNaissance?: string;
     finDateNaissance?: string;
-    sexe?: ISexe;
-    situationFamiliale?: ISituationFamiliale;
+    sexe?: IReference;
+    situationFamiliale?: IReference;
     dateEntree?: string;
     debutDateEntree?: string;
     finDateEntree?: string;
@@ -23,7 +22,7 @@ export interface IEmploye {
     adresse?: string;
     fonction?: string;
     description?: string;
-    departement?: IDepartement;
+    departement?: IReference;
 }
 
 export interface IRequeteEmploye extends IEmploye, IPagination { }

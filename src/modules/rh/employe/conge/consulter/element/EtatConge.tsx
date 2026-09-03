@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { ActionUcModifier, ActionUcRetourListe, ActionUcSupprimer, Bloc, BlocAction, FormulaireConsultation, Reference, Texte, useGoToPage } from 'waxant';
+import { ActionUcModifier, ActionUcRetourListe, ActionUcSupprimer, Bloc, BlocAction, DateFormatee, FormulaireConsultation, Reference, Texte, useGoToPage } from 'waxant';
 import { ActionEmploye } from '../../../ActionEmploye';
 import { PageConsulterEmploye, PageModifierConge } from '../../../ListePageEmploye';
 import useConsulterConge from '../useConsulterConge';
@@ -24,9 +24,11 @@ const EtatConge = () => {
     return (
         <Bloc largeur="600px" marge="20px" fond="blanc">
             <FormulaireConsultation modele={conge} nombreColonne={1}>
+                <Texte nom="code" />
                 <Reference nom="typeConge" />
-                <Texte nom="dateDebutConge" />
-                <Texte nom="dateFinConge" />
+                <DateFormatee nom="dateDebutConge" />
+                <DateFormatee nom="dateFinConge" />
+                <Texte nom="commentaire" />
             </FormulaireConsultation>
             <BlocAction>
                 <ActionUcModifier nom={ActionEmploye.UcConsulterConge.MODIFIER_CONGE} page={PageModifierConge} />

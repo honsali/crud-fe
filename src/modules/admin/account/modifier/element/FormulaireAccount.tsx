@@ -1,7 +1,8 @@
 import { Form } from 'antd';
 import { ROLE_ADMIN, ROLE_GESTIONNAIRE_RH } from 'commun/securite/mapRole';
+import { IUpdateAccountRequest } from 'modele/admin/account/DomaineAccount';
 import { useEffect } from 'react';
-import { ActionUcRetourConsulter, Bloc, BlocAction, ChampCache, ChampListeRadio, ChampOuiNon, ChampTexte, Formulaire, useI18n } from 'waxant';
+import { ActionUcRetourConsulter, Bloc, BlocAction, ChampListeRadio, ChampOuiNon, ChampTexte, Formulaire, useI18n } from 'waxant';
 import { ActionAccount } from '../../ActionAccount';
 import { PageConsulterAccount } from '../../ListePageAccount';
 import useModifierAccount from '../useModifierAccount';
@@ -10,7 +11,7 @@ import ActionMajAccount from './ActionMajAccount';
 const FormulaireAccount = () => {
     const { account, etatInitModificationAccount, initModificationAccount } = useModifierAccount();
     const { i18n } = useI18n();
-    const [form] = Form.useForm();
+    const [form] = Form.useForm<IUpdateAccountRequest & { username: string }>();
     const listeRole = [
         { code: ROLE_GESTIONNAIRE_RH, libelle: i18n(ROLE_GESTIONNAIRE_RH) },
         { code: ROLE_ADMIN, libelle: i18n(ROLE_ADMIN) },
@@ -22,7 +23,11 @@ const FormulaireAccount = () => {
 
     useEffect(() => {
         if (etatInitModificationAccount.succes) {
-            form.setFieldsValue(account);
+            form.setFieldsValue({
+                username: account?.username,
+                role: account?.role.code,
+                activated: account?.activated,
+            });
         }
     }, [etatInitModificationAccount.succes]);
     //
@@ -32,7 +37,6 @@ const FormulaireAccount = () => {
                 <ChampTexte nom="username" requis="true" disabled />
                 <ChampListeRadio nom="role" liste={listeRole} direction="vertical" requis="true" />
                 <ChampOuiNon nom="activated" oui="Oui" non="Non" requis="true" />
-                <ChampCache nom="id" />
             </Formulaire>
             <BlocAction>
                 <ActionMajAccount form={form} />

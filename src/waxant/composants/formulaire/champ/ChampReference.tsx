@@ -3,7 +3,6 @@ import _ from 'lodash';
 import { useContext, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import useContexteApp from '../../../noyau/contexte/ContexteApp';
-import util from '../../../noyau/util/util';
 import FormulaireValidateur from '../FormulaireValidateur';
 
 const ChampReference = (props) => {
@@ -42,31 +41,28 @@ const ChampReference = (props) => {
     }, [reference, optionLibelle]);
 
     const valueChanged = (valeur) => {
-        setReference(referenceListe, valeur ? { id: valeur } : { id: null });
+        setReference(referenceListe, valeur ? { id: valeur } : null);
     };
 
     const valueCleared = () => {
-        setReference(referenceListe, { id: null });
+        setReference(referenceListe, null);
     };
 
     const setReference = (liste, valeur) => {
-        if (liste && liste.length > 0 && valeur?.id !== current?.id) {
+        if (liste && valeur?.id !== current?.id) {
             setCurrent(valeur);
-            let x = valeur?.id ? _.find(liste, { id: valeur.id }) : {};
-            if (util.estVide(x)) {
-                x = { id: null,  libelle: null };
-            }
+            const x = valeur?.id ? _.find(liste, { id: valeur.id }) ?? null : null;
             if (_.isArray(attributes.name)) {
                 const v = {};
                 const d = {};
                 d[attributes.name[1]] = x;
-                d[attributes.sname[1]] = x?.libelle;
+                d[attributes.sname[1]] = x?.libelle ?? null;
                 v[attributes.name[0]] = d;
                 form.setFieldsValue(v);
             } else {
                 const d = {};
                 d[attributes.name] = x;
-                d[attributes.sname] = x?.libelle;
+                d[attributes.sname] = x?.libelle ?? null;
                 form.setFieldsValue(d);
             }
 

@@ -55,8 +55,8 @@ const Tableau = (props: TableauProps) => {
         } else if (dayjs.isDayjs(text)) {
             return text.format(formatDate);
         } else {
-            const m = dayjs(text, formatDate);
-            return m.format(formatDate);
+            const m = dayjs(text);
+            return m.isValid() ? m.format(formatDate) : '';
         }
     };
 

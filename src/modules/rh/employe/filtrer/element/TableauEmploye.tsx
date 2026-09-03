@@ -12,7 +12,7 @@ const TableauEmploye = () => {
     };
 
     const goToPageConsulterEmploye = (employe: IEmploye) => {
-        goToPage(PageConsulterEmploye, employe);
+        goToPage(PageConsulterEmploye, { idEmploye: employe.id });
     };
     //
     return (

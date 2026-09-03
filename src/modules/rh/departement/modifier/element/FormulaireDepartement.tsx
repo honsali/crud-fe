@@ -26,6 +26,7 @@ const FormulaireDepartement = () => {
                 <ChampTexte nom="nom" requis="true" />
                 <ChampTexteLong nom="description" />
                 <ChampCache nom="id" />
+                <ChampCache nom="version" />
             </Formulaire>
             <BlocAction>
                 <ActionMajDepartement form={form} />

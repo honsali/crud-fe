@@ -1,4 +1,4 @@
-import { type IPagination, Page, Pageable } from './DomainePagination';
+import { type IPagination, PageResponse, Pageable } from './DomainePagination';
 
 const NOMBRE_LIGNE_PAR_PAGE_PAR_DEFAUT = 10;
 
@@ -9,9 +9,9 @@ const creerPageable = (pageCourante: number): Pageable => {
     };
 };
 
-const creerPagination = <T>(page: Page<T>): IPagination => {
+const creerPagination = <T>(page: PageResponse<T>): IPagination => {
     return {
-        pageCourante: page?.number + 1,
+        pageCourante: page?.page + 1,
         nombreLigneParPage: page?.size,
         nombreTotalDeLigne: page?.totalElements
     };

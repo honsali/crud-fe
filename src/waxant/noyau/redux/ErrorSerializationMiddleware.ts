@@ -6,6 +6,7 @@ import type { WaxantAction } from './StoreDynamique';
 
 interface FieldViolation {
     field?: string;
+    code?: string;
     message?: string;
 }
 
@@ -15,7 +16,7 @@ interface ErrorData {
     detail?: string;
     params?: any[];
     errors?: IErreurServeur[];
-    fields?: FieldViolation[];
+    fieldErrors?: FieldViolation[];
 }
 
 interface ErrorResponse {
@@ -34,12 +35,12 @@ const getServerErrors = (data: ErrorData): IErreurServeur[] | undefined => {
     if (data.errors?.length) {
         return data.errors;
     }
-    if (!data.fields?.length) {
+    if (!data.fieldErrors?.length) {
         return undefined;
     }
 
-    return data.fields.map((field) => ({
-        code: field.message || 'validation',
+    return data.fieldErrors.map((field) => ({
+        code: field.code || 'validation',
         arguments: field.field ? [field.field] : [],
         libelle: [field.field, field.message].filter(Boolean).join(' : '),
     }));
@@ -51,7 +52,6 @@ const getProblemMessage = (error: ErrorResponse, code = 'error.bad.request'): II
     return {
         code,
         status: error.status,
-        erreur: data.code,
         params: data.params,
         listeErreurServeur: getServerErrors(data),
         listeErreurDirecte: directDetails ? [directDetails] : undefined,
@@ -67,17 +67,11 @@ const ERROR_MESSAGES: Record<number, ErrorMessageHandler> = {
         code: 'error.server.not.reachable',
     }),
     [400]: (error) => getProblemMessage(error),
-    [401]: () => ({
-        code: 'error.url.not.authorized',
-    }),
-    [403]: () => ({
-        code: 'error.url.not.authorized',
-    }),
+    [401]: (error) => getProblemMessage(error, 'error.url.not.authorized'),
+    [403]: (error) => getProblemMessage(error, 'error.url.not.authorized'),
     [404]: (error) => getProblemMessage(error, 'error.url.not.found'),
     [409]: (error) => getProblemMessage(error),
-    [500]: () => ({
-        code: 'error.server.error',
-    }),
+    [500]: (error) => getProblemMessage(error, 'error.server.error'),
 };
 
 const getDefaultErrorMessage = (error: ErrorResponse): IInfoActionEchouee => {

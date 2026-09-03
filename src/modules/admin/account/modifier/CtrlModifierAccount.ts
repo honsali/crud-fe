@@ -1,4 +1,5 @@
 import ServiceAccount from 'modele/admin/account/ServiceAccount';
+import { IUpdateAccountRequest } from 'modele/admin/account/DomaineAccount';
 import { ActionOperation, action, util } from 'waxant';
 import { ActionAccount } from '../ActionAccount';
 import { ReqModifierAccount, ResModifierAccount } from './MdlModifierAccount';
@@ -9,8 +10,11 @@ const initModificationAccountImpl: ActionOperation<ReqModifierAccount, ResModifi
 
 const majAccountImpl: ActionOperation<ReqModifierAccount, ResModifierAccount> = async (requete, _resultat, _thunkAPI) => {
     await requete.form?.validateFields();
-    const dataForm = util.removeNonSerialisable(requete.form?.getFieldsValue());
-    await ServiceAccount.maj(dataForm);
+    const dataForm = util.removeNonSerialisable(requete.form?.getFieldsValue()) as IUpdateAccountRequest;
+    await ServiceAccount.maj(requete.idAccount, {
+        role: dataForm.role,
+        activated: dataForm.activated,
+    });
 };
 
 const CtrlModifierAccount = {

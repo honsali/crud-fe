@@ -12,7 +12,7 @@ L'audit reste une source de constats à vérifier, pas une spécification. Chaqu
 |---|---|---|
 | 1. Remettre `bun run typecheck` au vert | **Terminée** | Maintenir le typecheck à zéro erreur |
 | 2. Renforcer progressivement les garde-fous TypeScript et le formatage | **En cours — signatures générées assainies** | Analyser les 21 avertissements de hooks générés avant de traiter Waxant |
-| 3. Corriger les routes parent/enfant et la propriété du code congé | À faire | Décider d'abord si le code est saisi ou dérivé par le backend |
+| 3. Corriger les routes parent/enfant et la propriété du code congé | **Implémentée le 2026-09-02** | Effectuer le smoke test navigateur quand l'orchestration full-stack sera disponible |
 | 4. Corriger les risques d'intégrité des formulaires | À vérifier puis faire | Définir explicitement la sémantique « conserver / vider / null » avec le backend |
 | 5. Stabiliser les défauts Waxant à fort impact | À faire par petits lots | Error boundary, clavier, logout, chargement des références |
 | 6. Nettoyer dépendances et vestiges inutilisés | À vérifier puis faire | Supprimer seulement après preuve d'absence d'usage |
@@ -171,14 +171,22 @@ Critères d'acceptation :
 
 ## Action 3 — routes congé et propriété du code
 
+### Implémentation du 2026-09-02
+
+Le nouveau backend tranche la décision métier : ses requêtes de création et de mise à jour exigent un `code` non vide et ne le dérivent pas. Le code est donc désormais saisi dans les formulaires de congé ; `ServiceConge` ne le calcule et ne le modifie plus.
+
+L'engine porte maintenant :
+
+- des routes frontend explicites avec plusieurs paramètres pour les parcours parent/enfant ;
+- le mapping de l'identifiant canonique `id` des réponses vers le paramètre `id<Entity>` des routes ;
+- les champs code/commentaire et la version optimiste dans le parcours congé ;
+- le formatage en lecture des dates ISO renvoyées par l'API.
+
+Après régénération, les arbres RH partagés de `engine/result/fe/src` et `crud-fe/src` sont identiques. Les 8 tests engine, le typecheck et le build frontend passent. Le test navigateur/full-stack reste à exécuter, faute d'orchestrateur E2E disponible.
+
 ### Décision métier préalable
 
-Choisir une seule règle :
-
-- le code congé est saisi par l'utilisateur ; ou
-- le backend le dérive de manière autoritaire.
-
-Le frontend ne doit plus inventer ni muter ce code dans `ServiceConge`.
+Décision appliquée : le code congé est saisi par l'utilisateur et validé par le backend.
 
 ### Modification technique
 

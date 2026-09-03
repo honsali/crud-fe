@@ -6,9 +6,8 @@ interface LoginResponse {
     accessToken?: string;
 }
 
-interface ProblemDetails {
-    title?: string;
-    detail?: string;
+interface ApiError {
+    message?: string;
 }
 
 const PageAuth = () => {
@@ -41,9 +40,9 @@ const PageAuth = () => {
                 }),
             });
 
-            const data = await response.json().catch(() => ({})) as LoginResponse & ProblemDetails;
+            const data = await response.json().catch(() => ({})) as LoginResponse & ApiError;
             if (!response.ok) {
-                throw new Error(data.detail || data.title || 'Authentification impossible.');
+                throw new Error(data.message || 'Authentification impossible.');
             }
             if (!data.accessToken) {
                 throw new Error("Le serveur n'a pas retourné de jeton d'accès.");
@@ -93,7 +92,7 @@ const PageAuth = () => {
                             value={username}
                             onChange={(event) => setUsername(event.target.value)}
                             disabled={isLoading}
-                            maxLength={50}
+                            maxLength={100}
                             style={{
                                 width: '100%',
                                 padding: '0.75rem',

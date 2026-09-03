@@ -4,13 +4,12 @@ export interface IPagination {
     nombreTotalDeLigne?: number;
 }
 
-export interface Page<T> {
-    content: T[];
+export interface PageResponse<T> {
+    items: T[];
+    page: number;
+    size: number;
     totalElements: number;
     totalPages: number;
-    size: number;
-    number: number;              // current page index (0-based)
-    numberOfElements: number;
     first: boolean;
     last: boolean;
 }

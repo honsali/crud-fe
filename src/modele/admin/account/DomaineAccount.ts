@@ -1,21 +1,24 @@
-import { IReference } from 'modele/commun/reference/DomaineReference';
+export interface IRoleReference {
+    id: string;
+    code: string;
+    libelle: string;
+}
 
 export interface IAccount {
     id: string;
-    idAccount: string;
     username: string;
-    role: IReference;
+    role: IRoleReference;
     activated: boolean;
 }
 
 export interface ICreateAccountRequest {
     username: string;
     password: string;
-    role: IReference;
+    role: string;
 }
 
 export interface IUpdateAccountRequest {
-    role: IReference;
+    role: string;
     activated: boolean;
 }
 
