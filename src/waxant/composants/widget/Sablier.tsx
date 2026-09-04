@@ -20,7 +20,7 @@ const Composant = styled(Spin)`
     .sablier_msg {
         font-size: 14px;
         font-weight: bold;
-        fill: #777;
+        color: #777;
     }
      
 `;
@@ -37,9 +37,9 @@ const Sablier = ({ children }: SablierProps) => {
         const array = _.flatten(_.values(actionEnCours)) as string[];
         const liste: ReactNode[] = array.map((actionName: string, i) => {
             return (
-                <text x="0" y={30 * (i + 1)} className="sablier_msg" key={i}>
+                <div className="sablier_msg" key={i}>
                     {journalI18n(actionName)} ...
-                </text>
+                </div>
             );
         });
         return liste;

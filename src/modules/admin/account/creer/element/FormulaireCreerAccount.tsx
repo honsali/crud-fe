@@ -7,7 +7,7 @@ import { ActionAccount } from '../../ActionAccount';
 import { PageListerAccount } from '../../ListePageAccount';
 import ActionCreerAccount from './ActionCreerAccount';
 
-const FormulaireAccount = () => {
+const FormulaireCreerAccount = () => {
     const [form] = Form.useForm<ICreateAccountForm>();
     const { i18n } = useI18n();
     const listeRole = [
@@ -34,4 +34,4 @@ const FormulaireAccount = () => {
     );
 };
 
-export default FormulaireAccount;
+export default FormulaireCreerAccount;

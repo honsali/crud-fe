@@ -32,7 +32,7 @@ const LayoutGlobal = () => {
         const message = infoActionI18n(infoActionReussie);
         if (message) {
             notification.success({
-                message,
+                title: message,
                 placement: 'topRight',
             });
         }

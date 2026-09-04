@@ -1,11 +1,11 @@
 import { Section } from 'waxant';
-import FormulaireAccount from './element/FormulaireAccount';
+import FormulaireModifierAccount from './element/FormulaireModifierAccount';
 
 const ViewModifierAccount = () => {
     //
     return (
         <Section>
-            <FormulaireAccount />
+            <FormulaireModifierAccount />
         </Section>
     );
 };
