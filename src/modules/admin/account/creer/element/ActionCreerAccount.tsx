@@ -1,16 +1,17 @@
 import { FormInstance } from 'antd';
+import { ICreateAccountForm } from 'modele/admin/account/DomaineAccount';
 import { useEffect } from 'react';
 import { ActionUcCreer, useGoToPage } from 'waxant';
 import { ActionAccount } from '../../ActionAccount';
 import { PageConsulterAccount } from '../../ListePageAccount';
 import useCreerAccount from '../useCreerAccount';
 
-const ActionCreerAccount = ({ form }: { form: FormInstance }) => {
+const ActionCreerAccount = ({ form }: { form: FormInstance<ICreateAccountForm> }) => {
     const goToPage = useGoToPage();
     const { creerAccount, etatCreerAccount, idAccount, resetEtatCreerAccount } = useCreerAccount();
 
     const creer = () => {
-        creerAccount({ form });
+        creerAccount(form);
     };
 
     useEffect(() => {

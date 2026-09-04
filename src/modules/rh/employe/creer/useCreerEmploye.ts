@@ -1,8 +1,10 @@
+import { FormInstance } from 'antd';
+import { IEmploye } from 'modele/rh/employe/DomaineEmploye';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { useAppDispatch } from 'waxant';
+import { useAppDispatch, util } from 'waxant';
 import CtrlCreerEmploye from './CtrlCreerEmploye';
-import { MdlCreerEmploye, ReqCreerEmploye, selectEtatCreerEmploye, selectIdEmploye } from './MdlCreerEmploye';
+import { MdlCreerEmploye, selectEtatCreerEmploye, selectIdEmploye } from './MdlCreerEmploye';
 
 const useCreerEmploye = () => {
 
@@ -12,11 +14,14 @@ const useCreerEmploye = () => {
     const etatCreerEmploye = useSelector(selectEtatCreerEmploye);
     const idEmploye = useSelector(selectIdEmploye);
 
-    const createAction = (action: any) => (req?: Partial<ReqCreerEmploye>) => dispatch(action({ ...req, ...params }));
+    const creerEmploye = async (form: FormInstance<IEmploye>) => {
+        const request = util.removeNonSerialisable(await form.validateFields()) as IEmploye;
+        return dispatch(CtrlCreerEmploye.creerEmploye({ request, ...params }));
+    };
 
     return {
         // Actions
-        creerEmploye: createAction(CtrlCreerEmploye.creerEmploye),
+        creerEmploye,
         resetEtatCreerEmploye: () => dispatch(MdlCreerEmploye.resetEtatCreerEmploye()),
 
         // State

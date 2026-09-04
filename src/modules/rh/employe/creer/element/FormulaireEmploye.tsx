@@ -1,11 +1,12 @@
 import { Form } from 'antd';
+import { IEmploye } from 'modele/rh/employe/DomaineEmploye';
 import { ActionUcRetourListe, Bloc, BlocAction, CadreSimple, ChampDate, ChampReference, ChampTexte, ChampTexteLong, Formulaire } from 'waxant';
 import { ActionEmploye } from '../../ActionEmploye';
 import { PageFiltrerEmploye } from '../../ListePageEmploye';
 import ActionCreerEmploye from './ActionCreerEmploye';
 
 const FormulaireEmploye = () => {
-    const [form] = Form.useForm();
+    const [form] = Form.useForm<IEmploye>();
     //
     return (
         <Bloc marge="40px" fond="blanc">

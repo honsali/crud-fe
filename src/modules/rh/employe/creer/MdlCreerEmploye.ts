@@ -1,10 +1,10 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { FormInstance } from 'antd';
+import { IEmploye } from 'modele/rh/employe/DomaineEmploye';
 import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlCreerEmploye from './CtrlCreerEmploye';
 
 export interface ReqCreerEmploye extends IRequete {
-    form?: FormInstance;
+    request: IEmploye;
 }
 
 export interface ResCreerEmploye extends IResultat {

@@ -1,4 +1,5 @@
 import { Form } from 'antd';
+import { IEmploye } from 'modele/rh/employe/DomaineEmploye';
 import { useEffect } from 'react';
 import { ActionUcRetourConsulter, Bloc, BlocAction, CadreSimple, ChampCache, ChampDate, ChampReference, ChampTexte, ChampTexteLong, Formulaire } from 'waxant';
 import { ActionEmploye } from '../../ActionEmploye';
@@ -8,14 +9,14 @@ import ActionMajEmploye from './ActionMajEmploye';
 
 const FormulaireEmploye = () => {
     const { employe, etatInitModificationEmploye, initModificationEmploye } = useModifierEmploye();
-    const [form] = Form.useForm();
+    const [form] = Form.useForm<IEmploye>();
 
     useEffect(() => {
         initModificationEmploye();
     }, []);
 
     useEffect(() => {
-        if (etatInitModificationEmploye.succes) {
+        if (etatInitModificationEmploye.succes && employe) {
             form.setFieldsValue(employe);
         }
     }, [etatInitModificationEmploye.succes]);

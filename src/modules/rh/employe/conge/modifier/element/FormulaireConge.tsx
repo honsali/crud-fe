@@ -1,4 +1,5 @@
 import { Form } from 'antd';
+import { IConge } from 'modele/rh/conge/DomaineConge';
 import { useEffect } from 'react';
 import { ActionUcRetourConsulter, Bloc, BlocAction, ChampCache, ChampDate, ChampReference, ChampTexte, ChampTexteLong, Formulaire } from 'waxant';
 import { ActionEmploye } from '../../../ActionEmploye';
@@ -8,14 +9,14 @@ import ActionMajConge from './ActionMajConge';
 
 const FormulaireConge = () => {
     const { conge, etatInitModificationConge, initModificationConge } = useModifierConge();
-    const [form] = Form.useForm();
+    const [form] = Form.useForm<IConge>();
 
     useEffect(() => {
         initModificationConge();
     }, []);
 
     useEffect(() => {
-        if (etatInitModificationConge.succes) {
+        if (etatInitModificationConge.succes && conge) {
             form.setFieldsValue(conge);
         }
     }, [etatInitModificationConge.succes]);

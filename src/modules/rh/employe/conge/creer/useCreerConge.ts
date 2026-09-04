@@ -1,8 +1,10 @@
+import { FormInstance } from 'antd';
+import { IConge } from 'modele/rh/conge/DomaineConge';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { useAppDispatch } from 'waxant';
+import { useAppDispatch, util } from 'waxant';
 import CtrlCreerConge from './CtrlCreerConge';
-import { MdlCreerConge, ReqCreerConge, selectEtatCreerConge, selectIdConge } from './MdlCreerConge';
+import { MdlCreerConge, selectEtatCreerConge, selectIdConge } from './MdlCreerConge';
 
 const useCreerConge = () => {
 
@@ -12,11 +14,14 @@ const useCreerConge = () => {
     const etatCreerConge = useSelector(selectEtatCreerConge);
     const idConge = useSelector(selectIdConge);
 
-    const createAction = (action: any) => (req?: Partial<ReqCreerConge>) => dispatch(action({ ...req, ...params }));
+    const creerConge = async (form: FormInstance<IConge>) => {
+        const request = util.removeNonSerialisable(await form.validateFields()) as IConge;
+        return dispatch(CtrlCreerConge.creerConge({ request, ...params, idEmploye: params.idEmploye! }));
+    };
 
     return {
         // Actions
-        creerConge: createAction(CtrlCreerConge.creerConge),
+        creerConge,
         resetEtatCreerConge: () => dispatch(MdlCreerConge.resetEtatCreerConge()),
 
         // State

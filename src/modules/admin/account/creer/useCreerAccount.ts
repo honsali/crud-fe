@@ -1,8 +1,10 @@
+import { FormInstance } from 'antd';
+import { ICreateAccountForm } from 'modele/admin/account/DomaineAccount';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useAppDispatch } from 'waxant';
 import CtrlCreerAccount from './CtrlCreerAccount';
-import { MdlCreerAccount, ReqCreerAccount, selectEtatCreerAccount, selectIdAccount } from './MdlCreerAccount';
+import { MdlCreerAccount, selectEtatCreerAccount, selectIdAccount } from './MdlCreerAccount';
 
 const useCreerAccount = () => {
 
@@ -12,11 +14,19 @@ const useCreerAccount = () => {
     const etatCreerAccount = useSelector(selectEtatCreerAccount);
     const idAccount = useSelector(selectIdAccount);
 
-    const createAction = (action: any) => (req?: Partial<ReqCreerAccount>) => dispatch(action({ ...req, ...params }));
+    const creerAccount = async (form: FormInstance<ICreateAccountForm>) => {
+        const values = await form.validateFields();
+        const request = {
+            username: values.username,
+            password: values.password,
+            role: { id: values.role },
+        };
+        return dispatch(CtrlCreerAccount.creerAccount({ request, ...params }));
+    };
 
     return {
         // Actions
-        creerAccount: createAction(CtrlCreerAccount.creerAccount),
+        creerAccount,
         resetEtatCreerAccount: () => dispatch(MdlCreerAccount.resetEtatCreerAccount()),
 
         // State

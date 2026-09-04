@@ -11,7 +11,7 @@ const ActionCreerDepartement = ({ form }: { form: FormInstance<IDepartement> }) 
     const { creerDepartement, etatCreerDepartement, idDepartement, resetEtatCreerDepartement } = useCreerDepartement();
 
     const creer = () => {
-        void creerDepartement(form).catch(() => undefined);
+        creerDepartement(form);
     };
 
     useEffect(() => {

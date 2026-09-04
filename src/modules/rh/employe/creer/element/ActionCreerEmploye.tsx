@@ -1,16 +1,17 @@
 import { FormInstance } from 'antd';
+import { IEmploye } from 'modele/rh/employe/DomaineEmploye';
 import { useEffect } from 'react';
 import { ActionUcCreer, useGoToPage } from 'waxant';
 import { ActionEmploye } from '../../ActionEmploye';
 import { PageConsulterEmploye } from '../../ListePageEmploye';
 import useCreerEmploye from '../useCreerEmploye';
 
-const ActionCreerEmploye = ({ form }: { form: FormInstance }) => {
+const ActionCreerEmploye = ({ form }: { form: FormInstance<IEmploye> }) => {
     const goToPage = useGoToPage();
     const { creerEmploye, etatCreerEmploye, idEmploye, resetEtatCreerEmploye } = useCreerEmploye();
 
     const creer = () => {
-        creerEmploye({ form });
+        creerEmploye(form);
     };
 
     useEffect(() => {

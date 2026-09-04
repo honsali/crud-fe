@@ -1,11 +1,12 @@
 import { Form } from 'antd';
+import { IConge } from 'modele/rh/conge/DomaineConge';
 import { ActionUcRetourListe, Bloc, BlocAction, ChampDate, ChampReference, ChampTexte, ChampTexteLong, Formulaire } from 'waxant';
 import { ActionEmploye } from '../../../ActionEmploye';
 import { PageConsulterEmploye } from '../../../ListePageEmploye';
 import ActionCreerConge from './ActionCreerConge';
 
 const FormulaireConge = () => {
-    const [form] = Form.useForm();
+    const [form] = Form.useForm<IConge>();
     //
     return (
         <Bloc largeur="600px" marge="20px" fond="blanc">

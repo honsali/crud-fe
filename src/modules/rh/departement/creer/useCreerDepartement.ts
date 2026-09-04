@@ -2,7 +2,7 @@ import { FormInstance } from 'antd';
 import { IDepartement } from 'modele/rh/departement/DomaineDepartement';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { useAppDispatch } from 'waxant';
+import { useAppDispatch, util } from 'waxant';
 import CtrlCreerDepartement from './CtrlCreerDepartement';
 import { MdlCreerDepartement, selectEtatCreerDepartement, selectIdDepartement } from './MdlCreerDepartement';
 
@@ -15,7 +15,7 @@ const useCreerDepartement = () => {
     const idDepartement = useSelector(selectIdDepartement);
 
     const creerDepartement = async (form: FormInstance<IDepartement>) => {
-        const request = await form.validateFields();
+        const request = util.removeNonSerialisable(await form.validateFields()) as IDepartement;
         return dispatch(CtrlCreerDepartement.creerDepartement({ request, ...params }));
     };
 

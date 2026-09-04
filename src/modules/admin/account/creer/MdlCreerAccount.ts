@@ -1,10 +1,10 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { FormInstance } from 'antd';
+import { ICreateAccountRequest } from 'modele/admin/account/DomaineAccount';
 import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlCreerAccount from './CtrlCreerAccount';
 
 export interface ReqCreerAccount extends IRequete {
-    form?: FormInstance;
+    request: ICreateAccountRequest;
 }
 
 export interface ResCreerAccount extends IResultat {
