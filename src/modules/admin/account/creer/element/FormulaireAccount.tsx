@@ -1,6 +1,6 @@
 import { Form } from 'antd';
-import { ROLE_ADMIN, ROLE_GESTIONNAIRE_RH } from 'commun/securite/mapRole';
-import { ICreateAccountRequest } from 'modele/admin/account/DomaineAccount';
+import { ROLE_ADMIN, ROLE_ADMIN_ID, ROLE_GESTIONNAIRE_RH, ROLE_GESTIONNAIRE_RH_ID } from 'commun/securite/mapRole';
+import { ICreateAccountForm } from 'modele/admin/account/DomaineAccount';
 import { useEffect } from 'react';
 import { ActionUcRetourListe, Bloc, BlocAction, ChampListeRadio, ChampMotDePasse, ChampTexte, Formulaire, useI18n } from 'waxant';
 import { ActionAccount } from '../../ActionAccount';
@@ -8,15 +8,15 @@ import { PageListerAccount } from '../../ListePageAccount';
 import ActionCreerAccount from './ActionCreerAccount';
 
 const FormulaireAccount = () => {
-    const [form] = Form.useForm<ICreateAccountRequest>();
+    const [form] = Form.useForm<ICreateAccountForm>();
     const { i18n } = useI18n();
     const listeRole = [
-        { code: ROLE_GESTIONNAIRE_RH, libelle: i18n(ROLE_GESTIONNAIRE_RH) },
-        { code: ROLE_ADMIN, libelle: i18n(ROLE_ADMIN) },
+        { code: ROLE_GESTIONNAIRE_RH_ID, libelle: i18n(ROLE_GESTIONNAIRE_RH) },
+        { code: ROLE_ADMIN_ID, libelle: i18n(ROLE_ADMIN) },
     ];
 
     useEffect(() => {
-        form.setFieldValue('role', ROLE_GESTIONNAIRE_RH);
+        form.setFieldValue('role', ROLE_GESTIONNAIRE_RH_ID);
     }, [form]);
 
     return (

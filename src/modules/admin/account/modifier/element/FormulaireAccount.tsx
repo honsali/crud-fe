@@ -1,6 +1,6 @@
 import { Form } from 'antd';
-import { ROLE_ADMIN, ROLE_GESTIONNAIRE_RH } from 'commun/securite/mapRole';
-import { IUpdateAccountRequest } from 'modele/admin/account/DomaineAccount';
+import { ROLE_ADMIN, ROLE_ADMIN_ID, ROLE_GESTIONNAIRE_RH, ROLE_GESTIONNAIRE_RH_ID } from 'commun/securite/mapRole';
+import { IUpdateAccountForm } from 'modele/admin/account/DomaineAccount';
 import { useEffect } from 'react';
 import { ActionUcRetourConsulter, Bloc, BlocAction, ChampListeRadio, ChampOuiNon, ChampTexte, Formulaire, useI18n } from 'waxant';
 import { ActionAccount } from '../../ActionAccount';
@@ -11,10 +11,10 @@ import ActionMajAccount from './ActionMajAccount';
 const FormulaireAccount = () => {
     const { account, etatInitModificationAccount, initModificationAccount } = useModifierAccount();
     const { i18n } = useI18n();
-    const [form] = Form.useForm<IUpdateAccountRequest & { username: string }>();
+    const [form] = Form.useForm<IUpdateAccountForm & { username: string }>();
     const listeRole = [
-        { code: ROLE_GESTIONNAIRE_RH, libelle: i18n(ROLE_GESTIONNAIRE_RH) },
-        { code: ROLE_ADMIN, libelle: i18n(ROLE_ADMIN) },
+        { code: ROLE_GESTIONNAIRE_RH_ID, libelle: i18n(ROLE_GESTIONNAIRE_RH) },
+        { code: ROLE_ADMIN_ID, libelle: i18n(ROLE_ADMIN) },
     ];
 
     useEffect(() => {
@@ -25,7 +25,7 @@ const FormulaireAccount = () => {
         if (etatInitModificationAccount.succes) {
             form.setFieldsValue({
                 username: account?.username,
-                role: account?.role.code,
+                role: account?.role.id,
                 activated: account?.activated,
             });
         }
