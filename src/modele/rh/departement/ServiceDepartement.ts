@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { API_URL } from 'commun';
-import { IDepartement } from './DomaineDepartement';
+import { ICreateDepartementRequest, IDepartement } from './DomaineDepartement';
 
 
-const creer = async (departement: IDepartement) => {
+const creer = async (departement: ICreateDepartementRequest) => {
     const { data } = await axios.post<IDepartement>(`${API_URL}/rh/departements`, departement);
     return data;
 };

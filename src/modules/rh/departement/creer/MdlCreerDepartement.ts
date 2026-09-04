@@ -1,10 +1,10 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { FormInstance } from 'antd';
+import { ICreateDepartementRequest } from 'modele/rh/departement/DomaineDepartement';
 import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlCreerDepartement from './CtrlCreerDepartement';
 
 export interface ReqCreerDepartement extends IRequete {
-    form?: FormInstance;
+    request: ICreateDepartementRequest;
 }
 
 export interface ResCreerDepartement extends IResultat {
