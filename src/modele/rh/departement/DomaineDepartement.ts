@@ -8,16 +8,6 @@ export interface IDepartement {
     description?: string;
 }
 
-export interface ICreateDepartementForm {
-    nom: string;
-    description?: string;
-}
-
-export interface ICreateDepartementRequest {
-    nom: string;
-    description?: string;
-}
-
 export interface IRequeteDepartement extends IDepartement, IPagination { }
 export interface IListePagineeDepartement {
     liste?: IDepartement[];

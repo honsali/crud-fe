@@ -1,12 +1,12 @@
 import { Form } from 'antd';
-import { ICreateDepartementForm } from 'modele/rh/departement/DomaineDepartement';
+import { IDepartement } from 'modele/rh/departement/DomaineDepartement';
 import { ActionUcRetourListe, Bloc, BlocAction, ChampTexte, ChampTexteLong, Formulaire } from 'waxant';
 import { ActionDepartement } from '../../ActionDepartement';
 import { PageListerDepartement } from '../../ListePageDepartement';
 import ActionCreerDepartement from './ActionCreerDepartement';
 
 const FormulaireDepartement = () => {
-    const [form] = Form.useForm<ICreateDepartementForm>();
+    const [form] = Form.useForm<IDepartement>();
     //
     return (
         <Bloc largeur="600px" marge="20px" fond="blanc">
