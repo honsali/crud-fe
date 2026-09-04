@@ -5,6 +5,7 @@ export interface IAccount {
     username: string;
     role: IReference;
     activated: boolean;
+    version: number;
 }
 
 export interface ICreateAccountRequest {
@@ -22,11 +23,13 @@ export interface ICreateAccountForm {
 export interface IUpdateAccountRequest {
     role: IReference;
     activated: boolean;
+    version: number;
 }
 
 export interface IUpdateAccountForm {
     role: string;
     activated: boolean;
+    version: number;
 }
 
 export interface IResetPasswordRequest {

@@ -2,7 +2,7 @@ import { Form } from 'antd';
 import { ROLE_ADMIN, ROLE_ADMIN_ID, ROLE_GESTIONNAIRE_RH, ROLE_GESTIONNAIRE_RH_ID } from 'commun/securite/mapRole';
 import { IUpdateAccountForm } from 'modele/admin/account/DomaineAccount';
 import { useEffect } from 'react';
-import { ActionUcRetourConsulter, Bloc, BlocAction, ChampListeRadio, ChampOuiNon, ChampTexte, Formulaire, useI18n } from 'waxant';
+import { ActionUcRetourConsulter, Bloc, BlocAction, ChampCache, ChampListeRadio, ChampOuiNon, ChampTexte, Formulaire, useI18n } from 'waxant';
 import { ActionAccount } from '../../ActionAccount';
 import { PageConsulterAccount } from '../../ListePageAccount';
 import useModifierAccount from '../useModifierAccount';
@@ -27,6 +27,7 @@ const FormulaireAccount = () => {
                 username: account?.username,
                 role: account?.role.id,
                 activated: account?.activated,
+                version: account?.version,
             });
         }
     }, [etatInitModificationAccount.succes]);
@@ -37,6 +38,7 @@ const FormulaireAccount = () => {
                 <ChampTexte nom="username" requis="true" disabled />
                 <ChampListeRadio nom="role" liste={listeRole} direction="vertical" requis="true" />
                 <ChampOuiNon nom="activated" oui="Oui" non="Non" requis="true" />
+                <ChampCache nom="version" />
             </Formulaire>
             <BlocAction>
                 <ActionMajAccount form={form} />

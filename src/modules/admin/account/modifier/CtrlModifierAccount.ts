@@ -14,6 +14,7 @@ const majAccountImpl: ActionOperation<ReqModifierAccount, ResModifierAccount> = 
     await ServiceAccount.maj(requete.idAccount, {
         role: { id: dataForm.role },
         activated: dataForm.activated,
+        version: dataForm.version,
     });
 };
 
