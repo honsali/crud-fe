@@ -1,12 +1,11 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { FormInstance } from 'antd';
 import { IConge } from 'modele/rh/conge/DomaineConge';
 import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlModifierConge from './CtrlModifierConge';
 
 export interface ReqModifierConge extends IRequete {
-    form?: FormInstance;
     idConge: string;
+    request: IConge;
 }
 
 export interface ResModifierConge extends IResultat {

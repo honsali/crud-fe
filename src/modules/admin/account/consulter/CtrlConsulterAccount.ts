@@ -1,6 +1,5 @@
 import ServiceAccount from 'modele/admin/account/ServiceAccount';
-import { IResetPasswordRequest } from 'modele/admin/account/DomaineAccount';
-import { ActionOperation, action, util } from 'waxant';
+import { ActionOperation, action } from 'waxant';
 import { ActionAccount } from '../ActionAccount';
 import { ReqConsulterAccount, ResConsulterAccount } from './MdlConsulterAccount';
 
@@ -9,11 +8,7 @@ const recupererAccountParIdImpl: ActionOperation<ReqConsulterAccount, ResConsult
 };
 
 const reinitialiserMotDePasseAccountImpl: ActionOperation<ReqConsulterAccount, ResConsulterAccount> = async (requete, _resultat, _thunkAPI) => {
-    await requete.form?.validateFields();
-    const dataForm = util.removeNonSerialisable(requete.form?.getFieldsValue()) as IResetPasswordRequest;
-    await ServiceAccount.reinitialiserMotDePasse(requete.idAccount, {
-        password: dataForm.password,
-    });
+    await ServiceAccount.reinitialiserMotDePasse(requete.idAccount, requete.request);
 };
 
 const CtrlConsulterAccount = {

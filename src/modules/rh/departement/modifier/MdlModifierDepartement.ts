@@ -1,12 +1,11 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { FormInstance } from 'antd';
 import { IDepartement } from 'modele/rh/departement/DomaineDepartement';
 import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlModifierDepartement from './CtrlModifierDepartement';
 
 export interface ReqModifierDepartement extends IRequete {
-    form?: FormInstance;
     idDepartement: string;
+    request: IDepartement;
 }
 
 export interface ResModifierDepartement extends IResultat {

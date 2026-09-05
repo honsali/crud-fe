@@ -1,12 +1,11 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { FormInstance } from 'antd';
-import { IAccount } from 'modele/admin/account/DomaineAccount';
+import { IAccount, IUpdateAccountRequest } from 'modele/admin/account/DomaineAccount';
 import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlModifierAccount from './CtrlModifierAccount';
 
 export interface ReqModifierAccount extends IRequete {
-    form?: FormInstance;
     idAccount: string;
+    request: IUpdateAccountRequest;
 }
 
 export interface ResModifierAccount extends IResultat {

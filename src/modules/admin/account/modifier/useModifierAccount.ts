@@ -1,6 +1,8 @@
+import { FormInstance } from 'antd';
+import { IUpdateAccountForm, IUpdateAccountRequest } from 'modele/admin/account/DomaineAccount';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { useAppDispatch } from 'waxant';
+import { useAppDispatch, util } from 'waxant';
 import CtrlModifierAccount from './CtrlModifierAccount';
 import { MdlModifierAccount, ReqModifierAccount, selectAccount, selectEtatInitModificationAccount, selectEtatMajAccount } from './MdlModifierAccount';
 
@@ -15,10 +17,20 @@ const useModifierAccount = () => {
 
     const createAction = (action: any) => (req?: Partial<ReqModifierAccount>) => dispatch(action({ ...req, ...params }));
 
+    const majAccount = async ({ form, ...req }: Partial<ReqModifierAccount> & { form: FormInstance<IUpdateAccountForm> }) => {
+        const values = util.removeNonSerialisable(await form.validateFields()) as IUpdateAccountForm;
+        const request: IUpdateAccountRequest = {
+            role: { id: values.role },
+            activated: values.activated,
+            version: values.version,
+        };
+        return dispatch(CtrlModifierAccount.majAccount({ ...req, request, ...params } as ReqModifierAccount));
+    };
+
     return {
         // Actions
         initModificationAccount: createAction(CtrlModifierAccount.initModificationAccount),
-        majAccount: createAction(CtrlModifierAccount.majAccount),
+        majAccount,
         resetEtatInitModificationAccount: () => dispatch(MdlModifierAccount.resetEtatInitModificationAccount()),
         resetEtatMajAccount: () => dispatch(MdlModifierAccount.resetEtatMajAccount()),
 

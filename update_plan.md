@@ -26,8 +26,9 @@ L'audit reste une source de constats à vérifier, pas une spécification. Chaqu
 3. Le frontend garde les composants, la navigation, l'état d'interaction, l'orchestration HTTP et le feedback inline non autoritaire.
 4. Aucun `throw` de validation n'est généré dans les contrôleurs frontend pour les identifiants, formulaires ou filtres.
 5. Dans les contrats de page générés :
-   - les identifiants consommés par un service strict sont requis dans `Req*` ;
-   - `form` et `pageCourante` restent optionnels lorsqu'un même `Req*` sert plusieurs actions ;
+   - les identifiants, corps de commande `request` et critères `filtre` consommés par un service strict sont requis dans `Req*` ;
+   - `pageCourante` peut rester optionnel lorsqu'un même `Req*` sert plusieurs actions ;
+   - les instances de formulaire restent dans les vues et les hooks, jamais dans `Req*` ou les contrôleurs ;
    - les hooks acceptent `Partial<Req*>`, puis fusionnent les paramètres de route avant dispatch ;
    - les propriétés de `Res*` sont optionnelles, car chaque action ne renseigne que son sous-ensemble ;
    - le pattern `T | {}` n'est plus généré.
@@ -35,6 +36,16 @@ L'audit reste une source de constats à vérifier, pas une spécification. Chaqu
 7. Toute correction répétée dans `src/modele/rh` ou `src/modules/rh` doit commencer dans `engine`, être régénérée, comparée puis transférée sélectivement.
 8. Ne jamais recopier en masse `engine/result` sur les applications exécutables.
 9. Ne pas multiplier les DTO frontend par principe ; renforcer les contrats seulement lorsqu'un risque concret le justifie.
+
+## Mise à jour du 2026-09-05 — formulaires limités aux hooks
+
+La migration déjà appliquée aux créations est étendue au filtrage des employés, aux modifications de département, d'employé, de congé et de compte, ainsi qu'à la réinitialisation du mot de passe d'un compte.
+
+Les hooks extraient les valeurs avant dispatch. Les contrôleurs reçoivent `request` ou `filtre`, sans `FormInstance`. Le filtrage conserve sa lecture sans validation ; les commandes conservent la validation du formulaire. Les hooks Account préservent les contrats API et la sélection explicite des champs envoyés.
+
+Engine porte la même règle pour les mises à jour, filtres paginés ou non, recherches et actions spécifiques avec formulaire. Les sections historiques ci-dessous décrivent les états intermédiaires antérieurs à cette migration.
+
+Validation de ce lot : 13 tests engine passés et génération réussie ; 11 tests ciblés frontend passés (`bun test tests/form-boundary.test.ts`), typecheck et build réussis. Les tests frontend utilisent les hooks, contrôleurs et reducers réels avec des contextes React et services HTTP simulés. Les modules RH restent identiques à la sortie générée ; la sortie backend n'a pas changé. Aucun test navigateur ou E2E n'a été exécuté.
 
 ## Action 1 terminée — baseline TypeScript
 

@@ -1,5 +1,5 @@
 import ServiceEmploye from 'modele/rh/employe/ServiceEmploye';
-import { ActionOperation, action, util } from 'waxant';
+import { ActionOperation, action } from 'waxant';
 import { ActionEmploye } from '../ActionEmploye';
 import { ReqModifierEmploye, ResModifierEmploye } from './MdlModifierEmploye';
 
@@ -8,9 +8,7 @@ const initModificationEmployeImpl: ActionOperation<ReqModifierEmploye, ResModifi
 };
 
 const majEmployeImpl: ActionOperation<ReqModifierEmploye, ResModifierEmploye> = async (requete, _resultat, _thunkAPI) => {
-    await requete.form?.validateFields();
-    const dataForm = util.removeNonSerialisable(requete.form?.getFieldsValue());
-    await ServiceEmploye.maj(dataForm);
+    await ServiceEmploye.maj(requete.request);
 };
 
 const CtrlModifierEmploye = {

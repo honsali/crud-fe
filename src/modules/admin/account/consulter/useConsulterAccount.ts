@@ -1,6 +1,8 @@
+import { FormInstance } from 'antd';
+import { IResetPasswordRequest } from 'modele/admin/account/DomaineAccount';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { useAppDispatch } from 'waxant';
+import { useAppDispatch, util } from 'waxant';
 import CtrlConsulterAccount from './CtrlConsulterAccount';
 import { MdlConsulterAccount, ReqConsulterAccount, selectAccount, selectEtatRecupererAccountParId, selectEtatReinitialiserMotDePasseAccount } from './MdlConsulterAccount';
 
@@ -15,10 +17,16 @@ const useConsulterAccount = () => {
 
     const createAction = (action: any) => (req?: Partial<ReqConsulterAccount>) => dispatch(action({ ...req, ...params }));
 
+    const reinitialiserMotDePasseAccount = async ({ form, ...req }: Partial<ReqConsulterAccount> & { form: FormInstance<IResetPasswordRequest> }) => {
+        const values = util.removeNonSerialisable(await form.validateFields()) as IResetPasswordRequest;
+        const request: IResetPasswordRequest = { password: values.password };
+        return dispatch(CtrlConsulterAccount.reinitialiserMotDePasseAccount({ ...req, request, ...params } as ReqConsulterAccount));
+    };
+
     return {
         // Actions
         recupererAccountParId: createAction(CtrlConsulterAccount.recupererAccountParId),
-        reinitialiserMotDePasseAccount: createAction(CtrlConsulterAccount.reinitialiserMotDePasseAccount),
+        reinitialiserMotDePasseAccount,
         resetEtatRecupererAccountParId: () => dispatch(MdlConsulterAccount.resetEtatRecupererAccountParId()),
         resetEtatReinitialiserMotDePasseAccount: () => dispatch(MdlConsulterAccount.resetEtatReinitialiserMotDePasseAccount()),
 

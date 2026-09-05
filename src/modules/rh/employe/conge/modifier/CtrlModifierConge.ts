@@ -1,5 +1,5 @@
 import ServiceConge from 'modele/rh/conge/ServiceConge';
-import { ActionOperation, action, util } from 'waxant';
+import { ActionOperation, action } from 'waxant';
 import { ActionEmploye } from '../../ActionEmploye';
 import { ReqModifierConge, ResModifierConge } from './MdlModifierConge';
 
@@ -8,9 +8,7 @@ const initModificationCongeImpl: ActionOperation<ReqModifierConge, ResModifierCo
 };
 
 const majCongeImpl: ActionOperation<ReqModifierConge, ResModifierConge> = async (requete, _resultat, _thunkAPI) => {
-    await requete.form?.validateFields();
-    const dataForm = util.removeNonSerialisable(requete.form?.getFieldsValue());
-    await ServiceConge.maj(dataForm);
+    await ServiceConge.maj(requete.request);
 };
 
 const CtrlModifierConge = {

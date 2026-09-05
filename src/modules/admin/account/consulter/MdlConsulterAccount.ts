@@ -1,12 +1,11 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { FormInstance } from 'antd';
-import { IAccount } from 'modele/admin/account/DomaineAccount';
+import { IAccount, IResetPasswordRequest } from 'modele/admin/account/DomaineAccount';
 import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlConsulterAccount from './CtrlConsulterAccount';
 
 export interface ReqConsulterAccount extends IRequete {
-    form?: FormInstance;
     idAccount: string;
+    request: IResetPasswordRequest;
 }
 
 export interface ResConsulterAccount extends IResultat {

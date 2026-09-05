@@ -1,11 +1,10 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { FormInstance } from 'antd';
 import { IListePagineeEmploye, IRequeteEmploye } from 'modele/rh/employe/DomaineEmploye';
 import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlFiltrerEmploye from './CtrlFiltrerEmploye';
 
 export interface ReqFiltrerEmploye extends IRequete {
-    form?: FormInstance;
+    filtre: IRequeteEmploye;
     pageCourante?: number;
 }
 

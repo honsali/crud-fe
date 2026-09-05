@@ -1,5 +1,5 @@
 import ServiceEmploye from 'modele/rh/employe/ServiceEmploye';
-import { ActionOperation, action, util } from 'waxant';
+import { ActionOperation, action } from 'waxant';
 import { ActionEmploye } from '../ActionEmploye';
 import { ReqFiltrerEmploye, ResFiltrerEmploye } from './MdlFiltrerEmploye';
 
@@ -9,9 +9,8 @@ const changerPageFiltrerEmployeImpl: ActionOperation<ReqFiltrerEmploye, ResFiltr
 };
 
 const filtrerEmployeImpl: ActionOperation<ReqFiltrerEmploye, ResFiltrerEmploye> = async (requete, resultat, _thunkAPI) => {
-    const dataForm = util.removeNonSerialisable(requete.form?.getFieldsValue());
-    resultat.listePagineeEmploye = await ServiceEmploye.filtrer(dataForm);
-    resultat.filtre = dataForm;
+    resultat.listePagineeEmploye = await ServiceEmploye.filtrer(requete.filtre);
+    resultat.filtre = requete.filtre;
 };
 
 const initialiserFiltrerEmployeImpl: ActionOperation<ReqFiltrerEmploye, ResFiltrerEmploye> = async (_requete, resultat, _thunkAPI) => {

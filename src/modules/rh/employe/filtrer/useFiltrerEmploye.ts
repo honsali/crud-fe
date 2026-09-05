@@ -1,6 +1,8 @@
+import { FormInstance } from 'antd';
+import { IRequeteEmploye } from 'modele/rh/employe/DomaineEmploye';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { useAppDispatch } from 'waxant';
+import { useAppDispatch, util } from 'waxant';
 import CtrlFiltrerEmploye from './CtrlFiltrerEmploye';
 import { MdlFiltrerEmploye, ReqFiltrerEmploye, selectEtatChangerPageFiltrerEmploye, selectEtatFiltrerEmploye, selectEtatInitialiserFiltrerEmploye, selectListePagineeEmploye } from './MdlFiltrerEmploye';
 
@@ -16,10 +18,15 @@ const useFiltrerEmploye = () => {
 
     const createAction = (action: any) => (req?: Partial<ReqFiltrerEmploye>) => dispatch(action({ ...req, ...params }));
 
+    const filtrerEmploye = async ({ form, ...req }: Partial<ReqFiltrerEmploye> & { form: FormInstance<IRequeteEmploye> }) => {
+        const filtre = util.removeNonSerialisable(form.getFieldsValue()) as IRequeteEmploye;
+        return dispatch(CtrlFiltrerEmploye.filtrerEmploye({ ...req, filtre, ...params } as ReqFiltrerEmploye));
+    };
+
     return {
         // Actions
         changerPageFiltrerEmploye: createAction(CtrlFiltrerEmploye.changerPageFiltrerEmploye),
-        filtrerEmploye: createAction(CtrlFiltrerEmploye.filtrerEmploye),
+        filtrerEmploye,
         initialiserFiltrerEmploye: createAction(CtrlFiltrerEmploye.initialiserFiltrerEmploye),
         resetEtatChangerPageFiltrerEmploye: () => dispatch(MdlFiltrerEmploye.resetEtatChangerPageFiltrerEmploye()),
         resetEtatFiltrerEmploye: () => dispatch(MdlFiltrerEmploye.resetEtatFiltrerEmploye()),

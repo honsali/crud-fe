@@ -1,140 +1,73 @@
 # CRUD RH Frontend
 
-Runnable React frontend for the HR showcase. It consumes the sibling `../crud-be` API and uses candidate overlays generated under `../engine/result/fe`.
+Ce projet est la partie navigateur d'une application RH construite avec [crud-be](../crud-be/README.md). Il permet d'exécuter et d'éprouver le gros œuvre produit par [Engine](../engine/README.md), puis de le compléter au fil des besoins de l'application.
 
-Shared workspace decisions are documented in [`../Context.md`](../Context.md) and [`../WORKSPACE.md`](../WORKSPACE.md). The active follow-up sequence from the July frontend review is recorded in [`update_plan.md`](update_plan.md).
+L'intention est de disposer d'un core frontend réutilisable et d'une forme commune pour les écrans : des composants composables, des parcours reconnaissables et une organisation qui reste lisible après personnalisation.
 
-## Responsibilities
+## Une application conçue avec son backend
 
-This project owns:
+Le frontend et le backend sont développés et livrés ensemble. Les contrats HTTP se construisent à partir des parcours utilisateur et évoluent avec eux : recherche paginée, références de formulaire, actions et présentation des erreurs.
 
-- the browser application and Waxant UI foundation;
-- authentication state and bearer-token handling;
-- role-selected domains, routes, menus, reducers, and ACL display rules;
-- the HR screens and API services;
-- the administrator account-management screens.
+Le frontend porte les composants, les layouts, la navigation, l'état d'interaction et l'orchestration des appels API. Le backend prend les décisions métier et garantit validation, autorisations, transactions et intégrité.
 
-Frontend ACLs only control presentation. The backend remains the security boundary.
+Les contrôles de formulaire donnent un retour immédiat à l'utilisateur. Les erreurs du backend restent la réponse faisant autorité. Les types TypeScript décrivent les échanges internes de cette application ; ils accompagnent l'interface sans constituer un second modèle métier.
 
-## Frontend/backend boundary
+## Un core réutilisable et des modules générés
 
-The frontend and backend are developed and delivered as one application. The API remains an explicit transport and security boundary, but it is not an independently evolving product by default.
+Le projet distingue les fondations communes, la configuration de l'application et ses parcours :
 
-This frontend owns components, layouts, navigation, presentation, interaction state, and API orchestration. It does not own business decisions, authoritative validation, authorization, transactions, or data integrity. Those remain backend responsibilities and must hold even when the API is called without React.
-
-Form-level checks such as Ant Design `Form` validation are intentionally allowed for immediate inline feedback. They do not create a second validation authority: every request is still validated by the backend, and backend `ApiError` responses remain canonical. The frontend displays their `message` and validation `fieldErrors` rather than reproducing the same business rules.
-
-TypeScript API types and services document the internal transport contract. Keep them accurate and simple, but do not turn them into a parallel frontend domain layer. Add Redux, controllers, hooks, or other abstractions only when they materially clarify UI state or a repeated generated workflow.
-
-## Requirements
-
-- Bun
-- the backend running on its configured address
-
-Install dependencies with:
-
-```bash
-bun install
-```
-
-The committed `bun.lock` keeps dependency resolution deterministic.
-
-## API configuration
-
-`BUN_PUBLIC_API_URL` configures the API root at server startup or build time. It defaults locally to:
-
-```text
-http://localhost:8080/api
-```
-
-Override it when building or serving elsewhere, for example:
-
-```bash
-BUN_PUBLIC_API_URL=https://client.example/api bun run build
-```
-
-The value must include the `/api` prefix. Trailing slashes are removed automatically. The Bun server exposes the resolved non-secret value through `/app-config.json`, allowing the same frontend bundle to use external deployment configuration.
-
-`FRONTEND_PORT` changes the Bun server port and defaults to `9000`.
-
-## Running and validation
-
-```bash
-bun run dev
-bun run typecheck
-bun run build
-```
-
-The development server listens on port `9000`. `dist/` is disposable build output and is not committed.
-
-## Security contract
-
-Authentication uses `POST /api/login` with `username` and `password`. The backend returns `{ "accessToken": "...", "tokenType": "Bearer", "expiresIn": 900 }`.
-
-The frontend derives display identity from the JWT `sub` and scalar `role` claims. It stores only the bearer token in `sessionStorage`, attaches it to Axios requests, logs out when it expires, and logs out after an authenticated request receives `401`. There is no refresh-token flow and no `/api/user` endpoint.
-
-Supported roles are deliberately separate:
-
-| Backend role | Frontend domain |
+| Partie | Rôle |
 |---|---|
-| `ROLE_GESTIONNAIRE_RH` | HR departments, employees, leave, and reference data |
-| `ROLE_ADMIN` | Account list, creation, role/activation update, and password reset |
+| `src/waxant` | Core UI : composants, routage, état, authentification et présentation des erreurs |
+| `src/commun` et `src/domaines` | Configuration, layout, libellés, rôles et composition des modules de l'application |
+| `src/modele` et `src/modules` | Contrats HTTP, services, pages et parcours applicatifs, dont la partie issue d'Engine |
 
-An administrator cannot access HR routes, and an HR manager cannot access account-administration routes. The backend enforces the same separation.
+Waxant est destiné à être repris dans les applications partageant cette stack et ces conventions. Les modules s'appuient sur ce socle pour fournir une expérience cohérente. La configuration et les adaptations propres au projet restent dans l'application qui l'utilise.
 
-## API namespaces
+La cible actuelle repose sur React, TypeScript, Bun, Ant Design et Redux. Engine porte la composition des écrans et les contributions des actions aux différentes couches ; il peut être modifié pour produire une autre organisation ou une autre technologie.
 
-- Login: `/api/login`
-- Account administration: `/api/admin/accounts/**`
-- HR CRUD: `/api/rh/**`
-- Department choices: `GET /api/rh/departements`
+## Une architecture élaborée, un typage pragmatique
 
-All API identifiers are JSON strings and remain `string` throughout frontend models, services, URL parameters, form values, and strict comparisons. The backend preserves `Long` internally and applies `@JsonId` only at the JSON boundary.
+L'architecture frontend assume une organisation plus élaborée que les couches conventionnelles du backend de démonstration. Une page peut associer une vue, des composants, un hook, un contrôleur et un modèle d'état. Le core coordonne les modules, les routes, les actions et les retours à l'utilisateur.
 
-Dates use `DD/MM/YYYY` in the UI and ISO `yyyy-MM-dd` JSON values. Employee pagination consumes the backend-owned `PageResponse` shape with `items`, `page`, `size`, `totalElements`, `totalPages`, `first`, and `last`.
+Cette organisation permet de composer des interfaces et de retrouver les mêmes repères dans plusieurs parcours. La génération prend en charge une grande partie de la répétition nécessaire à cette structure.
 
-The current backend does not expose generic reference-data endpoints. Department options come from its department collection; the immutable sex, marital-status, and leave-type options mirror the Liquibase seed data shipped with the backend.
+La souplesse TypeScript est un choix de travail : les types doivent clarifier les contrats et aider à modifier l'interface, avec une syntaxe et une inférence qui restent légères. Le durcissement systématique du typage n'est pas un objectif en soi. Un contrat est précisé lorsqu'il protège un comportement utile ou rend le code plus compréhensible.
 
-## TypeScript and service conventions
+Cette souplesse conserve des points fermes, notamment les identifiants API en chaînes, les entrées attendues par les services et les contrats des actions. Les limites de typage et les défauts identifiés se traitent progressivement ; le [plan de suivi](update_plan.md) les distingue des conventions déjà stabilisées.
 
-In generated and runtime API services, use normal imports rather than `import type`; the project deliberately keeps `verbatimModuleSyntax: false`, so TypeScript/Bun removes type-only usage during compilation. Axios services follow one readable shape:
+## Le gros œuvre donne une forme aux écrans
 
-```ts
-import { IDepartement } from './DomaineDepartement';
+La démonstration couvre les départements, les employés et leurs congés, ainsi que l'administration des comptes. Ces parcours partagent une organisation que l'on retrouve d'un module à l'autre.
 
-const creer = async (departement: IDepartement) => {
-    const { data } = await axios.post<IDepartement>(
-        `${API_URL}/rh/departements`,
-        departement,
-    );
-    return data;
-};
-```
+Le bénéfice est aussi dans la lecture du projet : savoir où chercher l'état d'une page, son appel HTTP ou ses composants réduit l'effort pour comprendre un écran nouveau. Cette forme commune reste utile lorsque les comportements propres à l'application se multiplient.
 
-Put the response type on the Axios call, destructure `data`, and let TypeScript infer the async function return type. Do not duplicate the same type with `Promise<IDepartement>` and do not return `(await axios...).data` inline. Delete operations simply await Axios without returning response data. Services that transform pagination return a plain inferred object, and consumers use optional access where the shared pagination model permits an absent value.
+Le résultat généré constitue le plan de base de cette organisation. Le comparer à l'application permet de voir les lignes et les blocs ajoutés ou transformés depuis, comme les travaux réalisés dans une maison par rapport au plan d'origine.
 
-These repeated service conventions belong in `../engine` first. Regenerate, review `engine/result/fe`, and transfer only the intended changes while preserving runtime customizations.
+## À t = 0, reprendre ; ensuite, sélectionner
 
-## Project structure
+Une fois le core et les conventions de la cible préparés, les fichiers d'un nouveau module peuvent être repris tels quels depuis `engine/result/fe`. Le développeur fait ensuite évoluer les écrans dans ce dépôt.
 
-```text
-src/
-├── commun/      application configuration, layout, labels, roles, and ACL maps
-├── domaines/    role-to-module graphs for administrator and HR domains
-├── modele/      API models and services
-├── modules/     account and HR pages/workflows
-└── waxant/      reusable UI, routing, Redux, authentication, and error infrastructure
-```
+Une nouvelle génération produit une proposition que le développeur examine avec son outil de diff. Il reprend les fichiers, blocs ou lignes qui l'intéressent, en conservant les adaptations du frontend exécutable. Engine écrit uniquement dans `result` ; le transfert dans l'application reste explicite.
 
-Most files under `src/modele/rh` and `src/modules/rh` are generator-shaped. Repeated changes to those files normally belong in the engine first, followed by generation, comparison, and selective transfer. Their controllers, models, and services orchestrate UI state and transport; they must not become a second implementation of backend business behavior.
+Pour comprendre les différences, on conserve l'ancien résultat généré `G0`. On le compare à l'application actuelle `P` et au nouveau résultat `G1` : une partie restée identique peut être remplacée, une partie personnalisée reçoit les changements sélectionnés.
 
-Account administration now follows the same selective workflow: the engine generates its list, detail, create, and update page structure, while the runnable files under `src/modele/admin/account` and `src/modules/admin/account` retain explicit adaptations for the secure plural API, separate request payloads, canonical identifiers, role presentation, self-update feedback, and password reset. Generated Account backend files are not transferred over the backend's host-owned security implementation.
+Les corrections répétées dans les écrans générables commencent dans Engine, puis sont régénérées, comparées et transférées. Les interactions propres à cette application restent dans ses modules. Le [workflow Engine](../engine/README.md) explique ce partage.
 
-A generated page shares aggregate `Req*` and `Res*` interfaces across several actions. Strict service inputs such as route identifiers are required in `Req*`; shared UI values such as `form` and `pageCourante` remain optional. Hooks accept `Partial<Req*>` because router parameters complete the dispatched request, without adding frontend `throw` validation. The backend remains authoritative for request validation. Results use optional properties rather than misleading `T | {}` unions, and consumers remain null-safe.
+L'administration des comptes illustre cette démarche : sa structure de pages provient du générateur, tandis que le frontend conserve ses adaptations aux contrats réels de création, de modification et de réinitialisation des mots de passe. Le backend de sécurité conserve lui aussi son implémentation propre.
 
-Waxant exposes `ActionOperation<Req, Res>` as the typed contract for generated controller implementations. Generated callbacks keep only meaningful Redux and route parameters, prefix genuinely unused operation parameters with `_`, and type form and table-row inputs. These conventions keep the generated overlay free of `noImplicitAny`, `noUnusedLocals`, and `noUnusedParameters` diagnostics without changing runtime behavior.
+## Quand utiliser ce projet
 
-## Current limitations
+- Pour montrer ou valider une application CRUD-like complète avec son backend.
+- Pour amorcer un frontend à partir d'un core et de parcours déjà organisés.
+- Pour éprouver une évolution de composant ou d'Action dans Engine.
+- Pour construire des interfaces métier qui gardent une forme familière tout en recevant des adaptations locales.
 
-- The three immutable reference lists without API endpoints mirror backend seed identifiers and must be updated if those Liquibase datasets change.
-- Full-stack E2E orchestration is not yet available because `../crud-e2e` remains a scaffold.
+Le contexte de démonstration et de POC du backend est compatible avec cette architecture UI plus élaborée. L'effort de chaque côté répond à ses besoins : simplicité des traitements serveur, composition et coordination des interactions dans le navigateur.
+
+## Pour poursuivre
+
+- [Guide de développement](DEVELOPMENT.md) : démarrage, configuration, contrats API, conventions TypeScript et vérifications.
+- [Plan de suivi](update_plan.md) : chantiers frontend et limites déjà identifiées.
+- [Backend](../crud-be/README.md) : responsabilités métier et arbitrages de la même application.
+- [Engine](../engine/README.md) : hiérarchie des composants, actions transversales et comparaison des générations.
