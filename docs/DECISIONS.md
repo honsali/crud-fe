@@ -19,6 +19,16 @@ Références de code au moment de la passation : `engine` à `3cc1c32`, `crud-fe
 
 Les [intentions d'Engine](../../engine/README.md) et le [positionnement backend](../../crud-be/README.md) détaillent ce cadre. Le setup reste dans les `DEVELOPMENT.md`, secondaire dans la présentation des projets.
 
+## Arbitrages Engine — mise à jour du 2026-09-07
+
+Le propriétaire lit le projet de haut en bas depuis `App.java`. Un seul `modules.ProjectBootstrap` assemble explicitement `AdminModule` et `RhModule`, sans recherche automatique du bootstrap. Un module métier ne compose pas le projet entier. Les méthodes de chargement et de composition sans état d'instance peuvent être statiques.
+
+Le propriétaire lance manuellement Engine pour une génération à la fois. Il a explicitement choisi le retour au singleton `Context` : la fluidité du code prime ici sur la capacité non demandée de faire coexister plusieurs générations dans une même JVM. Le passage explicite du contexte n'est pas une correction obligatoire ni une règle à réintroduire au nom de la testabilité.
+
+`App` appelle `Context.init("result")`, puis le moteur accède au contexte par `Context.getInstance()`, sans le transmettre aux modules, actions et printers. L'initialisation repart d'un état neuf, y compris pour les registres, les libellés, le compteur d'actions et les mappings SQL. Les objets de l'ancienne génération ne sont pas réutilisés. Le bootstrap explicite, les `PageRef` immuables, l'ordre de génération et les contrats de formulaires restent conservés.
+
+Des tests successifs dans une même JVM peuvent partager un état global même sans parallélisme : ce risque n'était pas seulement une question de vitesse des tests. La solution retenue est désormais d'adapter les tests au cycle de vie d'Engine : initialisation du singleton par scénario et exécution séquentielle. Le test de coexistence de deux contextes est remplacé par un test de réinitialisation complète. Compilation, 15 tests et génération ont réussi ; les 193 fichiers fraîchement générés avant/après sont identiques. Voir le [cycle de génération](../../engine/DEVELOPMENT.md#cycle-de-génération).
+
 ## Architecture frontend à préserver
 
 L'organisation retenue associe modules, pages et cas d'usage, composants visuels, hooks d'adaptation React/Redux, contrôleurs d'orchestration, modèles d'état de présentation et services HTTP. Un même modèle de page peut porter plusieurs méthodes et leurs états distincts. Le nom « MVC » est un repère, pas l'obligation de reproduire un MVC classique.
