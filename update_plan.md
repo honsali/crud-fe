@@ -1,10 +1,10 @@
 # Plan de mise à jour après la review frontend
 
-Date de passation : 2026-07-24
+Passation initiale : 2026-07-24. Arbitrages et état de reprise réconciliés le 2026-09-05.
 
-Ce document est le point de reprise pour les prochaines sessions. Il transforme les constats de l'audit local `review24.07.2026.md` et du résumé versionné [`review.md`](review.md) en un plan ordonné compatible avec [`../Context.md`](../Context.md), [`../WORKSPACE.md`](../WORKSPACE.md) et les responsabilités réelles du frontend, du backend et de l'engine.
+Ce document est le plan de reprise des travaux. Lire d'abord les [décisions et leurs raisons](docs/DECISIONS.md), puis le [README](README.md) pour les intentions et [DEVELOPMENT.md](DEVELOPMENT.md) pour les contrats actuels. Les audits [`review24.07.2026.md`](review24.07.2026.md) et [`review.md`](review.md) sont des archives. Les anciens documents racine `Context.md` et `WORKSPACE.md` ne sont pas présents dans ce checkout ; ils ne sont plus des prérequis de reprise.
 
-L'audit reste une source de constats à vérifier, pas une spécification. Chaque point doit être reproduit sur l'arbre courant avant modification. Ne pas introduire automatiquement une couche, une dépendance, plusieurs DTO frontend ou une refonte Waxant uniquement parce que l'audit les suggère.
+L'audit reste une source de constats à vérifier, pas une spécification. Chaque point doit être reproduit sur l'arbre courant avant modification. Ne pas introduire automatiquement une couche, une dépendance, plusieurs DTO frontend ou une refonte Waxant uniquement parce que l'audit les suggère. Les mesures et validations de juillet ci-dessous sont historiques ; les décisions de septembre et les mises à jour datées priment sur leurs recommandations devenues obsolètes.
 
 ## État synthétique
 
@@ -14,10 +14,11 @@ L'audit reste une source de constats à vérifier, pas une spécification. Chaqu
 | 2. Renforcer progressivement les garde-fous TypeScript et le formatage | **En cours — signatures générées assainies** | Analyser les 21 avertissements de hooks générés avant de traiter Waxant |
 | 3. Corriger les routes parent/enfant et la propriété du code congé | **Implémentée le 2026-09-02** | Effectuer le smoke test navigateur quand l'orchestration full-stack sera disponible |
 | 4. Corriger les risques d'intégrité des formulaires | À vérifier puis faire | Définir explicitement la sémantique « conserver / vider / null » avec le backend |
-| 5. Stabiliser les défauts Waxant à fort impact | À faire par petits lots | Error boundary, clavier, logout, chargement des références |
-| 6. Nettoyer dépendances et vestiges inutilisés | À vérifier puis faire | Supprimer seulement après preuve d'absence d'usage |
-| 7. Clarifier l'idiome admin et le déploiement | À faire | Aligner les conventions sans imposer une refonte générale |
-| 8. Ajouter l'acceptation full-stack | Bloquée | `crud-e2e` est encore un scaffold |
+| 5. Stabiliser les défauts Waxant à fort impact | À vérifier par petits lots | Clavier, logout, références et effets ; ErrorBoundary limitée conservée intentionnellement |
+| 6. Nettoyer dépendances et vestiges inutilisés | À vérifier puis faire | `useExecute` est historique ; préserver ses types et exports lors d'un éventuel retrait |
+| 7. Administration et déploiement | Admin aligné ; déploiement à décider selon la cible | Préserver les adaptations Account ; ne pas confondre déploiement et évaluation de V0 |
+| 8. Ajouter l'acceptation full-stack | Non disponible | `crud-e2e` est encore un scaffold ; aucun E2E validé dans le lot de septembre |
+| 9. Protéger la liste contre les réponses obsolètes | Absence de garde constatée dans les reducers ; correction non réalisée | Tester l'ordre inversé des réponses et définir la portée commune aux actions qui écrivent la liste |
 
 ## Décisions à préserver
 
@@ -36,6 +37,15 @@ L'audit reste une source de constats à vérifier, pas une spécification. Chaqu
 7. Toute correction répétée dans `src/modele/rh` ou `src/modules/rh` doit commencer dans `engine`, être régénérée, comparée puis transférée sélectivement.
 8. Ne jamais recopier en masse `engine/result` sur les applications exécutables.
 9. Ne pas multiplier les DTO frontend par principe ; renforcer les contrats seulement lorsqu'un risque concret le justifie.
+10. `useExecute` est l'ancien mécanisme ; ne pas en déduire une architecture concurrente dans les pages actuelles. Les états de page, `MdlMessage` et la convention succès/reset/navigation restent en place.
+11. Conserver l'ErrorBoundary volontairement limitée ; tout élargissement doit répondre à un besoin explicite et vérifier le scénario de boucle rapporté par le propriétaire.
+12. Distinguer onglets du navigateur, usages distincts dans un même store et requêtes concurrentes écrivant une même donnée. Ne pas traiter l'absence de démonstration sur des applications complexes comme la preuve d'une incapacité architecturale.
+
+## Mise à jour du 2026-09-05 — arbitrages de review
+
+Les [décisions de reprise](docs/DECISIONS.md) consignent les intentions communes aux trois projets et les rectifications de cette discussion. Cette passation réconcilie aussi `AGENTS.md`, `docs/GLOBAL_READING.md` et les entrées des archives, sans changer le code applicatif.
+
+Le remplacement systématique de l'ErrorBoundary est retiré du plan courant. `useExecute` est classé comme historique, sans suppression décidée. Le passage général à `unwrap()`, l'extraction systématique des contrats et la refonte du résultat mutable restent des alternatives non retenues, pas des travaux obligatoires. Le risque de réponses obsolètes reste ouvert indépendamment de la migration des formulaires.
 
 ## Mise à jour du 2026-09-05 — formulaires limités aux hooks
 
@@ -227,22 +237,25 @@ Le constat sur `removeNonSerialisable` doit être reproduit avec le backend avan
 2. Vérifier les mappers/services de mise à jour et les contraintes Liquibase.
 3. Remplacer le nettoyage global par une règle explicite compatible avec cette sémantique.
 4. Ajouter un test seulement pour le risque concret « vider une valeur existante ».
-5. Vérifier séparément la présence de `commentaire` dans création, modification, détail et liste du congé ; corriger seulement si le besoin métier confirme ce champ éditable.
+5. Préserver le champ `commentaire` intégré avec le lot congé du 2026-09-02 ; la question encore ouverte ici est la possibilité de vider une valeur existante, à vérifier avec la sémantique backend.
 
 ## Action 5 — Waxant à fort impact
 
-Traiter dans des commits indépendants :
+Décision du 2026-09-05 : conserver l'ErrorBoundary limitée. Le composant écoute `window.error` et n'offre pas les garanties d'une boundary React. Le propriétaire a rapporté des boucles infinies à l'origine de cette limitation ; leur cause n'a pas été reproduite pendant cette session. Un besoin explicite de couverture supplémentaire peut rouvrir le sujet, avec une vérification ciblée de l'absence de boucle. L'ancienne prescription de remplacement systématique ne s'applique plus.
 
-1. remplacer le listener global actuel par une vraie error boundary React placée au-dessus des routes concernées ;
-2. restaurer le comportement clavier natif des boutons ;
-3. rendre la déconnexion sémantique, focusable et nommée ;
-4. décider si les lignes de tableau sont interactives et fournir alors clavier/rôle/focus cohérents ;
-5. gérer erreur, annulation et démontage dans le chargement des références ;
-6. corriger les effets de rendu manifestement invalides (`Sablier`, callbacks/effets de `Tableau`) après reproduction.
+Pour les autres constats, reproduire puis traiter dans des lots indépendants :
+
+1. restaurer le comportement clavier natif des boutons ;
+2. rendre la déconnexion sémantique, focusable et nommée ;
+3. décider si les lignes de tableau sont interactives et fournir alors clavier/rôle/focus cohérents ;
+4. gérer erreur, annulation et démontage dans le chargement des références ;
+5. corriger les effets de rendu invalides (`Sablier`, callbacks/effets de `Tableau`) après reproduction.
 
 Chaque lot doit avoir une vérification navigateur ciblée. Ne pas refondre tout Waxant en une seule fois.
 
 ## Action 6 — dépendances et code mort
+
+`useExecute` est l'ancien mécanisme, pas une troisième mécanique à imposer ou à unifier avec les pages actuelles. Aucun appel du hook n'a été trouvé dans les pages le 2026-09-05 ; son export Waxant et le type `ExecuteResponse` consommé par deux composants de dialogue restent présents. Un éventuel retrait demande de traiter explicitement ces usages et la compatibilité du core, pas de supprimer le fichier sur le seul constat d'absence d'appel dans le showcase.
 
 1. Rechercher les usages réels dans le code, les scripts et le lockfile avant toute suppression.
 2. Retirer une petite famille à la fois : anciens outils CRA, éditeurs/charts non utilisés, EventBus/RxJS, composants métier étrangers au showcase.
@@ -254,9 +267,11 @@ Chaque lot doit avoir une vérification navigateur ciblée. Ne pas refondre tout
 
 ### Administration
 
-Commencer par le minimum : aligner `ServiceAccount` sur la convention Axios documentée et réutiliser la normalisation d'erreur lorsque cela réduit réellement la duplication. Ne pas forcer automatiquement le module admin dans toute la chaîne Redux générée.
+État constaté le 2026-09-05 : `ServiceAccount` suit déjà la convention Axios et les pages utilisent les hooks, contrôleurs et modèles par cas d'usage. Préserver leurs adaptations aux contrats réels : payloads distincts, version, rôle, mot de passe, gestion du compte courant et absence de suppression. Ne pas relancer l'ancienne migration depuis le module admin monolithique, ni recopier le candidat Account sans comparaison.
 
 ### Déploiement
+
+Ce volet dépend de l'application à livrer ; il n'est pas une preuve que le socle de V0/bootstrap est architecturalement inadapté.
 
 1. choisir explicitement si Bun sert les sources/runtime ou si `dist/` est servi comme bundle statique ;
 2. vérifier le comportement réel de `/app-config.json` dans ce modèle ;
@@ -272,22 +287,35 @@ Cette action reste bloquée tant que `crud-e2e` n'est pas implémenté. Le futur
 - filtrage paginé des employés ;
 - création/consultation/modification/suppression avec identifiants JSON string ;
 - parcours parent/enfant employé/congé ;
-- présentation des Problem Details backend.
+- présentation des erreurs backend `ApiError` et de leurs `fieldErrors`.
 
 Ne pas annoncer de couverture E2E avant exécution réelle de cette orchestration.
 
+## Action 9 — ordre des réponses et portée de l'état
+
+La lecture de `MdlFiltrerEmploye` montre que l'initialisation, le filtrage et la pagination remplacent la même liste sans garde sur l'appel pertinent. Si leurs réponses arrivent dans un ordre différent des demandes, une ancienne réponse peut écraser la plus récente. C'est un constat de code, pas un scénario navigateur exécuté dans cette passation.
+
+1. Définir le résultat qui doit rester visible quand ces opérations se chevauchent.
+2. Reproduire le défaut avec un test contrôlant l'ordre des réponses, y compris entre méthodes différentes qui écrivent la même liste.
+3. Utiliser les identifiants d'appel déjà disponibles (`meta.requestId` des thunks) à la portée de la donnée ; les `rid` UI actuels ne protègent pas ces reducers. Aucun nouveau « call id » n'est requis par principe.
+4. Vérifier aussi l'effet d'un échec tardif sur les statuts, puis porter tout pattern répété dans Engine avant le transfert sélectif.
+
+Aucun correctif n'a été implémenté dans la migration des formulaires ou dans cette passation documentaire. Les onglets du navigateur ont des stores distincts ; ce sujet concerne des écritures concurrentes dans une même instance.
+
 ## Procédure de reprise d'une prochaine session
 
-1. Lire `../Context.md`, `../WORKSPACE.md`, les `AGENTS.md` applicables et ce fichier.
+1. Lire les `AGENTS.md` applicables, les README, `docs/DECISIONS.md` et ce fichier ; consulter `DEVELOPMENT.md` pour les contrats et commandes.
 2. Inspecter séparément `git status` dans `crud-fe`, `engine` et `crud-be`.
 3. Lire les commits créés après cette passation ; ne pas supposer que tous les fichiers locaux ont été inclus.
 4. Choisir une seule action ci-dessus et reproduire le constat avant modification.
 5. Pour un pattern généré : engine d'abord, `mvn test`, génération, comparaison, transfert sélectif.
 6. Valider seulement les projets réellement touchés et rapporter précisément ce qui n'a pas été exécuté.
 
-## État des arbres avant commit/push
+## Archive — état des arbres lors de la passation initiale de juillet
 
-Les dépôts sont indépendants et le dossier `C:\crudRH\current` n'est pas un dépôt Git.
+Les indications ci-dessous concernent l'ancien workspace Windows et ne décrivent pas l'état Git actuel. Les dépôts restent indépendants ; relire leur statut à chaque session. Les modifications applicatives du 2026-09-05 sont référencées par leurs commits dans `docs/DECISIONS.md`.
+
+Dans ce workspace historique, le dossier `C:\crudRH\current` n'était pas un dépôt Git.
 
 Éléments préexistants à ne pas inclure automatiquement sans inspection :
 
@@ -299,4 +327,4 @@ Les dépôts sont indépendants et le dossier `C:\crudRH\current` n'est pas un d
 
 Le correctif #1 produit des changements de code dans `engine` et `crud-fe`. `crud-be` ne reçoit que de la documentation dans cette passation. Les documents racine sous `C:\crudRH\current` doivent être conservés ou versionnés par un mécanisme distinct, puisque ce dossier n'est pas un dépôt.
 
-Aucun stage, commit ou push n'a été effectué dans cette session.
+Aucun stage, commit ou push n'avait été effectué dans cette passation initiale de juillet.

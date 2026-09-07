@@ -1,8 +1,8 @@
 # CRUD RH Frontend Architecture
 
-Updated: 2026-07-24
+Updated: 2026-09-05. Earlier validation records are explicitly historical below.
 
-See [`../README.md`](../README.md) for setup, runtime configuration, security contracts, and validation commands, and [`../update_plan.md`](../update_plan.md) for the active review follow-up sequence. Shared frontend/backend ownership is defined authoritatively in [`../../Context.md`](../../Context.md), with operational consequences in [`../../WORKSPACE.md`](../../WORKSPACE.md); this document only describes how the frontend implements that boundary.
+Read [`DECISIONS.md`](DECISIONS.md) for the intentions, reasons and corrections to earlier reviews, and [`../README.md`](../README.md) for the application's purpose. Setup and current API contracts live in [`../DEVELOPMENT.md`](../DEVELOPMENT.md); [`../update_plan.md`](../update_plan.md) tracks remaining work. The former workspace `Context.md` and `WORKSPACE.md` are absent from this checkout. The versioned project documents now provide the handoff context.
 
 ## Architecture
 
@@ -23,11 +23,21 @@ View → action component → use* hook → Ctrl* thunk → Service* request →
 
 This structure is intentionally explicit and generator-friendly. `src/waxant` and host security infrastructure are maintained in the runnable frontend; repetitive HR model/module output is compared with `engine/result/fe` before transfer.
 
-These frontend layers organize presentation, navigation, interaction state, and API transport. They do not own business rules or authoritative validation. Ant Design form checks provide inline feedback only; the co-delivered backend validates every request and its Problem Details remain canonical.
+These frontend layers organize presentation, navigation, interaction state, and API transport. They do not own business rules or authoritative validation. Ant Design form checks provide inline feedback only; the co-delivered backend validates requests and its `ApiError` responses remain canonical.
 
-Generated page contracts deliberately separate the complete action request from the values supplied by a component. Strict service inputs such as route identifiers are required in `Req*`; `form` and `pageCourante` remain optional because several actions share one page contract. Hooks accept `Partial<Req*>`, merge URL parameters, and dispatch without adding controller `throw` validation. Each `Res*` property remains optional because an action populates only its own subset; the former `T | {}` result pattern is no longer generated.
+Generated page contracts deliberately separate the complete action request from the values supplied by a component. Strict service inputs such as route identifiers, command payloads and filter criteria are required in `Req*`; shared pagination such as `pageCourante` may remain optional. `FormInstance` belongs only to views and hooks: hooks extract the values, validate command forms, merge URL parameters and dispatch data without adding controller `throw` validation. Filter hooks keep the existing read-without-validation behavior. Hooks deliberately accept `Partial<Req*>`. Each `Res*` property remains optional because an action populates only its own subset; the former `T | {}` result pattern is no longer generated.
 
-Generated controller implementations use Waxant's `ActionOperation<Req, Res>` contract. Form props and table rows are typed, genuinely unused operation parameters use the `_` convention, Redux handlers omit unused callback parameters, constant routes take no unused argument, and empty ACLs import no action catalog. The generated overlay therefore contributes no `noImplicitAny`, `noUnusedLocals`, or `noUnusedParameters` diagnostic.
+Generated controller implementations use Waxant's `ActionOperation<Req, Res>` contract. Form props and table rows are typed, genuinely unused operation parameters use the `_` convention, Redux handlers omit unused callback parameters, constant routes take no unused argument, and empty ACLs import no action catalog. Dated diagnostic counts are recorded in the follow-up plan; they are not guarantees for future edits.
+
+## State and review decisions
+
+Each page model may contain several controller methods with distinct operation states. Hooks adapt React and Redux; `MdlMessage` owns cross-cutting feedback. The named action convention ties execution to UI rights, labels, confirmations and progress. Success/reset/navigation remains the current page convention; a general migration to `unwrap()` has not been selected.
+
+`useExecute` is the earlier approach, not a concurrent architecture used by current pages. Its Waxant export and the `ExecuteResponse` type used by dialog components require an explicit compatibility decision before removal.
+
+Browser tabs run separate JavaScript stores. Internal panels sharing one store are a different scenario. The employee list reducers still lack protection against obsolete responses from overlapping initialization, filtering or pagination requests; that local issue is tracked separately from browser multitab support.
+
+The component named `ErrorBoundary` listens to `window.error`; it is not a React error boundary. Its limited behavior is intentional after loops reported by the owner. The prior instruction to replace it automatically is withdrawn. Revisit its coverage only for an explicit need, with a targeted reproduction and a no-loop check. See [`DECISIONS.md`](DECISIONS.md) for the rationale and evidence limits.
 
 ## Authentication and authorization display
 
@@ -44,18 +54,18 @@ The role-selected domain graph is:
 
 ## Backend API alignment
 
-| Area | Frontend routes |
+| Area | Backend endpoints consumed |
 |---|---|
 | Authentication | `POST /api/login` |
 | Accounts | `/api/admin/accounts/**` |
-| Departments | `/api/rh/departement/**` |
-| Employees | `/api/rh/employe/**` |
-| Leave | `/api/rh/conge/**` and `/api/rh/employe/{id}/conge` |
-| References | `/api/rh/reference/**` |
+| Departments | `/api/rh/departements/**` |
+| Employees | `/api/rh/employes/**`, including `POST /api/rh/employes/filtrer` |
+| Leave | `/api/rh/conges/{id}` and `/api/rh/employes/{idEmploye}/conges` |
+| References | Department collection plus locally defined immutable choices aligned with Liquibase; no generic reference API |
 
-Employee filtering consumes the backend `PageResponse` fields. API identifiers are serialized by the backend as JSON strings and stay as `string` values in frontend domain models and URL parameters; no numeric ID coercion is performed. UI dates use `DD/MM/YYYY`, matching the backend's `dd/MM/yyyy` JSON representation.
+Employee filtering consumes the backend `PageResponse` fields. API identifiers are serialized by the backend as JSON strings and stay as `string` values in frontend domain models and URL parameters; no numeric ID coercion is performed. UI dates use `DD/MM/YYYY`; JSON dates use ISO `yyyy-MM-dd`.
 
-Backend Problem Details are normalized by `ErrorSerializationMiddleware`, including `detail` and validation `fields`. The frontend presents these authoritative failures instead of reimplementing backend business validation.
+Current backend errors use `ApiError` with `code`, `message`, `path` and `fieldErrors`. `ErrorSerializationMiddleware` normalizes these responses and also retains support for older message shapes; that compatibility does not change the current backend contract. The frontend presents authoritative failures instead of reimplementing backend business validation.
 
 ## Generated service convention
 
@@ -71,21 +81,25 @@ String IDs flow through these services unchanged. Paginated filtering maps backe
 - create an initially active account;
 - change another account's role or activation;
 - reset passwords;
-- log out immediately after resetting the current administrator's password because the backend revokes that token.
+- log out locally after resetting the current administrator's password.
 
-The UI prevents editing the current administrator's role/activation. Backend locking and policy checks remain authoritative.
+The UI provides feedback for the current account. Backend validation and version checks remain authoritative; UI visibility alone is not a guarantee against direct API calls. Local logout does not imply server-side token revocation: the current backend keeps already-issued JWTs valid until expiry, as documented in its [development guide](../../crud-be/DEVELOPMENT.md).
 
 ## Generator relationship
 
-The runnable frontend remains close to `engine/result/fe`. Known deliberate runtime differences include:
+Generated-pattern corrections belong in Engine first, followed by generation, comparison and selective transfer. The 2026-09-02 change aligned parent-child routes and made leave code an explicit form value validated by the backend; `ServiceConge` no longer derives it. The 2026-09-05 change completed the remaining form-to-hook migration. The shared HR module trees were identical to generated output after that migration.
 
-- corrected parent-child leave routes and their runtime parameter names;
-- client-side leave-code derivation in `ServiceConge`, a known boundary violation to remove; either the backend derives the code or the user supplies it according to the business requirement;
-- host-owned authentication, account administration, deployment configuration, and error handling.
+Account retains hand-maintained adaptations of its generated structure: distinct command payloads, role and activation mapping, version, password reset and current-account feedback. Host-owned authentication, deployment configuration and error handling also remain in the runnable application. Never overwrite the backend's Account security implementation with its generated candidate.
 
-Generated-pattern corrections should be implemented in the engine, regenerated, reviewed, and then transferred selectively. The JSON-string ID contract, typed/destructured Axios service style, and null-safe pagination access are now synchronized with the engine. Parent-child route derivation remains engine follow-up work; leave-code semantics remain a backend/business decision, but the frontend must not derive the code.
+The generated result is a baseline, not a requirement that customized applications stay identical to it. Preserve `G0`, compare `P` with `G1`, and select the changes appropriate to the application.
 
 ## Verification status
+
+The latest implementation lot on 2026-09-05 recorded 13 engine tests, successful generation, 11 frontend form-boundary tests, a successful typecheck and build, exact HR module comparison and unchanged generated backend output. No browser or full-stack E2E was run in that lot. This documentation pass did not rerun those application checks; consult [`../update_plan.md`](../update_plan.md) for their scope.
+
+### Historical validation records
+
+The following results describe earlier API and source versions. They do not establish current browser behavior, reference endpoints or remaining generator differences.
 
 On 2026-07-21:
 
@@ -98,7 +112,7 @@ On 2026-07-21:
 - no account records were mutated during browser verification;
 - full-stack E2E remains unavailable because `crud-e2e` is still a scaffold.
 
-Latest local validation on 2026-07-24:
+Local validation on 2026-07-24:
 
 - the engine's `mvn test` passed all 7 focused tests, including the generated page-contract and text-normalization regression tests;
 - the engine was regenerated and intended request/result/hook/pagination/signature changes were transferred selectively;

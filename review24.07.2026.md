@@ -1,3 +1,5 @@
+> Archive de l'audit du 2026-07-24, signalée comme telle le 2026-09-05. Le texte, les mesures et les chemins ci-dessous décrivent l'ancienne version et ne sont pas des consignes actuelles. Lire les [décisions et leurs raisons](docs/DECISIONS.md), le [plan réconcilié](update_plan.md) et les [contrats actuels](DEVELOPMENT.md) avant de reprendre un constat. En particulier, le remplacement automatique de l'ErrorBoundary n'est plus retenu, `useExecute` est historique et les formulaires ont quitté les modèles et contrôleurs. Les défauts encore suspectés doivent être revalidés, pas ignorés.
+
 Je vais d'abord explorer la structure du projet et lire les documents `.md` de référence, puis auditer `crud-fe` en profondeur.
 
 Audit terminé. Voici le rapport complet — sévère, comme demandé, mais chaque constat est vérifié dans le code.

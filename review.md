@@ -1,8 +1,10 @@
 # Deep discovery summary
 
-> Historical snapshot: the original review below predates the July 2026 backend-alignment work and is retained as discovery evidence, not current guidance. See [`README.md`](README.md) and [`docs/GLOBAL_READING.md`](docs/GLOBAL_READING.md) for current behavior, and [`update_plan.md`](update_plan.md) for the active follow-up sequence.
+> Historical archive, clarified on 2026-09-05: the original review below predates the July 2026 backend-alignment work. Its measurements, verdict and recommendations are not current instructions. Read [`docs/DECISIONS.md`](docs/DECISIONS.md) for the later decisions and their reasons, [`docs/GLOBAL_READING.md`](docs/GLOBAL_READING.md) for the current architecture, and [`update_plan.md`](update_plan.md) for remaining work. Setup and current API contracts are in [`DEVELOPMENT.md`](DEVELOPMENT.md).
 
-## Resolution status — 2026-07-24
+The later discussion explicitly withdrew automatic ErrorBoundary replacement and identified `useExecute` as legacy. The form-to-hook migration is complete; the response-order issue remains open. Do not infer an architectural limit to small businesses, or an obligation to rewrite the frontend, from the earlier assessment below. New evidence remains grounds for review.
+
+## Historical resolution status — 2026-07-24
 
 | Historical finding | Current status |
 |---|---|
@@ -18,6 +20,8 @@
 | Accessibility improvements and executable full-stack E2E | Still open; `crud-e2e` remains a scaffold |
 
 No account records were mutated during browser verification. The original measurements and recommendations below describe the earlier baseline only.
+
+## Original review — historical baseline
 
 The application has a sound central idea and should **not be rewritten**. Its strongest design is the role-selected module graph that drives navigation, routes, reducers, translations, and generated CRUD workflows.
 

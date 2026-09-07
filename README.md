@@ -67,6 +67,7 @@ Le contexte de démonstration et de POC du backend est compatible avec cette arc
 
 ## Pour poursuivre
 
+- [Décisions et contexte de reprise](docs/DECISIONS.md) : intentions, raisons des arbitrages et rectifications des anciennes reviews.
 - [Guide de développement](DEVELOPMENT.md) : démarrage, configuration, contrats API, conventions TypeScript et vérifications.
 - [Plan de suivi](update_plan.md) : chantiers frontend et limites déjà identifiées.
 - [Backend](../crud-be/README.md) : responsabilités métier et arbitrages de la même application.
