@@ -1,4 +1,4 @@
-import { createSelector, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { IDepartement } from 'modele/rh/departement/DomaineDepartement';
 import { EtatMdl, IRequete, IResultat, IRootState, createEtatError, createEtatInit, createEtatPending, createEtatSuccess } from 'waxant';
 import CtrlConsulterDepartement from './CtrlConsulterDepartement';
@@ -13,12 +13,12 @@ export interface ResConsulterDepartement extends IResultat {
 
 interface ConsulterDepartementType {
     departement?: IDepartement;
+    requeteConsultationId?: string;
     etatRecupererDepartementParId: EtatMdl;
     etatSupprimerDepartement: EtatMdl;
 }
 
 const initialState: ConsulterDepartementType = {
-    departement: {} as IDepartement,
     etatRecupererDepartementParId: createEtatInit(),
     etatSupprimerDepartement: createEtatInit(),
 };
@@ -27,9 +27,6 @@ const SliceConsulterDepartement = createSlice({
     name: 'MdlConsulterDepartement',
     initialState,
     reducers: {
-        resetEtatRecupererDepartementParId(state) {
-            state.etatRecupererDepartementParId = createEtatInit();
-        },
         resetEtatSupprimerDepartement(state) {
             state.etatSupprimerDepartement = createEtatInit();
         },
@@ -37,14 +34,25 @@ const SliceConsulterDepartement = createSlice({
     extraReducers(builder) {
         builder
             .addCase(CtrlConsulterDepartement.recupererDepartementParId.fulfilled, (state, action) => {
+                if (action.meta.requestId !== state.requeteConsultationId) {
+                    return;
+                }
                 state.departement = action.payload.departement;
                 state.etatRecupererDepartementParId = createEtatSuccess();
+                state.requeteConsultationId = undefined;
             })
-            .addCase(CtrlConsulterDepartement.recupererDepartementParId.pending, (state) => {
+            .addCase(CtrlConsulterDepartement.recupererDepartementParId.pending, (state, action) => {
+                state.departement = undefined;
                 state.etatRecupererDepartementParId = createEtatPending();
+                // Une réponse précédente ne doit pas remplacer le département demandé depuis.
+                state.requeteConsultationId = action.meta.requestId;
             })
-            .addCase(CtrlConsulterDepartement.recupererDepartementParId.rejected, (state) => {
+            .addCase(CtrlConsulterDepartement.recupererDepartementParId.rejected, (state, action) => {
+                if (action.meta.requestId !== state.requeteConsultationId) {
+                    return;
+                }
                 state.etatRecupererDepartementParId = createEtatError();
+                state.requeteConsultationId = undefined;
             })
             .addCase(CtrlConsulterDepartement.supprimerDepartement.fulfilled, (state) => {
                 state.etatSupprimerDepartement = createEtatSuccess();
@@ -60,9 +68,8 @@ const SliceConsulterDepartement = createSlice({
 
 export const MdlConsulterDepartement = SliceConsulterDepartement.actions;
 
-const selectMdlConsulterDepartement = (state: IRootState) => state.mdlConsulterDepartement;
-export const selectDepartement = createSelector([selectMdlConsulterDepartement], (state: ConsulterDepartementType) => state.departement);
-export const selectEtatRecupererDepartementParId = createSelector([selectMdlConsulterDepartement], (state: ConsulterDepartementType) => state.etatRecupererDepartementParId);
-export const selectEtatSupprimerDepartement = createSelector([selectMdlConsulterDepartement], (state: ConsulterDepartementType) => state.etatSupprimerDepartement);
+const selectMdlConsulterDepartement = (state: IRootState): ConsulterDepartementType => state.mdlConsulterDepartement;
+export const selectDepartement = (state: IRootState) => selectMdlConsulterDepartement(state).departement;
+export const selectEtatSupprimerDepartement = (state: IRootState) => selectMdlConsulterDepartement(state).etatSupprimerDepartement;
 
 export default SliceConsulterDepartement.reducer;
