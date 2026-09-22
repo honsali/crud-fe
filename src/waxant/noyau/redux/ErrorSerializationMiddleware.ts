@@ -90,7 +90,7 @@ const getDefaultErrorMessage = (error: ErrorResponse): IInfoActionEchouee => {
     return { code: 'error.server.error' };
 };
 
-export const getErrorMessage = (error: ErrorResponse): IInfoActionEchouee => {
+const getErrorMessage = (error: ErrorResponse): IInfoActionEchouee => {
     if (typeof error.status === 'number') {
         const handler = ERROR_MESSAGES[error.status];
         if (handler) {

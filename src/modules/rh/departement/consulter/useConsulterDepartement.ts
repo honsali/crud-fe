@@ -1,0 +1,32 @@
+import { useSelector } from 'react-redux';
+import { useParams } from 'react-router';
+import { useAppDispatch } from 'waxant';
+import CtrlConsulterDepartement from './CtrlConsulterDepartement';
+import { MdlConsulterDepartement, ReqConsulterDepartement, selectDepartement, selectEtatRecupererDepartementParId, selectEtatSupprimerDepartement } from './MdlConsulterDepartement';
+
+const useConsulterDepartement = () => {
+
+    const dispatch = useAppDispatch();
+    const params = useParams();
+
+    const departement = useSelector(selectDepartement);
+    const etatRecupererDepartementParId = useSelector(selectEtatRecupererDepartementParId);
+    const etatSupprimerDepartement = useSelector(selectEtatSupprimerDepartement);
+
+    const createAction = (action: any) => (req?: Partial<ReqConsulterDepartement>) => dispatch(action({ ...req, ...params }));
+
+    return {
+        // Actions
+        recupererDepartementParId: createAction(CtrlConsulterDepartement.recupererDepartementParId),
+        supprimerDepartement: createAction(CtrlConsulterDepartement.supprimerDepartement),
+        resetEtatRecupererDepartementParId: () => dispatch(MdlConsulterDepartement.resetEtatRecupererDepartementParId()),
+        resetEtatSupprimerDepartement: () => dispatch(MdlConsulterDepartement.resetEtatSupprimerDepartement()),
+
+        // State
+        departement,
+        etatRecupererDepartementParId,
+        etatSupprimerDepartement,
+    };
+};
+
+export default useConsulterDepartement;

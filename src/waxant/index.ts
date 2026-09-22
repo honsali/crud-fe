@@ -112,7 +112,6 @@ export { ContextePageProvider, default as useContextePage } from './noyau/contex
 export { ContexteTableauProvider, default as useContexteTableau } from './noyau/contexte/ContexteTableau';
 export { ContexteViewProvider, default as useContexteView } from './noyau/contexte/ContexteView';
 export type { IModele } from './noyau/domaine/modele';
-export { default as useRecupererParId } from './noyau/hooks/useRecupererParId';
 export { MdlI18n } from './noyau/i18n/MdlI18n';
 export { default as useI18n } from './noyau/i18n/useI18n';
 export * from './noyau/message/DomaineMessage';

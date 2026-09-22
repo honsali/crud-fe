@@ -1,18 +1,14 @@
-import ServiceDepartement from 'modele/rh/departement/ServiceDepartement';
-import { FormulaireConsultation, Texte, useRecupererParId } from 'waxant';
-import { ActionDepartement } from '../../ActionDepartement';
+import { useEffect } from 'react';
+import { FormulaireConsultation, Texte } from 'waxant';
+import useConsulterDepartement from '../useConsulterDepartement';
 
 const EtatDepartement = () => {
-    const departement = useRecupererParId(
-        'idDepartement',
-        ServiceDepartement.recupererParId,
-        ActionDepartement.UcConsulterDepartement.RECUPERER_DEPARTEMENT_PAR_ID,
-    );
+    const { departement, recupererDepartementParId } = useConsulterDepartement();
 
-    if (!departement) {
-        return null;
-    }
-
+    useEffect(() => {
+        recupererDepartementParId();
+    }, []);
+    //
     return (
         <FormulaireConsultation modele={departement} nombreColonne={1}>
             <Texte nom="nom" />
