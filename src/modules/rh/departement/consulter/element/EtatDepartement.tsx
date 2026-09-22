@@ -1,8 +1,8 @@
 import { FormulaireConsultation, Texte } from 'waxant';
-import useConsulterDepartement from '../useConsulterDepartement';
+import useCtrlConsulterDepartement from '../useCtrlConsulterDepartement';
 
 const EtatDepartement = () => {
-    const { departement } = useConsulterDepartement();
+    const { departement } = useCtrlConsulterDepartement();
 
     if (!departement) {
         return null;
