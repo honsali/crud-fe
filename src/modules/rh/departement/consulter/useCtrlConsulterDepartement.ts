@@ -1,30 +1,55 @@
+import _ from 'lodash';
+import type { IDepartement } from 'modele/rh/departement/DomaineDepartement';
 import ServiceDepartement from 'modele/rh/departement/ServiceDepartement';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { action, useAppDispatch } from 'waxant';
+import { MdlMessage, serializeError, useAppDispatch } from 'waxant';
+import { getErrorMessage } from 'waxant/noyau/redux/ErrorSerializationMiddleware';
 import { ActionDepartement } from '../ActionDepartement';
-import type { ConsulterDepartementType, ReqConsulterDepartement, ResConsulterDepartement } from './MdlConsulterDepartement';
 
-// Définie une seule fois ; le Mdl écoute le cycle de cette action.
-export const recupererDepartementParId = action<ReqConsulterDepartement, ResConsulterDepartement>(
-    async (requete, resultat) => {
-        resultat.departement = await ServiceDepartement.recupererParId(requete.idDepartement);
-    },
-    ActionDepartement.UcConsulterDepartement.RECUPERER_DEPARTEMENT_PAR_ID,
-);
-
-const selectDepartement = (state: { mdlConsulterDepartement: ConsulterDepartementType }) => state.mdlConsulterDepartement.departement;
+const actionName = ActionDepartement.UcConsulterDepartement.RECUPERER_DEPARTEMENT_PAR_ID;
 
 const useCtrlConsulterDepartement = () => {
     const dispatch = useAppDispatch();
     const { idDepartement } = useParams<{ idDepartement: string }>();
-    const departement = useSelector(selectDepartement);
+    const [departement, setDepartement] = useState<IDepartement>();
 
     useEffect(() => {
-        if (idDepartement) {
-            dispatch(recupererDepartementParId({ idDepartement }));
+        setDepartement(undefined);
+        if (!idDepartement) {
+            return;
         }
+
+        let actif = true;
+        const rid = _.uniqueId('consulterDepartement-');
+        dispatch(MdlMessage.initialiser());
+        dispatch(MdlMessage.setActionEnCours({ rid, actionName }));
+
+        const recupererDepartement = async () => {
+            try {
+                const resultat = await ServiceDepartement.recupererParId(idDepartement);
+                if (actif) {
+                    setDepartement(resultat);
+                    dispatch(MdlMessage.setInfoActionReussie({ type: actionName, key: 'fulfilled', data: { rid, departement: resultat } }));
+                }
+            } catch (erreur) {
+                if (actif) {
+                    dispatch(MdlMessage.setInfoActionEchouee(getErrorMessage(serializeError(erreur))));
+                }
+            } finally {
+                if (actif) {
+                    dispatch(MdlMessage.finAction(rid));
+                }
+            }
+        };
+
+        void recupererDepartement();
+
+        return () => {
+            // Ignorer les réponses de l'ancien département ou d'un écran démonté.
+            actif = false;
+            dispatch(MdlMessage.finAction(rid));
+        };
     }, [dispatch, idDepartement]);
 
     return { departement };

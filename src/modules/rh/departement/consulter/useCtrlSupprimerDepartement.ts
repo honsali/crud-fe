@@ -1,17 +1,12 @@
+import _ from 'lodash';
 import ServiceDepartement from 'modele/rh/departement/ServiceDepartement';
 import { useEffect, useRef, useTransition } from 'react';
 import { useParams } from 'react-router';
-import { action, useAppDispatch } from 'waxant';
-import type { IResultat } from 'waxant';
+import { MdlMessage, serializeError, useAppDispatch } from 'waxant';
+import { getErrorMessage } from 'waxant/noyau/redux/ErrorSerializationMiddleware';
 import { ActionDepartement } from '../ActionDepartement';
-import type { ReqConsulterDepartement } from './MdlConsulterDepartement';
 
-const supprimerDepartement = action<ReqConsulterDepartement, IResultat>(
-    async (requete) => {
-        await ServiceDepartement.supprimer(requete.idDepartement);
-    },
-    ActionDepartement.UcConsulterDepartement.SUPPRIMER_DEPARTEMENT,
-);
+const actionName = ActionDepartement.UcConsulterDepartement.SUPPRIMER_DEPARTEMENT;
 
 const useCtrlSupprimerDepartement = (apresSuppression: () => void) => {
     const dispatch = useAppDispatch();
@@ -19,29 +14,41 @@ const useCtrlSupprimerDepartement = (apresSuppression: () => void) => {
     const [enCours, startTransition] = useTransition();
     const versionPage = useRef(0);
 
-    useEffect(() => () => {
-        versionPage.current += 1;
+    useEffect(() => {
+        return () => {
+            versionPage.current += 1;
+        };
     }, [idDepartement]);
 
-    const supprimer = () => {
+    const supprimerDepartement = () => {
         if (!idDepartement || enCours) {
             return;
         }
         const versionAuDepart = versionPage.current;
         const urlAuDepart = window.location.href;
+        const rid = _.uniqueId('supprimerDepartement-');
+        dispatch(MdlMessage.initialiser());
+        dispatch(MdlMessage.setActionEnCours({ rid, actionName }));
 
         startTransition(async () => {
-            const resultat = await dispatch(supprimerDepartement({ idDepartement }));
+            try {
+                await ServiceDepartement.supprimer(idDepartement);
+                dispatch(MdlMessage.setInfoActionReussie({ type: actionName, key: 'fulfilled', data: { rid } }));
 
-            // L'URL change avant le rendu de la route si React diffère la navigation.
-            const pageToujoursActive = versionAuDepart === versionPage.current && urlAuDepart === window.location.href;
-            if (supprimerDepartement.fulfilled.match(resultat) && pageToujoursActive) {
-                startTransition(apresSuppression);
+                // L'URL change avant le rendu de la route si React diffère la navigation.
+                const pageToujoursActive = versionAuDepart === versionPage.current && urlAuDepart === window.location.href;
+                if (pageToujoursActive) {
+                    startTransition(apresSuppression);
+                }
+            } catch (erreur) {
+                dispatch(MdlMessage.setInfoActionEchouee(getErrorMessage(serializeError(erreur))));
+            } finally {
+                dispatch(MdlMessage.finAction(rid));
             }
         });
     };
 
-    return { supprimerDepartement: supprimer, enCours };
+    return { supprimerDepartement, enCours };
 };
 
 export default useCtrlSupprimerDepartement;
