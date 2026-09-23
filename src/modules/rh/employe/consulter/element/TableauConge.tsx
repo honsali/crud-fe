@@ -1,16 +1,20 @@
 import { IConge } from 'modele/rh/conge/DomaineConge';
+import { useEffect } from 'react';
 import { Bloc, Colonne, Tableau, useGoToPage } from 'waxant';
 import { PageConsulterConge } from '../../ListePageEmploye';
-import { useListerCongeParIdEmploye } from '../useConsulterEmploye';
+import useConsulterEmploye from '../useConsulterEmploye';
 
 const TableauConge = () => {
     const goToPage = useGoToPage();
-    const { listeConge } = useListerCongeParIdEmploye();
+    const { listeConge, listerCongeParIdEmploye } = useConsulterEmploye();
 
     const goToPageConsulterConge = (conge: IConge) => {
         goToPage(PageConsulterConge, { idConge: conge.id });
     };
 
+    useEffect(() => {
+        listerCongeParIdEmploye();
+    }, []);
     //
     return (
         <Bloc>

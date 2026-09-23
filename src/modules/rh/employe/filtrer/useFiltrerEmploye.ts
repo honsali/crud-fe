@@ -1,52 +1,43 @@
 import { FormInstance } from 'antd';
 import { IRequeteEmploye } from 'modele/rh/employe/DomaineEmploye';
-import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router';
 import { useAppDispatch, util } from 'waxant';
 import CtrlFiltrerEmploye from './CtrlFiltrerEmploye';
-import { ReqFiltrerEmploye, selectListePagineeEmploye } from './MdlFiltrerEmploye';
+import { MdlFiltrerEmploye, ReqFiltrerEmploye, selectEtatChangerPageFiltrerEmploye, selectEtatFiltrerEmploye, selectEtatInitialiserFiltrerEmploye, selectListePagineeEmploye } from './MdlFiltrerEmploye';
 
-export const useChangerPageFiltrerEmploye = () => {
+const useFiltrerEmploye = () => {
+
     const dispatch = useAppDispatch();
+    const params = useParams();
+
+    const etatChangerPageFiltrerEmploye = useSelector(selectEtatChangerPageFiltrerEmploye);
+    const etatFiltrerEmploye = useSelector(selectEtatFiltrerEmploye);
+    const etatInitialiserFiltrerEmploye = useSelector(selectEtatInitialiserFiltrerEmploye);
     const listePagineeEmploye = useSelector(selectListePagineeEmploye);
 
-    const changerPageFiltrerEmploye = useCallback(
-        (req?: Partial<ReqFiltrerEmploye>) => dispatch(CtrlFiltrerEmploye.changerPageFiltrerEmploye({ ...req } as ReqFiltrerEmploye)),
-        [dispatch],
-    );
+    const createAction = (action: any) => (req?: Partial<ReqFiltrerEmploye>) => dispatch(action({ ...req, ...params }));
+
+    const filtrerEmploye = async ({ form, ...req }: Partial<ReqFiltrerEmploye> & { form: FormInstance<IRequeteEmploye> }) => {
+        const filtre = util.removeNonSerialisable(form.getFieldsValue()) as IRequeteEmploye;
+        return dispatch(CtrlFiltrerEmploye.filtrerEmploye({ ...req, filtre, ...params } as ReqFiltrerEmploye));
+    };
 
     return {
-        changerPageFiltrerEmploye,
+        // Actions
+        changerPageFiltrerEmploye: createAction(CtrlFiltrerEmploye.changerPageFiltrerEmploye),
+        filtrerEmploye,
+        initialiserFiltrerEmploye: createAction(CtrlFiltrerEmploye.initialiserFiltrerEmploye),
+        resetEtatChangerPageFiltrerEmploye: () => dispatch(MdlFiltrerEmploye.resetEtatChangerPageFiltrerEmploye()),
+        resetEtatFiltrerEmploye: () => dispatch(MdlFiltrerEmploye.resetEtatFiltrerEmploye()),
+        resetEtatInitialiserFiltrerEmploye: () => dispatch(MdlFiltrerEmploye.resetEtatInitialiserFiltrerEmploye()),
+
+        // State
+        etatChangerPageFiltrerEmploye,
+        etatFiltrerEmploye,
+        etatInitialiserFiltrerEmploye,
         listePagineeEmploye,
     };
 };
 
-export const useFiltrerEmploye = () => {
-    const dispatch = useAppDispatch();
-
-    const filtrerEmploye = useCallback(async ({ form, ...req }: Partial<ReqFiltrerEmploye> & { form: FormInstance<IRequeteEmploye> }) => {
-        const filtre = util.removeNonSerialisable(form.getFieldsValue()) as IRequeteEmploye;
-        return dispatch(CtrlFiltrerEmploye.filtrerEmploye({ ...req, filtre } as ReqFiltrerEmploye));
-    }, [dispatch]);
-
-    return {
-        filtrerEmploye,
-    };
-};
-
-export const useInitialiserFiltrerEmploye = () => {
-    const dispatch = useAppDispatch();
-
-    useEffect(() => {
-        dispatch(CtrlFiltrerEmploye.initialiserFiltrerEmploye({} as ReqFiltrerEmploye));
-    }, [dispatch]);
-
-    const initialiserFiltrerEmploye = useCallback(
-        (req?: Partial<ReqFiltrerEmploye>) => dispatch(CtrlFiltrerEmploye.initialiserFiltrerEmploye({ ...req } as ReqFiltrerEmploye)),
-        [dispatch],
-    );
-
-    return {
-        initialiserFiltrerEmploye,
-    };
-};
+export default useFiltrerEmploye;

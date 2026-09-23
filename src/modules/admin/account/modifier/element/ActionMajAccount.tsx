@@ -3,11 +3,11 @@ import { useEffect } from 'react';
 import { ActionUcMaj, useGoToPage } from 'waxant';
 import { ActionAccount } from '../../ActionAccount';
 import { PageConsulterAccount } from '../../ListePageAccount';
-import { useMajAccount } from '../useModifierAccount';
+import useModifierAccount from '../useModifierAccount';
 
 const ActionMajAccount = ({ form }: { form: FormInstance }) => {
     const goToPage = useGoToPage();
-    const { etatMajAccount, majAccount, resetEtatMajAccount } = useMajAccount();
+    const { etatMajAccount, majAccount, resetEtatMajAccount } = useModifierAccount();
 
     const maj = () => {
         majAccount({ form });

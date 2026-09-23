@@ -1,11 +1,11 @@
 import { IEmploye } from 'modele/rh/employe/DomaineEmploye';
 import { Bloc, Colonne, Tableau, useGoToPage } from 'waxant';
 import { PageConsulterEmploye } from '../../ListePageEmploye';
-import { useChangerPageFiltrerEmploye } from '../useFiltrerEmploye';
+import useFiltrerEmploye from '../useFiltrerEmploye';
 
 const TableauEmploye = () => {
     const goToPage = useGoToPage();
-    const { changerPageFiltrerEmploye, listePagineeEmploye } = useChangerPageFiltrerEmploye();
+    const { changerPageFiltrerEmploye, listePagineeEmploye } = useFiltrerEmploye();
 
     const actionChangementPage = (pageCourante: number) => {
         changerPageFiltrerEmploye({ pageCourante });

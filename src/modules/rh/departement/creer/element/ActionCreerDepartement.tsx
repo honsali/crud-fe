@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { ActionUcCreer, useGoToPage } from 'waxant';
 import { ActionDepartement } from '../../ActionDepartement';
 import { PageConsulterDepartement } from '../../ListePageDepartement';
-import { useCreerDepartement } from '../useCreerDepartement';
+import useCreerDepartement from '../useCreerDepartement';
 
 const ActionCreerDepartement = ({ form }: { form: FormInstance<IDepartement> }) => {
     const goToPage = useGoToPage();

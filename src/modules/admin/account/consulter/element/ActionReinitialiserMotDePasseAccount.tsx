@@ -3,14 +3,14 @@ import { Form } from 'antd';
 import { IResetPasswordRequest } from 'modele/admin/account/DomaineAccount';
 import { ActionUcDialogue, ChampMotDePasse, ChampTexte, Formulaire, useContexteAuth } from 'waxant';
 import { ActionAccount } from '../../ActionAccount';
-import { useReinitialiserMotDePasseAccount } from '../useConsulterAccount';
+import useConsulterAccount from '../useConsulterAccount';
 
 interface FormulaireMotDePasseAccount extends IResetPasswordRequest {
     username?: string;
 }
 
 const ActionReinitialiserMotDePasseAccount = () => {
-    const { account, etatReinitialiserMotDePasseAccount, reinitialiserMotDePasseAccount, resetEtatReinitialiserMotDePasseAccount } = useReinitialiserMotDePasseAccount();
+    const { account, etatReinitialiserMotDePasseAccount, reinitialiserMotDePasseAccount, resetEtatReinitialiserMotDePasseAccount } = useConsulterAccount();
     const [form] = Form.useForm<FormulaireMotDePasseAccount>();
     const { logout, user } = useContexteAuth();
 

@@ -1,30 +1,33 @@
 import { FormInstance } from 'antd';
 import { IDepartement } from 'modele/rh/departement/DomaineDepartement';
-import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router';
 import { useAppDispatch, util } from 'waxant';
 import CtrlCreerDepartement from './CtrlCreerDepartement';
-import { MdlCreerDepartement, ReqCreerDepartement, selectEtatCreerDepartement, selectIdDepartement } from './MdlCreerDepartement';
+import { MdlCreerDepartement, selectEtatCreerDepartement, selectIdDepartement } from './MdlCreerDepartement';
 
-export const useCreerDepartement = () => {
+const useCreerDepartement = () => {
+
     const dispatch = useAppDispatch();
+    const params = useParams();
+
     const etatCreerDepartement = useSelector(selectEtatCreerDepartement);
     const idDepartement = useSelector(selectIdDepartement);
 
-    const creerDepartement = useCallback(async (form: FormInstance<IDepartement>) => {
+    const creerDepartement = async (form: FormInstance<IDepartement>) => {
         const request = util.removeNonSerialisable(await form.validateFields()) as IDepartement;
-        return dispatch(CtrlCreerDepartement.creerDepartement({ request } as ReqCreerDepartement));
-    }, [dispatch]);
-
-    const resetEtatCreerDepartement = useCallback(
-        () => dispatch(MdlCreerDepartement.resetEtatCreerDepartement()),
-        [dispatch],
-    );
+        return dispatch(CtrlCreerDepartement.creerDepartement({ request, ...params }));
+    };
 
     return {
+        // Actions
         creerDepartement,
-        resetEtatCreerDepartement,
+        resetEtatCreerDepartement: () => dispatch(MdlCreerDepartement.resetEtatCreerDepartement()),
+
+        // State
         etatCreerDepartement,
         idDepartement,
     };
 };
+
+export default useCreerDepartement;

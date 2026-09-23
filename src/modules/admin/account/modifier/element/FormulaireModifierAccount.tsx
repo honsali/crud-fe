@@ -5,17 +5,21 @@ import { useEffect } from 'react';
 import { ActionUcRetourConsulter, Bloc, BlocAction, ChampCache, ChampListeRadio, ChampOuiNon, Formulaire, FormulaireConsultation, Texte, useI18n } from 'waxant';
 import { ActionAccount } from '../../ActionAccount';
 import { PageConsulterAccount } from '../../ListePageAccount';
-import { useInitModificationAccount } from '../useModifierAccount';
+import useModifierAccount from '../useModifierAccount';
 import ActionMajAccount from './ActionMajAccount';
 
 const FormulaireModifierAccount = () => {
-    const { account, etatInitModificationAccount } = useInitModificationAccount();
+    const { account, etatInitModificationAccount, initModificationAccount } = useModifierAccount();
     const { i18n } = useI18n();
     const [form] = Form.useForm<IUpdateAccountForm>();
     const listeRole = [
         { code: ROLE_GESTIONNAIRE_RH_ID, libelle: i18n(ROLE_GESTIONNAIRE_RH) },
         { code: ROLE_ADMIN_ID, libelle: i18n(ROLE_ADMIN) },
     ];
+
+    useEffect(() => {
+        initModificationAccount();
+    }, []);
 
     useEffect(() => {
         if (etatInitModificationAccount.succes) {
@@ -25,7 +29,7 @@ const FormulaireModifierAccount = () => {
                 version: account?.version,
             });
         }
-    }, [etatInitModificationAccount.succes, account, form]);
+    }, [etatInitModificationAccount.succes]);
     //
     return (
         <Bloc largeur="600px" marge="20px" fond="blanc">

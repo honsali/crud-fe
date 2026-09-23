@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { ActionUcCreer, useGoToPage } from 'waxant';
 import { ActionAccount } from '../../ActionAccount';
 import { PageConsulterAccount } from '../../ListePageAccount';
-import { useCreerAccount } from '../useCreerAccount';
+import useCreerAccount from '../useCreerAccount';
 
 const ActionCreerAccount = ({ form }: { form: FormInstance<ICreateAccountForm> }) => {
     const goToPage = useGoToPage();

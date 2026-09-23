@@ -3,11 +3,11 @@ import { useEffect } from 'react';
 import { ActionUcMaj, useGoToPage } from 'waxant';
 import { ActionEmploye } from '../../../ActionEmploye';
 import { PageConsulterConge } from '../../../ListePageEmploye';
-import { useMajConge } from '../useModifierConge';
+import useModifierConge from '../useModifierConge';
 
 const ActionMajConge = ({ form }: { form: FormInstance }) => {
     const goToPage = useGoToPage();
-    const { etatMajConge, majConge, resetEtatMajConge } = useMajConge();
+    const { etatMajConge, majConge, resetEtatMajConge } = useModifierConge();
 
     const maj = () => {
         majConge({ form });

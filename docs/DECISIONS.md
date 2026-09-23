@@ -45,14 +45,6 @@ La discussion n'a retenu ni remplacement de Redux, ni réécriture de cette orga
 
 ## Arbitrages frontend
 
-### Hooks par action — généralisation du 2026-09-23
-
-Après validation sur « consulter département », le découpage est porté dans Engine et généralisé aux modules RH et Account. Le MVC est conservé : `Ctrl` traite les données et appelle les services, `Mdl` porte l'état partagé, les hooks adaptent React à chaque action. Les exports nommés restent regroupés dans `use<UC>.ts`.
-
-Les actions d'initialisation sont déclenchées dans les hooks par `useEffect`, avec des dépendances explicites sur les paramètres utiles. Un hook de consultation simple retourne uniquement les données, sans état/reset inutilisés ni copie locale. Les commandes déclenchées par l'utilisateur restent des callbacks ; leurs abonnements se limitent aux données et statuts consommés. L'initialisation des formulaires conserve le statut nécessaire au remplissage ; le filtre conserve sa relance manuelle.
-
-Un seul composant possède le chargement initial. Un autre composant lisant le même modèle utilise un sélecteur, pas un second appel du hook initialiseur. Cela ne supprime ni les rendus issus des contextes/parents ni le rejeu des effets par StrictMode. Aucun provider par vue, garde de concurrence ou remplacement de Redux n'est introduit. Les contrats propres à Account et le cycle succès/reset/navigation sont conservés.
-
 ### Formulaires : migration réalisée
 
 `FormInstance` appartient aux vues et aux hooks, jamais aux contrats `Req*` des `Mdl*` ni aux `Ctrl*`. Les hooks extraient les valeurs avant dispatch : validation pour les commandes, lecture sans nouvelle validation pour le filtre existant. Les contrôleurs reçoivent des données `request` ou `filtre` et n'ont pas à simuler un formulaire pour être testés.

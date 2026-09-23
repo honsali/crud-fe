@@ -1,8 +1,13 @@
+import { useEffect } from 'react';
 import { BlocInline, CadreFort, DateFormatee, FormulaireConsultation, Reference, Texte } from 'waxant';
-import { useRecupererEmployeParId } from '../useConsulterEmploye';
+import useConsulterEmploye from '../useConsulterEmploye';
 
 const EtatEmploye = () => {
-    const { employe } = useRecupererEmployeParId();
+    const { employe, recupererEmployeParId } = useConsulterEmploye();
+
+    useEffect(() => {
+        recupererEmployeParId();
+    }, []);
     //
     return (
         <BlocInline>

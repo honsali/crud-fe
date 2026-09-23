@@ -3,11 +3,11 @@ import { useEffect } from 'react';
 import { ActionUcMaj, useGoToPage } from 'waxant';
 import { ActionDepartement } from '../../ActionDepartement';
 import { PageConsulterDepartement } from '../../ListePageDepartement';
-import { useMajDepartement } from '../useModifierDepartement';
+import useModifierDepartement from '../useModifierDepartement';
 
 const ActionMajDepartement = ({ form }: { form: FormInstance }) => {
     const goToPage = useGoToPage();
-    const { etatMajDepartement, majDepartement, resetEtatMajDepartement } = useMajDepartement();
+    const { etatMajDepartement, majDepartement, resetEtatMajDepartement } = useModifierDepartement();
 
     const maj = () => {
         majDepartement({ form });
