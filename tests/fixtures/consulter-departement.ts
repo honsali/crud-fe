@@ -12,7 +12,7 @@ Object.assign(globalThis, { window: dom.window, document: dom.window.document, I
 const React = require('react');
 const { createRoot } = require('react-dom/client');
 const { configureStore } = require('@reduxjs/toolkit');
-const { Provider, useDispatch } = require('react-redux');
+const { Provider, useDispatch, useSelector } = require('react-redux');
 const { MemoryRouter, Routes, Route, useLocation, useNavigate } = require('react-router');
 const { act } = React;
 const h = React.createElement;
@@ -21,7 +21,7 @@ const counts = { view: 0, form: 0, modifier: 0, supprimer: 0, shared: 0 };
 const readings: any[] = [];
 const deletions: any[] = [];
 let deleteProps: any;
-let sharedRead: any;
+let sharedDepartement: any;
 let navigate: any;
 let pathname = '';
 let navigationCount = 0;
@@ -69,8 +69,7 @@ mock.module(`${project}src/modules/rh/departement/ListePageDepartement.tsx`, () 
 }));
 
 const { default: View } = await import(`${uc}/ViewConsulterDepartement.tsx`);
-const { default: reducer } = await import(`${uc}/MdlConsulterDepartement.ts`);
-const { useRecupererDepartementParId } = await import(`${uc}/useConsulterDepartement.ts`);
+const { default: reducer, selectDepartement } = await import(`${uc}/MdlConsulterDepartement.ts`);
 const store = configureStore({
     reducer: {
         mdlConsulterDepartement: reducer,
@@ -80,8 +79,9 @@ const store = configureStore({
 });
 function SharedReadProbe() {
     counts.shared++;
-    sharedRead = useRecupererDepartementParId();
-    return h('p', { 'data-shared': true }, sharedRead.departement?.nom);
+    // Other consumers read the shared model without repeating initialization.
+    sharedDepartement = useSelector(selectDepartement);
+    return h('p', { 'data-shared': true }, sharedDepartement?.nom);
 }
 function RouterProbe() {
     navigate = useNavigate();
@@ -102,25 +102,24 @@ try {
         h(MemoryRouter, { initialEntries: ['/consult/101'] }, h(RouterProbe)))));
     assert.deepEqual(readings.map(r => r.id), ['101']);
     const initialCounts = snapshot();
-    const initialRead = sharedRead.recupererDepartementParId;
-    const initialReset = sharedRead.resetEtatRecupererDepartementParId;
     const initialDelete = deleteProps.action;
 
     await act(async () => readings[0].resolve({ id: '101', nom: 'RH' }));
     assert.equal(document.querySelector('[data-departement]')?.textContent, 'RH');
     assert.equal(document.querySelector('[data-shared]')?.textContent, 'RH');
-    assert.equal(sharedRead.departement, store.getState().mdlConsulterDepartement.departement);
+    assert.equal(sharedDepartement, store.getState().mdlConsulterDepartement.departement);
     assert.equal(counts.view, initialCounts.view);
     assert.equal(counts.modifier, initialCounts.modifier);
     assert.equal(counts.supprimer, initialCounts.supprimer);
-    assert.equal(sharedRead.recupererDepartementParId, initialRead);
-    assert.equal(sharedRead.resetEtatRecupererDepartementParId, initialReset);
-    assert.equal(readings.length, 1, 'sharing the hook must not trigger a second HTTP request');
+    assert.equal(readings.length, 1, 'reading the shared model must not trigger a second HTTP request');
     idleSpinner();
 
     const beforeUnrelated = snapshot();
     await act(async () => store.dispatch({ type: 'unrelated' }));
     assert.deepEqual(counts, beforeUnrelated);
+
+    await act(async () => navigate('/consult/101?onglet=detail'));
+    assert.equal(readings.length, 1, 'a route render with the same ID must not reload the department');
 
     const beforeDelete = snapshot();
     let deletion: any;
@@ -151,7 +150,7 @@ try {
     await act(async () => readings[1].resolve({ id: '202', nom: 'Finance' }));
     assert.equal(document.querySelector('[data-departement]')?.textContent, 'Finance');
     assert.equal(document.querySelector('[data-shared]')?.textContent, 'Finance');
-    assert.equal(sharedRead.departement, store.getState().mdlConsulterDepartement.departement);
+    assert.equal(sharedDepartement, store.getState().mdlConsulterDepartement.departement);
 
     await act(async () => { deletion = deleteProps.action(); });
     assert.equal(deletions[1].id, '202');

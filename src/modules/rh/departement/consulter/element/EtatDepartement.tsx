@@ -1,13 +1,8 @@
-import { useEffect } from 'react';
 import { FormulaireConsultation, Texte } from 'waxant';
 import { useRecupererDepartementParId } from '../useConsulterDepartement';
 
 const EtatDepartement = () => {
-    const { departement, recupererDepartementParId } = useRecupererDepartementParId();
-
-    useEffect(() => {
-        recupererDepartementParId();
-    }, [recupererDepartementParId]);
+    const { departement } = useRecupererDepartementParId();
     //
     return (
         <FormulaireConsultation modele={departement} nombreColonne={1}>
