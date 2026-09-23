@@ -1,13 +1,8 @@
-import { useEffect } from 'react';
 import { FormulaireConsultation, OuiNon, Reference, Texte } from 'waxant';
-import useConsulterAccount from '../useConsulterAccount';
+import { useRecupererAccountParId } from '../useConsulterAccount';
 
 const EtatAccount = () => {
-    const { account, recupererAccountParId } = useConsulterAccount();
-
-    useEffect(() => {
-        recupererAccountParId();
-    }, []);
+    const { account } = useRecupererAccountParId();
     //
     return (
         <FormulaireConsultation modele={account} nombreColonne={1}>

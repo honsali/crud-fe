@@ -1,40 +1,45 @@
 import { FormInstance } from 'antd';
 import { IResetPasswordRequest } from 'modele/admin/account/DomaineAccount';
+import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useAppDispatch, util } from 'waxant';
 import CtrlConsulterAccount from './CtrlConsulterAccount';
-import { MdlConsulterAccount, ReqConsulterAccount, selectAccount, selectEtatRecupererAccountParId, selectEtatReinitialiserMotDePasseAccount } from './MdlConsulterAccount';
+import { MdlConsulterAccount, ReqConsulterAccount, selectAccount, selectEtatReinitialiserMotDePasseAccount } from './MdlConsulterAccount';
 
-const useConsulterAccount = () => {
-
+export const useRecupererAccountParId = () => {
     const dispatch = useAppDispatch();
-    const params = useParams();
-
+    const { idAccount } = useParams();
     const account = useSelector(selectAccount);
-    const etatRecupererAccountParId = useSelector(selectEtatRecupererAccountParId);
+
+    useEffect(() => {
+        dispatch(CtrlConsulterAccount.recupererAccountParId({ idAccount } as ReqConsulterAccount));
+    }, [dispatch, idAccount]);
+
+    return { account };
+};
+
+export const useReinitialiserMotDePasseAccount = () => {
+    const dispatch = useAppDispatch();
+    const { idAccount } = useParams();
+    const account = useSelector(selectAccount);
     const etatReinitialiserMotDePasseAccount = useSelector(selectEtatReinitialiserMotDePasseAccount);
 
-    const createAction = (action: any) => (req?: Partial<ReqConsulterAccount>) => dispatch(action({ ...req, ...params }));
-
-    const reinitialiserMotDePasseAccount = async ({ form, ...req }: Partial<ReqConsulterAccount> & { form: FormInstance<IResetPasswordRequest> }) => {
+    const reinitialiserMotDePasseAccount = useCallback(async ({ form, ...req }: Partial<ReqConsulterAccount> & { form: FormInstance<IResetPasswordRequest> }) => {
         const values = util.removeNonSerialisable(await form.validateFields()) as IResetPasswordRequest;
         const request: IResetPasswordRequest = { password: values.password };
-        return dispatch(CtrlConsulterAccount.reinitialiserMotDePasseAccount({ ...req, request, ...params } as ReqConsulterAccount));
-    };
+        return dispatch(CtrlConsulterAccount.reinitialiserMotDePasseAccount({ ...req, request, idAccount } as ReqConsulterAccount));
+    }, [dispatch, idAccount]);
+
+    const resetEtatReinitialiserMotDePasseAccount = useCallback(
+        () => dispatch(MdlConsulterAccount.resetEtatReinitialiserMotDePasseAccount()),
+        [dispatch],
+    );
 
     return {
-        // Actions
-        recupererAccountParId: createAction(CtrlConsulterAccount.recupererAccountParId),
         reinitialiserMotDePasseAccount,
-        resetEtatRecupererAccountParId: () => dispatch(MdlConsulterAccount.resetEtatRecupererAccountParId()),
-        resetEtatReinitialiserMotDePasseAccount: () => dispatch(MdlConsulterAccount.resetEtatReinitialiserMotDePasseAccount()),
-
-        // State
+        resetEtatReinitialiserMotDePasseAccount,
         account,
-        etatRecupererAccountParId,
         etatReinitialiserMotDePasseAccount,
     };
 };
-
-export default useConsulterAccount;

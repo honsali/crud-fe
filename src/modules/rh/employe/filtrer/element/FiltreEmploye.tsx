@@ -1,21 +1,17 @@
 import { Form } from 'antd';
 import { IEmploye } from 'modele/rh/employe/DomaineEmploye';
-import { useEffect } from 'react';
 import { ActionUcAppliquerFiltre, ActionUcInitialiserFiltre, BlocAction, ChampDate, ChampReference, ChampTexte, Filtre, Formulaire, PanneauEtendable, Separateur } from 'waxant';
 import { ActionEmploye } from '../../ActionEmploye';
-import useFiltrerEmploye from '../useFiltrerEmploye';
+import { useFiltrerEmploye, useInitialiserFiltrerEmploye } from '../useFiltrerEmploye';
 
 const FiltreEmploye = () => {
-    const { filtrerEmploye, initialiserFiltrerEmploye } = useFiltrerEmploye();
     const [form] = Form.useForm<IEmploye>();
+    const { filtrerEmploye } = useFiltrerEmploye();
+    const { initialiserFiltrerEmploye } = useInitialiserFiltrerEmploye();
 
     const appliquerFiltreEmploye = () => {
         filtrerEmploye({ form });
     };
-
-    useEffect(() => {
-        initialiserFiltreEmploye();
-    }, []);
 
     const initialiserFiltreEmploye = () => {
         form.resetFields();

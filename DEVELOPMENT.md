@@ -40,13 +40,15 @@ Le serveur Bun expose la valeur résolue, non secrète, dans `/app-config.json`.
 
 ```bash
 bun run typecheck
-bun test tests/form-boundary.test.ts
+bun test
 bun run build
 ```
 
 `dist/` est une sortie de build jetable, non versionnée, à retirer après vérification. Le script `bun run start` lance actuellement le serveur Bun depuis `src/index.ts` avec `NODE_ENV=production` ; il ne sert pas automatiquement le dossier `dist/`.
 
 Les tests de frontière formulaire exécutent les hooks, contrôleurs et reducers réels avec des contextes React et des services HTTP simulés. Ils vérifient les valeurs envoyées à Redux et aux services ; ils ne remplacent pas un test navigateur.
+
+Les fixtures `consulter-departement` et `action-hooks` montent React, Redux et le routeur dans JSDOM, avec services HTTP simulés. Elles couvrent les abonnements ciblés, les initialisations, les changements d'identifiant, le filtrage/pagination et la navigation après suppression. Elles tournent sans StrictMode pour mesurer le cycle ordinaire, pas son rejeu de développement.
 
 Le modèle de déploiement et les commandes adaptées aux autres shells sont suivis dans [update_plan.md](update_plan.md). Une vérification navigateur est distincte du typecheck et du build ; l'orchestration E2E complète reste à construire dans `crud-e2e`.
 
@@ -109,6 +111,14 @@ Les suppressions attendent simplement l'appel Axios. Les services qui transforme
 Les conventions répétées de ces services appartiennent d'abord à Engine. Régénérer, examiner `engine/result/fe`, puis transférer les changements utiles en conservant les personnalisations du runtime.
 
 ## Contrats des pages générées
+
+Les hooks sont nommés par action et regroupés dans `use<UC>.ts`, sans hook global abonné à tout le modèle. Par exemple, `useRecupererDepartementParId` retourne seulement `departement` ; `useSupprimerDepartement` expose sa commande, son état et son reset. Les contrôleurs et modèles Redux restent partagés à l'échelle de l'UC.
+
+Le hook d'initialisation déclenche son action dans un `useEffect`, dépendant de `dispatch` et des paramètres de route utilisés par le contrat. Le composant n'ajoute pas un second effet de chargement. Un seul composant possède cette initialisation ; les autres lecteurs utilisent les sélecteurs du `Mdl`, sans rappeler le hook initialiseur. Les commandes utilisateur restent des fonctions en `useCallback`.
+
+Seuls les états effectivement consommés sont sélectionnés. Les initialisations de modification conservent leur état de succès pour remplir le formulaire ; les consultations et listes simples n'en ont pas besoin. Le filtre employé conserve aussi une commande de réinitialisation, utilisée par son bouton en plus du chargement initial. Le cycle `succès → reset → navigation` reste inchangé.
+
+Ce découpage limite les rendus liés aux abonnements Redux ; il ne supprime pas les rendus dus aux parents ou aux contextes. StrictMode peut toujours rejouer les effets en développement ; aucun mécanisme de déduplication réseau n'est ajouté.
 
 Une page peut partager des interfaces `Req*` et `Res*` entre plusieurs actions. Les identifiants, corps de commande `request` et critères `filtre` nécessaires à un service strict restent requis ; les valeurs partagées de pagination, comme `pageCourante`, peuvent être optionnelles. Les hooks de ces actions acceptent la partie utile de la requête, puis la complètent avec les paramètres de route.
 

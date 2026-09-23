@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { ActionUcCreer, useGoToPage } from 'waxant';
 import { ActionEmploye } from '../../../ActionEmploye';
 import { PageConsulterConge } from '../../../ListePageEmploye';
-import useCreerConge from '../useCreerConge';
+import { useCreerConge } from '../useCreerConge';
 
 const ActionCreerConge = ({ form }: { form: FormInstance<IConge> }) => {
     const goToPage = useGoToPage();

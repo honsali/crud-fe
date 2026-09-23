@@ -1,28 +1,16 @@
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router';
 import { useAppDispatch } from 'waxant';
 import CtrlListerAccount from './CtrlListerAccount';
-import { MdlListerAccount, ReqListerAccount, selectEtatListerAccount, selectListeAccount } from './MdlListerAccount';
+import { selectListeAccount } from './MdlListerAccount';
 
-const useListerAccount = () => {
-
+export const useListerAccount = () => {
     const dispatch = useAppDispatch();
-    const params = useParams();
-
-    const etatListerAccount = useSelector(selectEtatListerAccount);
     const listeAccount = useSelector(selectListeAccount);
 
-    const createAction = (action: any) => (req?: Partial<ReqListerAccount>) => dispatch(action({ ...req, ...params }));
+    useEffect(() => {
+        dispatch(CtrlListerAccount.listerAccount({}));
+    }, [dispatch]);
 
-    return {
-        // Actions
-        listerAccount: createAction(CtrlListerAccount.listerAccount),
-        resetEtatListerAccount: () => dispatch(MdlListerAccount.resetEtatListerAccount()),
-
-        // State
-        etatListerAccount,
-        listeAccount,
-    };
+    return { listeAccount };
 };
-
-export default useListerAccount;

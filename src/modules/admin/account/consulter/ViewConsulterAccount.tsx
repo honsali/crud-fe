@@ -1,14 +1,15 @@
+import { useSelector } from 'react-redux';
 import { ActionUcModifier, ActionUcRetourListe, Bloc, BlocAction, Section, useContexteAuth, useI18n } from 'waxant';
 import { ActionAccount } from '../ActionAccount';
 import { PageListerAccount, PageModifierAccount } from '../ListePageAccount';
 import ActionReinitialiserMotDePasseAccount from './element/ActionReinitialiserMotDePasseAccount';
 import EtatAccount from './element/EtatAccount';
-import useConsulterAccount from './useConsulterAccount';
+import { selectAccount } from './MdlConsulterAccount';
 
 const ViewConsulterAccount = () => {
     const { user } = useContexteAuth();
     const { i18n } = useI18n();
-    const { account } = useConsulterAccount();
+    const account = useSelector(selectAccount);
     const compteCourant = !!account?.username && account.username.toLocaleLowerCase() === user?.toLocaleLowerCase();
     //
     return (

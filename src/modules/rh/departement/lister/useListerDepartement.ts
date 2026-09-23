@@ -1,28 +1,18 @@
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router';
 import { useAppDispatch } from 'waxant';
 import CtrlListerDepartement from './CtrlListerDepartement';
-import { MdlListerDepartement, ReqListerDepartement, selectEtatListerDepartement, selectListeDepartement } from './MdlListerDepartement';
+import { ReqListerDepartement, selectListeDepartement } from './MdlListerDepartement';
 
-const useListerDepartement = () => {
-
+export const useListerDepartement = () => {
     const dispatch = useAppDispatch();
-    const params = useParams();
-
-    const etatListerDepartement = useSelector(selectEtatListerDepartement);
     const listeDepartement = useSelector(selectListeDepartement);
 
-    const createAction = (action: any) => (req?: Partial<ReqListerDepartement>) => dispatch(action({ ...req, ...params }));
+    useEffect(() => {
+        dispatch(CtrlListerDepartement.listerDepartement({} as ReqListerDepartement));
+    }, [dispatch]);
 
     return {
-        // Actions
-        listerDepartement: createAction(CtrlListerDepartement.listerDepartement),
-        resetEtatListerDepartement: () => dispatch(MdlListerDepartement.resetEtatListerDepartement()),
-
-        // State
-        etatListerDepartement,
         listeDepartement,
     };
 };
-
-export default useListerDepartement;

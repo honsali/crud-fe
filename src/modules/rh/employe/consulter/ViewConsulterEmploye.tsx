@@ -1,22 +1,11 @@
-import { useEffect } from 'react';
-import { ActionUcAjouter, ActionUcModifier, ActionUcRetourListe, ActionUcSupprimer, Bloc, BlocAction, MenuOnglet, Onglet, Section, useGoToPage } from 'waxant';
+import { ActionUcAjouter, ActionUcModifier, ActionUcRetourListe, Bloc, BlocAction, MenuOnglet, Onglet, Section } from 'waxant';
 import { ActionEmploye } from '../ActionEmploye';
 import { PageCreerConge, PageFiltrerEmploye, PageModifierEmploye } from '../ListePageEmploye';
+import ActionSupprimerEmploye from './element/ActionSupprimerEmploye';
 import EtatEmploye from './element/EtatEmploye';
 import TableauConge from './element/TableauConge';
-import useConsulterEmploye from './useConsulterEmploye';
 
 const ViewConsulterEmploye = () => {
-    const goToPage = useGoToPage();
-    const { etatSupprimerEmploye, resetEtatSupprimerEmploye, supprimerEmploye } = useConsulterEmploye();
-
-
-    useEffect(() => {
-        if (etatSupprimerEmploye.succes) {
-            resetEtatSupprimerEmploye();
-            goToPage(PageFiltrerEmploye);
-        }
-    }, [etatSupprimerEmploye.succes]);
     //
     return (
         <Section>
@@ -27,7 +16,7 @@ const ViewConsulterEmploye = () => {
                         <BlocAction>
                             <ActionUcModifier nom={ActionEmploye.UcConsulterEmploye.MODIFIER_EMPLOYE} page={PageModifierEmploye} />
                             <ActionUcRetourListe nom={ActionEmploye.UcConsulterEmploye.RETOUR_LISTE_EMPLOYE} page={PageFiltrerEmploye} />
-                            <ActionUcSupprimer nom={ActionEmploye.UcConsulterEmploye.SUPPRIMER_EMPLOYE} action={supprimerEmploye} rid={etatSupprimerEmploye.rid} />
+                            <ActionSupprimerEmploye />
                         </BlocAction>
                     </Bloc>
                 </Onglet>

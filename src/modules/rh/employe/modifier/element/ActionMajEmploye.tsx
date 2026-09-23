@@ -3,11 +3,11 @@ import { useEffect } from 'react';
 import { ActionUcMaj, useGoToPage } from 'waxant';
 import { ActionEmploye } from '../../ActionEmploye';
 import { PageConsulterEmploye } from '../../ListePageEmploye';
-import useModifierEmploye from '../useModifierEmploye';
+import { useMajEmploye } from '../useModifierEmploye';
 
 const ActionMajEmploye = ({ form }: { form: FormInstance }) => {
     const goToPage = useGoToPage();
-    const { etatMajEmploye, majEmploye, resetEtatMajEmploye } = useModifierEmploye();
+    const { etatMajEmploye, majEmploye, resetEtatMajEmploye } = useMajEmploye();
 
     const maj = () => {
         majEmploye({ form });

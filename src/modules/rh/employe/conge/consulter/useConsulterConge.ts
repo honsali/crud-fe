@@ -1,32 +1,42 @@
+import { useCallback, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useAppDispatch } from 'waxant';
 import CtrlConsulterConge from './CtrlConsulterConge';
-import { MdlConsulterConge, ReqConsulterConge, selectConge, selectEtatRecupererCongeParId, selectEtatSupprimerConge } from './MdlConsulterConge';
+import { MdlConsulterConge, ReqConsulterConge, selectConge, selectEtatSupprimerConge } from './MdlConsulterConge';
 
-const useConsulterConge = () => {
-
+export const useRecupererCongeParId = () => {
     const dispatch = useAppDispatch();
-    const params = useParams();
-
+    const { idConge } = useParams();
     const conge = useSelector(selectConge);
-    const etatRecupererCongeParId = useSelector(selectEtatRecupererCongeParId);
-    const etatSupprimerConge = useSelector(selectEtatSupprimerConge);
 
-    const createAction = (action: any) => (req?: Partial<ReqConsulterConge>) => dispatch(action({ ...req, ...params }));
+    useEffect(() => {
+        dispatch(CtrlConsulterConge.recupererCongeParId({ idConge } as ReqConsulterConge));
+    }, [dispatch, idConge]);
 
     return {
-        // Actions
-        recupererCongeParId: createAction(CtrlConsulterConge.recupererCongeParId),
-        supprimerConge: createAction(CtrlConsulterConge.supprimerConge),
-        resetEtatRecupererCongeParId: () => dispatch(MdlConsulterConge.resetEtatRecupererCongeParId()),
-        resetEtatSupprimerConge: () => dispatch(MdlConsulterConge.resetEtatSupprimerConge()),
-
-        // State
         conge,
-        etatRecupererCongeParId,
-        etatSupprimerConge,
     };
 };
 
-export default useConsulterConge;
+export const useSupprimerConge = () => {
+    const dispatch = useAppDispatch();
+    const { idConge } = useParams();
+    const etatSupprimerConge = useSelector(selectEtatSupprimerConge);
+
+    const supprimerConge = useCallback(
+        (req?: Partial<ReqConsulterConge>) => dispatch(CtrlConsulterConge.supprimerConge({ ...req, idConge } as ReqConsulterConge)),
+        [dispatch, idConge],
+    );
+
+    const resetEtatSupprimerConge = useCallback(
+        () => dispatch(MdlConsulterConge.resetEtatSupprimerConge()),
+        [dispatch],
+    );
+
+    return {
+        supprimerConge,
+        resetEtatSupprimerConge,
+        etatSupprimerConge,
+    };
+};

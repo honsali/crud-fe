@@ -4,22 +4,18 @@ import { useEffect } from 'react';
 import { ActionUcRetourConsulter, Bloc, BlocAction, CadreSimple, ChampCache, ChampDate, ChampReference, ChampTexte, ChampTexteLong, Formulaire } from 'waxant';
 import { ActionEmploye } from '../../ActionEmploye';
 import { PageConsulterEmploye } from '../../ListePageEmploye';
-import useModifierEmploye from '../useModifierEmploye';
+import { useInitModificationEmploye } from '../useModifierEmploye';
 import ActionMajEmploye from './ActionMajEmploye';
 
 const FormulaireEmploye = () => {
-    const { employe, etatInitModificationEmploye, initModificationEmploye } = useModifierEmploye();
     const [form] = Form.useForm<IEmploye>();
-
-    useEffect(() => {
-        initModificationEmploye();
-    }, []);
+    const { employe, etatInitModificationEmploye } = useInitModificationEmploye();
 
     useEffect(() => {
         if (etatInitModificationEmploye.succes && employe) {
             form.setFieldsValue(employe);
         }
-    }, [etatInitModificationEmploye.succes]);
+    }, [etatInitModificationEmploye.succes, employe, form]);
     //
     return (
         <Bloc marge="40px" fond="blanc">

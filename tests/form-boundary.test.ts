@@ -1,6 +1,7 @@
 import { beforeEach, expect, mock, test } from 'bun:test';
 import { configureStore, Middleware } from '@reduxjs/toolkit';
 import { FormInstance } from 'antd';
+import * as React from 'react';
 import { IResetPasswordRequest, IUpdateAccountForm } from '../src/modele/admin/account/DomaineAccount';
 import { IRequeteEmploye } from '../src/modele/rh/employe/DomaineEmploye';
 import action from '../src/waxant/noyau/redux/action';
@@ -17,6 +18,9 @@ const recordCall = (operation: string) => async (...args: unknown[]) => {
     apiCalls.push({ operation, args });
 };
 
+// These boundary tests exercise command payloads, not React's render lifecycle.
+// Initialization and render behavior are covered by the isolated React fixtures.
+mock.module('react', () => ({ ...React, useCallback: (callback) => callback }));
 mock.module('react-redux', () => ({
     useSelector: (selector) => selector(store.getState()),
 }));
@@ -51,17 +55,17 @@ mock.module('modele/admin/account/ServiceAccount', () => ({
 
 // Load the real hooks, controllers and reducers after replacing only their
 // React context and HTTP services. Redux and the action wrapper stay real.
-const { default: useModifierDepartement } = await import('../src/modules/rh/departement/modifier/useModifierDepartement');
+const { useMajDepartement } = await import('../src/modules/rh/departement/modifier/useModifierDepartement');
 const { default: departementReducer } = await import('../src/modules/rh/departement/modifier/MdlModifierDepartement');
-const { default: useModifierEmploye } = await import('../src/modules/rh/employe/modifier/useModifierEmploye');
+const { useMajEmploye } = await import('../src/modules/rh/employe/modifier/useModifierEmploye');
 const { default: employeReducer } = await import('../src/modules/rh/employe/modifier/MdlModifierEmploye');
-const { default: useModifierConge } = await import('../src/modules/rh/employe/conge/modifier/useModifierConge');
+const { useMajConge } = await import('../src/modules/rh/employe/conge/modifier/useModifierConge');
 const { default: congeReducer } = await import('../src/modules/rh/employe/conge/modifier/MdlModifierConge');
-const { default: useFiltrerEmploye } = await import('../src/modules/rh/employe/filtrer/useFiltrerEmploye');
+const { useFiltrerEmploye, useChangerPageFiltrerEmploye } = await import('../src/modules/rh/employe/filtrer/useFiltrerEmploye');
 const { default: filtreReducer } = await import('../src/modules/rh/employe/filtrer/MdlFiltrerEmploye');
-const { default: useModifierAccount } = await import('../src/modules/admin/account/modifier/useModifierAccount');
+const { useMajAccount } = await import('../src/modules/admin/account/modifier/useModifierAccount');
 const { default: modifierAccountReducer } = await import('../src/modules/admin/account/modifier/MdlModifierAccount');
-const { default: useConsulterAccount } = await import('../src/modules/admin/account/consulter/useConsulterAccount');
+const { useReinitialiserMotDePasseAccount } = await import('../src/modules/admin/account/consulter/useConsulterAccount');
 const { default: consulterAccountReducer } = await import('../src/modules/admin/account/consulter/MdlConsulterAccount');
 
 const captureRequests: Middleware = () => (next) => (value) => {
@@ -104,17 +108,17 @@ const modificationCases = [
     {
         operation: 'majDepartement',
         params: { idDepartement: '101' },
-        run: (form: FormInstance) => useModifierDepartement().majDepartement({ form }),
+        run: (form: FormInstance) => useMajDepartement().majDepartement({ form }),
     },
     {
         operation: 'majEmploye',
         params: { idEmploye: '101' },
-        run: (form: FormInstance) => useModifierEmploye().majEmploye({ form }),
+        run: (form: FormInstance) => useMajEmploye().majEmploye({ form }),
     },
     {
         operation: 'majConge',
         params: { idEmploye: '202', idConge: '101' },
-        run: (form: FormInstance) => useModifierConge().majConge({ form }),
+        run: (form: FormInstance) => useMajConge().majConge({ form }),
     },
 ];
 
@@ -129,7 +133,8 @@ for (const scenario of modificationCases) {
         expect(result.meta.requestStatus).toBe('fulfilled');
         expect(validateFields).toHaveBeenCalledTimes(1);
         expect(getFieldsValue).not.toHaveBeenCalled();
-        expect(requests).toEqual([{ request: values, ...scenario.params }]);
+        const expectedParams = scenario.operation === 'majConge' ? { idConge: '101' } : scenario.params;
+        expect(requests).toEqual([{ request: values, ...expectedParams }]);
         expect(JSON.parse(JSON.stringify(requests))).toEqual(requests);
         expect(apiCalls).toEqual([{ operation: scenario.operation, args: [values] }]);
     });
@@ -140,7 +145,7 @@ test('filtering extracts plain criteria and pagination reuses them without a for
     const hook = useFiltrerEmploye();
 
     await hook.filtrerEmploye({ form });
-    await hook.changerPageFiltrerEmploye({ pageCourante: 2 });
+    await useChangerPageFiltrerEmploye().changerPageFiltrerEmploye({ pageCourante: 2 });
 
     expect(validateFields).not.toHaveBeenCalled();
     expect(getFieldsValue).toHaveBeenCalledTimes(1);
@@ -160,7 +165,7 @@ test('account update keeps its API shape and excludes display-only fields', asyn
     };
     const { form, validateFields } = formWith<IUpdateAccountForm>(values);
 
-    await useModifierAccount().majAccount({ form });
+    await useMajAccount().majAccount({ form });
 
     const request = { role: { id: 'ROLE_ADMIN' }, activated: false, version: 0 };
     expect(validateFields).toHaveBeenCalledTimes(1);
@@ -173,7 +178,7 @@ test('password reset sends only the password, never the form or displayed userna
     const values = { password: 'test-password', username: 'display-only' };
     const { form, validateFields } = formWith<IResetPasswordRequest>(values);
 
-    await useConsulterAccount().reinitialiserMotDePasseAccount({ form });
+    await useReinitialiserMotDePasseAccount().reinitialiserMotDePasseAccount({ form });
 
     const request = { password: 'test-password' };
     expect(validateFields).toHaveBeenCalledTimes(1);
@@ -186,12 +191,12 @@ const commandCases = [
     {
         operation: 'majAccount',
         params: { idAccount: '303' },
-        run: (form: FormInstance) => useModifierAccount().majAccount({ form }),
+        run: (form: FormInstance) => useMajAccount().majAccount({ form }),
     },
     {
         operation: 'reinitialiserMotDePasseAccount',
         params: { idAccount: '303' },
-        run: (form: FormInstance) => useConsulterAccount().reinitialiserMotDePasseAccount({ form }),
+        run: (form: FormInstance) => useReinitialiserMotDePasseAccount().reinitialiserMotDePasseAccount({ form }),
     },
 ];
 

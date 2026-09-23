@@ -2,15 +2,12 @@ import { useEffect } from 'react';
 import { ActionUcModifier, ActionUcRetourListe, ActionUcSupprimer, Bloc, BlocAction, DateFormatee, FormulaireConsultation, Reference, Texte, useGoToPage } from 'waxant';
 import { ActionEmploye } from '../../../ActionEmploye';
 import { PageConsulterEmploye, PageModifierConge } from '../../../ListePageEmploye';
-import useConsulterConge from '../useConsulterConge';
+import { useRecupererCongeParId, useSupprimerConge } from '../useConsulterConge';
 
 const EtatConge = () => {
     const goToPage = useGoToPage();
-    const { conge, etatSupprimerConge, recupererCongeParId, resetEtatSupprimerConge, supprimerConge } = useConsulterConge();
-
-    useEffect(() => {
-        recupererCongeParId();
-    }, []);
+    const { conge } = useRecupererCongeParId();
+    const { etatSupprimerConge, resetEtatSupprimerConge, supprimerConge } = useSupprimerConge();
 
 
 
