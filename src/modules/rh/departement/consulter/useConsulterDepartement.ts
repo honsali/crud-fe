@@ -1,32 +1,52 @@
+import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { useAppDispatch } from 'waxant';
 import CtrlConsulterDepartement from './CtrlConsulterDepartement';
 import { MdlConsulterDepartement, ReqConsulterDepartement, selectDepartement, selectEtatRecupererDepartementParId, selectEtatSupprimerDepartement } from './MdlConsulterDepartement';
 
-const useConsulterDepartement = () => {
-
+export const useRecupererDepartementParId = () => {
     const dispatch = useAppDispatch();
-    const params = useParams();
+    const { idDepartement } = useParams();
 
     const departement = useSelector(selectDepartement);
     const etatRecupererDepartementParId = useSelector(selectEtatRecupererDepartementParId);
-    const etatSupprimerDepartement = useSelector(selectEtatSupprimerDepartement);
 
-    const createAction = (action: any) => (req?: Partial<ReqConsulterDepartement>) => dispatch(action({ ...req, ...params }));
+    const recupererDepartementParId = useCallback(
+        (req?: Partial<ReqConsulterDepartement>) => dispatch(CtrlConsulterDepartement.recupererDepartementParId({ ...req, idDepartement } as ReqConsulterDepartement)),
+        [dispatch, idDepartement],
+    );
+    const resetEtatRecupererDepartementParId = useCallback(
+        () => dispatch(MdlConsulterDepartement.resetEtatRecupererDepartementParId()),
+        [dispatch],
+    );
 
     return {
-        // Actions
-        recupererDepartementParId: createAction(CtrlConsulterDepartement.recupererDepartementParId),
-        supprimerDepartement: createAction(CtrlConsulterDepartement.supprimerDepartement),
-        resetEtatRecupererDepartementParId: () => dispatch(MdlConsulterDepartement.resetEtatRecupererDepartementParId()),
-        resetEtatSupprimerDepartement: () => dispatch(MdlConsulterDepartement.resetEtatSupprimerDepartement()),
-
-        // State
+        recupererDepartementParId,
+        resetEtatRecupererDepartementParId,
         departement,
         etatRecupererDepartementParId,
-        etatSupprimerDepartement,
     };
 };
 
-export default useConsulterDepartement;
+export const useSupprimerDepartement = () => {
+    const dispatch = useAppDispatch();
+    const { idDepartement } = useParams();
+
+    const etatSupprimerDepartement = useSelector(selectEtatSupprimerDepartement);
+
+    const supprimerDepartement = useCallback(
+        (req?: Partial<ReqConsulterDepartement>) => dispatch(CtrlConsulterDepartement.supprimerDepartement({ ...req, idDepartement } as ReqConsulterDepartement)),
+        [dispatch, idDepartement],
+    );
+    const resetEtatSupprimerDepartement = useCallback(
+        () => dispatch(MdlConsulterDepartement.resetEtatSupprimerDepartement()),
+        [dispatch],
+    );
+
+    return {
+        supprimerDepartement,
+        resetEtatSupprimerDepartement,
+        etatSupprimerDepartement,
+    };
+};
